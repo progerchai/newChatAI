@@ -15,6 +15,7 @@ import {
   IconGood,
   IconPost,
 } from '@/components/icons';
+import Header from './component/Header.vue';
 import axios from 'axios';
 import hljs from 'highlight.js';
 import 'highlight.js/styles/github.css';
@@ -54,12 +55,12 @@ const chatContainer = ref(null);
 const instance = getCurrentInstance();
 const state = reactive<State>({
   theme: 'light',
-  popupShow: false, // TODO: 记得改回true
+  popupShow: true,
   avatarIdx: 1,
   conversations: [],
   conversation: [],
   chatMsg: '',
-  chatTitle: 'New chat',
+  chatTitle: '新建会话',
   convLoading: false,
   isShowGoBottom: false,
   oldConv: undefined,
@@ -129,7 +130,7 @@ function stopChat() {
       if (conversation.length == 2 && rconv['speeches'].length == 1) {
         var newConv = {
           id: cid,
-          title: 'New chat',
+          title: '新建会话',
         };
 
         generateConvTitle(newConv);
@@ -190,8 +191,6 @@ function vueCopy(node: Element) {
   );
 }
 function changeTheme(_theme: 'light' | 'dark') {
-  console.log(555, _theme);
-
   state.theme = _theme;
   var html = document.getElementsByTagName('html')[0];
   html.classList.remove('light', 'dark');
@@ -384,7 +383,7 @@ function send() {
       if (first) {
         let newConv = {
           id: cid,
-          title: 'New chat',
+          title: '新建会话',
         };
 
         generateConvTitle(newConv);
@@ -447,8 +446,8 @@ function newChat() {
     return;
   }
 
-  state.chatTitle = 'New chat';
-  document.title = 'New chat';
+  state.chatTitle = '新建会话';
+  document.title = '新建会话';
   const _conversations = conversations;
   for (let idx in _conversations) {
     var conv = _conversations[idx];
@@ -604,21 +603,28 @@ onMounted(() => {
 </script>
 <template>
   <div id="__next">
-    <div class="overflow-hidden w-full h-full relative">
-      <div class="flex h-full flex-1 flex-col md:pl-[260px]">
-        <div
-          class="sticky top-0 z-10 flex items-center border-b border-white/20 bg-gray-800 pl-1 pt-1 text-gray-200 sm:pl-3 md:hidden"
-        >
-          <h1 class="flex-1 text-center text-base font-normal">
-            {{ state.chatTitle }}
-          </h1>
-          <button @click.stop="newChat" type="button" class="px-3">
-            <IconPlus />
-          </button>
-        </div>
-
+    <Header />
+    <div class="content">
+      <!-- 菜单导航 -->
+      <LeftMenu
+        :new-chat="newChat"
+        :conversations="state.conversations"
+        :conv-titletmp="state.convTitletmp"
+        :change-conv-titletmp="(tmp:string)=>{state.convTitletmp = tmp}"
+        :title-input-blur="titleInputBlur"
+        :change-conv-title="changeConvTitle"
+        :cancel-change-conv-title="cancelChangeConvTitle"
+        :cancel-del-conv="cancelDelConv"
+        :del-conv="delConv"
+        :select-conversation="selectConversation"
+        :edit-title="editTitle"
+        :clear-conversations="clearConversations"
+        :theme="state.theme"
+        :change-theme="changeTheme"
+      />
+      <div class="flex flex-1 flex-col md:pl-[260px]">
         <main
-          class="relative h-full w-full transition-width flex flex-col overflow-hidden items-stretch flex-1"
+          class="relative w-full transition-width flex flex-col overflow-hidden items-stretch flex-1 content-main"
         >
           <!-- 聊天窗 -->
           <div class="flex-1 overflow-hidden">
@@ -1107,26 +1113,7 @@ onMounted(() => {
           </div>
         </main>
       </div>
-
-      <!-- 菜单导航 -->
-      <LeftMenu
-        :new-chat="newChat"
-        :conversations="state.conversations"
-        :conv-titletmp="state.convTitletmp"
-        :change-conv-titletmp="(tmp:string)=>{state.convTitletmp = tmp}"
-        :title-input-blur="titleInputBlur"
-        :change-conv-title="changeConvTitle"
-        :cancel-change-conv-title="cancelChangeConvTitle"
-        :cancel-del-conv="cancelDelConv"
-        :del-conv="delConv"
-        :select-conversation="selectConversation"
-        :edit-title="editTitle"
-        :clear-conversations="clearConversations"
-        :theme="state.theme"
-        :change-theme="changeTheme"
-      />
     </div>
-    <div class="absolute top-0 left-0 right-0 z-[2]"></div>
   </div>
 
   <!-- 弹窗 -->
@@ -1134,5 +1121,5 @@ onMounted(() => {
 </template>
 
 <style lang="scss" scoped>
-@import './HomeView.scss';
+@import './Homeview.scss';
 </style>

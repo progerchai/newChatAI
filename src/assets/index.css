@@ -3593,6 +3593,11 @@ html {
     height: 100%
 }
 
+#__next {
+    display: flex;
+    flex-direction: column;
+}
+
 .markdown ol {
     counter-reset: item
 }

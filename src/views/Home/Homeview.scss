@@ -115,3 +115,10 @@ body {
 .home-page-title {
   margin-top: 24px;
 }
+
+.content {
+  display: flex;
+  &-main {
+    padding-top: 60px;
+  }
+}
