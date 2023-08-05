@@ -11,6 +11,9 @@ import {
   IconPlus,
   IconSun,
   IconWarning,
+  IconBad,
+  IconGood,
+  IconPost,
 } from '@/components/icons';
 import axios from 'axios';
 import hljs from 'highlight.js';
@@ -673,7 +676,7 @@ onMounted(() => {
                               >
                                 <img
                                   aria-hidden="true"
-                                  :src="`@/assets/imgs/human${state.avatarIdx}.png`"
+                                  src="@/assets/imgs/human1.png"
                                   alt=" huamn"
                                   style="
                                     display: block;
@@ -845,22 +848,7 @@ onMounted(() => {
                                 }"
                                 class="p-1 rounded-md hover:bg-gray-100 hover:text-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-gray-200 disabled:dark:hover:text-gray-400"
                               >
-                                <svg
-                                  stroke="currentColor"
-                                  fill="none"
-                                  stroke-width="2"
-                                  viewBox="0 0 24 24"
-                                  stroke-linecap="round"
-                                  stroke-linejoin="round"
-                                  class="h-4 w-4"
-                                  height="1em"
-                                  width="1em"
-                                  xmlns="http://www.w3.org/2000/svg"
-                                >
-                                  <path
-                                    d="M14 9V5a3 3 0 0 0-3-3l-4 9v11h11.28a2 2 0 0 0 2-1.7l1.38-9a2 2 0 0 0-2-2.3zM7 22H4a2 2 0 0 1-2-2v-7a2 2 0 0 1 2-2h3"
-                                  ></path>
-                                </svg>
+                                <IconBad />
                               </button>
                               <button
                                 @click.stop="suitable(idx, conv, -1)"
@@ -874,22 +862,7 @@ onMounted(() => {
                                 }"
                                 class="p-1 rounded-md hover:bg-gray-100 hover:text-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-gray-200 disabled:dark:hover:text-gray-400"
                               >
-                                <svg
-                                  stroke="currentColor"
-                                  fill="none"
-                                  stroke-width="2"
-                                  viewBox="0 0 24 24"
-                                  stroke-linecap="round"
-                                  stroke-linejoin="round"
-                                  class="h-4 w-4"
-                                  height="1em"
-                                  width="1em"
-                                  xmlns="http://www.w3.org/2000/svg"
-                                >
-                                  <path
-                                    d="M10 15v4a3 3 0 0 0 3 3l4-9V2H5.72a2 2 0 0 0-2 1.7l-1.38 9a2 2 0 0 0 2 2.3zm7-13h2.67A2.31 2.31 0 0 1 22 4v7a2.31 2.31 0 0 1-2.33 2H17"
-                                  ></path>
-                                </svg>
+                                <IconGood />
                               </button>
                             </div>
                           </div>
@@ -1126,22 +1099,7 @@ onMounted(() => {
                       ><span class="load_dot2">·</span
                       ><span class="load_dot3">·</span>
                     </div>
-                    <svg
-                      v-else
-                      stroke="currentColor"
-                      fill="none"
-                      stroke-width="2"
-                      viewBox="0 0 24 24"
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                      class="h-4 w-4 mr-1"
-                      height="1em"
-                      width="1em"
-                      xmlns="http://www.w3.org/2000/svg"
-                    >
-                      <line x1="22" y1="2" x2="11" y2="13"></line>
-                      <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
-                    </svg>
+                    <IconPost v-else />
                   </button>
                 </div>
               </div>
