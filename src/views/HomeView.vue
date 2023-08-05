@@ -6,6 +6,17 @@ import _ from 'lodash';
 import { marked } from 'marked';
 import { getCurrentInstance, nextTick, onMounted, reactive, ref, watch } from 'vue';
 import '../assets/index.css';
+const IMG_URL = [
+  new URL('./assets/imgs/human1.png', import.meta.url).href,
+  new URL('./assets/imgs/human2.png', import.meta.url).href,
+  new URL('./assets/imgs/human3.png', import.meta.url).href,
+  new URL('./assets/imgs/human4.png', import.meta.url).href,
+  new URL('./assets/imgs/human5.png', import.meta.url).href,
+  new URL('./assets/imgs/human6.png', import.meta.url).href,
+  new URL('./assets/imgs/human7.png', import.meta.url).href,
+  new URL('./assets/imgs/human8.png', import.meta.url).href,
+  new URL('./assets/imgs/human9.png', import.meta.url).href,
+]
 interface State {
   theme: 'light' | 'dark';
   popupShow: boolean;
@@ -97,13 +108,13 @@ function closeSource() {
   }
 }
 function stopChat() {
-  let { conversation, cid, convLoading } = state
+  let { conversation, cid } = state
   axios
     .put(`/api/stop/chat/${cid}`, {})
     .then((result) => {
       const rconv = conversation[conversation.length - 1];
       rconv['loading'] = false;
-      convLoading = false;
+      state.convLoading = false;
 
       if (conversation.length == 2 && rconv['speeches'].length == 1) {
         var newConv = {
@@ -125,8 +136,7 @@ function stopChat() {
     });
 }
 function closeShowSlide() {
-  let { showSlide } = state
-  showSlide = false;
+  state.showSlide = false;
   (menu.value as any)?.appendChild(navEle.value);
 }
 function showSlideMethod() {
@@ -252,7 +262,7 @@ function refrechConversation() {
   conversation = JSON.parse(JSON.stringify(conversation));
 }
 function chatRepeat() {
-  let { convLoading, conversation, rsource, cid } = state
+  let { convLoading, conversation, cid } = state
   if (convLoading) {
     return;
   }
@@ -282,7 +292,7 @@ function chatRepeat() {
       rconv['loading'] = false;
       convLoading = false;
       refrechConversation();
-      rsource = undefined;
+      state.rsource = undefined;
       return;
     }
 
@@ -303,7 +313,7 @@ function chatRepeat() {
   _rsource.addEventListener('error', function (e: { data: any }) {
     console.log('error:' + e.data);
     _rsource.close();
-    rsource = undefined;
+    state.rsource = undefined;
   });
 }
 function judgeInput(e: KeyboardEvent) {
@@ -315,7 +325,7 @@ function judgeInput(e: KeyboardEvent) {
   }
 }
 function send() {
-  let { chatMsg, convLoading, conversation, source, cid, } = state
+  let { chatMsg, convLoading, conversation, cid, } = state
   if (chatMsg.trim().length == 0) {
     return;
   }
@@ -358,7 +368,7 @@ function send() {
     if (e.data == '[DONE]') {
       _source.close();
       conv['loading'] = false;
-      convLoading = false;
+      state.convLoading = false;
 
       if (first) {
         let newConv = {
@@ -372,7 +382,7 @@ function send() {
         saveConversations();
       }
       refrechConversation();
-      source = undefined;
+      state.source = undefined;
       return;
     }
 
@@ -392,7 +402,7 @@ function send() {
   _source.addEventListener('error', function (e: any) {
     console.log('error:' + e.data);
     _source.close();
-    source = undefined;
+    state.source = undefined;
   });
 }
 function generateConvTitle(conv: any) {
@@ -653,10 +663,7 @@ onMounted(() => {
                                   padding: 0px;
                                   max-width: 100%;
                                 ">
-                                <img aria-hidden="true" :src="require('./assets/imgs/human' +
-                                  state.avatarIdx +
-                                  '.png')
-                                  " alt="huamn" style="
+                                <img aria-hidden="true" :src="IMG_URL[state.avatarIdx]" alt=" huamn" style="
                                     display: block;
                                     max-width: 100%;
                                     width: initial;
