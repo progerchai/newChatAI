@@ -1,5 +1,9 @@
 @import './base.css';
 
+#app {
+  width: 100%;
+}
+
 a,
 .green {
   text-decoration: none;
@@ -20,7 +24,7 @@ a,
   }
 
   #app {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
+    /* display: grid; */
+    /* grid-template-columns: 1fr 1fr; */
   }
 }

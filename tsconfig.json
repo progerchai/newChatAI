@@ -7,5 +7,12 @@
     {
       "path": "./tsconfig.app.json"
     }
-  ]
+  ],
+  "compilerOptions": {
+    "moduleResolution": "NodeNext",
+    "module": "NodeNext",
+  },
+  "ts-node": {
+    "esm": true
+  }
 }
