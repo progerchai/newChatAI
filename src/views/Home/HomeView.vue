@@ -1,4 +1,5 @@
 <script setup lang="ts">
+// @ts-nocheck
 /*
  *@description: 首页
  *@author: progerchai
