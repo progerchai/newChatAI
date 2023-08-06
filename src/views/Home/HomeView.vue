@@ -618,7 +618,7 @@ onMounted(() => {
         :theme="state.theme"
         :change-theme="changeTheme"
       />
-      <div class="flex flex-1 flex-col md:pl-[260px]">
+      <div class="flex flex-1 flex-col md:pl-[260px] content-right">
         <main
           class="relative w-full transition-width flex flex-col overflow-hidden items-stretch flex-1 content-main"
         >

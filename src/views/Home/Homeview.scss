@@ -118,6 +118,9 @@ body {
 
 .content {
   display: flex;
+  &-right {
+    height: 100vh;
+  }
   &-main {
     padding-top: 60px;
   }
