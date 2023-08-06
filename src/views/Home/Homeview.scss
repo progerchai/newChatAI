@@ -125,3 +125,53 @@ body {
     padding-top: 60px;
   }
 }
+.welcome-text {
+  color: #666;
+  text-align: center;
+  font-size: 18px;
+  padding: 24px 16px;
+}
+.human {
+  box-sizing: border-box;
+  display: inline-block;
+  overflow: hidden;
+  width: initial;
+  height: initial;
+  background: none;
+  opacity: 1;
+  border: 0px;
+  margin: 0px;
+  padding: 0px;
+  position: relative;
+  max-width: 100%;
+  &-avater {
+    box-sizing: border-box;
+    display: block;
+    width: initial;
+    height: initial;
+    background: none;
+    opacity: 1;
+    border: 0px;
+    margin: 0px;
+    padding: 0px;
+    max-width: 100%;
+    &-img {
+      display: block;
+      max-width: 100%;
+      width: initial;
+      height: initial;
+      background: none;
+      opacity: 1;
+      border: 0px;
+      margin: 0px;
+      padding: 0px;
+    }
+  }
+}
+
+.chat_avater {
+  width: 30px;
+  height: 30px;
+  object-fit: cover;
+  border-radius: 2px;
+}

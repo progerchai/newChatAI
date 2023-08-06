@@ -16,7 +16,7 @@ import {
 defineProps<{
   newChat: () => void;
   conversations: any[];
-  convTitletmp: string;
+  convTitletmp: string | undefined;
   changeConvTitletmp: (tem: string) => void;
   titleInputBlur: (idx: number, conv: any) => void;
   changeConvTitle: (idx: number, conv: any) => void;
@@ -271,23 +271,23 @@ defineProps<{
           >
             <IconDark v-if="theme === 'light'" />
             <IconLight v-if="theme === 'dark'" />
-            {{ theme === 'light' ? 'Dark mode' : 'Light mode' }}
+            {{ theme === 'light' ? '暗色主题' : '亮色主题' }}
           </a>
           <a
-            href="https://discord.gg/openai"
+            href="https://aiplusx.com.cn/"
             target="_blank"
             class="flex py-3 px-3 items-center gap-3 rounded-md hover:bg-gray-500/10 transition-colors duration-200 text-white cursor-pointer text-sm"
           >
             <IconGame />
-            OpenAI Discord</a
+            智海</a
           >
           <a
-            href="https://help.openai.com/en/collections/3742473-chatgpt"
+            href="https://www.hep.com.cn/"
             target="_blank"
             class="flex py-3 px-3 items-center gap-3 rounded-md hover:bg-gray-500/10 transition-colors duration-200 text-white cursor-pointer text-sm"
           >
             <IconForward />
-            Updates &amp; FAQ</a
+            高教出版社</a
           >
         </nav>
       </div>
