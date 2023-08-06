@@ -336,7 +336,7 @@ function send() {
     speaker: 'human',
     speech: chatMsg.trim().replace(/\n/g, ''),
   });
-  chatMsg = '';
+  state.chatMsg = '';
   let conv = {
     idx: 0,
     loading: true,
