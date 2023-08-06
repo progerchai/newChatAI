@@ -15,7 +15,6 @@ import {
   IconGood,
   IconPost,
 } from '@/components/icons';
-import Header from './component/Header.vue';
 import axios from 'axios';
 import hljs from 'highlight.js';
 import 'highlight.js/styles/github.css';
@@ -48,14 +47,12 @@ interface State {
   tsource: any;
   cid: number | null;
 }
-const menu = ref(null);
-const navEle = ref(null);
 const inputChatRef = ref(null);
 const chatContainer = ref(null);
 const instance = getCurrentInstance();
 const state = reactive<State>({
   theme: 'light',
-  popupShow: true,
+  popupShow: false, // TODO:
   avatarIdx: 1,
   conversations: [],
   conversation: [],
@@ -603,7 +600,6 @@ onMounted(() => {
 </script>
 <template>
   <div id="__next">
-    <Header />
     <div class="content">
       <!-- 菜单导航 -->
       <LeftMenu

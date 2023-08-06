@@ -71,3 +71,8 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
+
+a:hover {
+  color: #2861FC;
+  background-color: transparent;
+}
