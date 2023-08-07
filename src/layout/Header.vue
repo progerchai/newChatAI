@@ -14,7 +14,7 @@ const menu = [
 <template>
   <div class="bg-gray-900 header">
     <span class="logo">
-      <img class="logo-img" src="@/assets/imgs/logo_white.png" alt="logo" />
+      <img class="logo-img" src="@/assets/imgs/logo_zh.png" alt="logo" />
       <span class="logo-title">智海三乐</span>
     </span>
     <RouterLink
