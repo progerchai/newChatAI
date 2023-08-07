@@ -13,6 +13,8 @@ import {
   IconPlus,
   IconTrash,
 } from '@/components/icons';
+import { getHistory } from '@/service/home';
+import { onMounted, ref } from 'vue';
 defineProps<{
   newChat: () => void;
   conversations: any[];
@@ -29,6 +31,14 @@ defineProps<{
   changeTheme: (theme: 'light' | 'dark') => void;
   theme: 'light' | 'dark';
 }>();
+const history = ref<Array<{ id: number; title: string }>>([]);
+onMounted(() => {
+  getHistory({ accountId: -1 }).then((res) => {
+    if (res.code === 'SUCCESS') {
+      history.value = res.data.list;
+    }
+  });
+});
 </script>
 <template>
   <div

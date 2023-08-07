@@ -11,14 +11,21 @@ const queryString = (params: any) => {
   }
   return '?' + str.substr(0, str.length - 1);
 };
-export const get = (
+export const get = async (
   url: string,
   data?: object,
   config?: AxiosRequestConfig
 ) => {
   const _url = url + queryString(data);
-  return axios.get(_url, config || {}) as unknown;
+  const response = await axios.get(_url, config || {});
+  return response.data;
 };
 
-export const post = (url: string, data?: object, config?: AxiosRequestConfig) =>
-  axios.post(url, data || {}, config || {}) as unknown;
+export const post = async (
+  url: string,
+  data?: object,
+  config?: AxiosRequestConfig
+) => {
+  const response = await axios.post(url, data || {}, config || {});
+  return response.data;
+};
