@@ -6,6 +6,9 @@ import VueSocketIO from 'vue-3-socket.io';
 import App from './App.vue';
 import router from './router';
 const app = createApp(App);
+app.config.errorHandler = (err, instance, info) => {
+  // 向追踪服务报告错误S
+}
 const socketio = new VueSocketIO({
   debug: true,
   connection: io('http://xxxx:8848', { transports: ['websocket'] }),
