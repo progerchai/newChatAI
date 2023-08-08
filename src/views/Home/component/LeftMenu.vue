@@ -6,18 +6,30 @@
  *@date: 2023-08-05 15:59:07
  */
 import {
+  IconChat,
   IconDark,
+  IconDelete,
+  IconEdit,
   IconForward,
   IconGame,
   IconLight,
   IconPlus,
+  IconRight,
   IconTrash,
 } from '@/components/icons';
-import { getHistory } from '@/service/home';
-import { onMounted, ref } from 'vue';
+import { getHistory, generateConv } from '@/service/home';
+import type { IConversation } from '@/types';
+import _ from 'lodash';
+import { onMounted, reactive, ref } from 'vue';
+interface State {
+  /**
+   * 被选中的对话id
+   */
+  selectConvId: number | undefined;
+}
 defineProps<{
   newChat: () => void;
-  conversations: any[];
+  conversations: IConversation[];
   convTitletmp: string | undefined;
   changeConvTitletmp: (tem: string) => void;
   titleInputBlur: (idx: number, conv: any) => void;
@@ -25,20 +37,65 @@ defineProps<{
   cancelChangeConvTitle: (idx: number, conv: any) => void;
   cancelDelConv: (idx: number, conv: any) => void;
   delConv: (idx: number) => void;
-  selectConversation: (conv: any, judge: boolean) => void;
   editTitle: (idx: number, conv: any) => void;
-  clearConversations: () => void;
   changeTheme: (theme: 'light' | 'dark') => void;
   theme: 'light' | 'dark';
 }>();
-const history = ref<Array<{ id: number; title: string }>>([]);
+const accountId = -1;
+const history = ref<Array<IConversation>>([]);
+const state = reactive<State>({
+  selectConvId: 0,
+});
 onMounted(() => {
-  getHistory({ accountId: -1 }).then((res) => {
+  getHistory({ accountId }).then((res) => {
     if (res.code === 'SUCCESS') {
       history.value = res.data.list;
+      state.selectConvId = _.get(res, 'data.list[0].idx', 0);
     }
   });
 });
+/**
+ * 选中会话
+ * @param idx
+ */
+function selectConversation(idx: number | undefined) {
+  state.selectConvId = idx;
+}
+/**
+ * 删除会话
+ */
+function delConv(idx: number | undefined) {
+  const _conversations = _.cloneDeep(history.value);
+  _.remove(_conversations, (o: IConversation) => o.idx === idx);
+  history.value = _conversations;
+}
+/**
+ * 清空会话
+ */
+function clearConversations() {
+  history.value = [];
+  state.selectConvId = 0;
+  saveConversations();
+}
+/**
+ * 保存会话
+ */
+function saveConversations() {}
+/**
+ * 新建会话
+ */
+function newChat() {
+  generateConv({ accountId }).then((res) => {
+    if (res.code === 'SUCCESS') {
+      const newId = res.data;
+      state.selectConvId = newId;
+      history.value = [
+        { idx: newId, title: `新会话-${newId}` },
+        ...history.value,
+      ];
+    }
+  });
+}
 </script>
 <template>
   <div
@@ -63,27 +120,12 @@ onMounted(() => {
             style="padding-bottom: 5px"
           >
             <div class="flex flex-col gap-2 text-gray-100 text-sm">
-              <template v-for="(conversation, cidx) in conversations">
+              <template v-for="(conversation, cidx) in history">
                 <div
                   v-if="conversation.editable"
                   class="m-focus flex py-3 px-3 items-center gap-3 relative rounded-md cursor-pointer hover:pr-14 break-all pr-14 bg-gray-800 hover:bg-gray-800"
                 >
-                  <svg
-                    stroke="currentColor"
-                    fill="none"
-                    stroke-width="2"
-                    viewBox="0 0 24 24"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    class="h-4 w-4 flex-shrink-0"
-                    height="1em"
-                    width="1em"
-                    xmlns="http://www.w3.org/2000/svg"
-                  >
-                    <path
-                      d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"
-                    ></path>
-                  </svg>
+                  <IconChat />
                   <input
                     id="titleInput"
                     :value="convTitletmp"
@@ -98,40 +140,13 @@ onMounted(() => {
                       @click="changeConvTitle(cidx, conversation)"
                       class="p-1 hover:text-white"
                     >
-                      <svg
-                        stroke="currentColor"
-                        fill="none"
-                        stroke-width="2"
-                        viewBox="0 0 24 24"
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                        class="h-4 w-4"
-                        height="1em"
-                        width="1em"
-                        xmlns="http://www.w3.org/2000/svg"
-                      >
-                        <polyline points="20 6 9 17 4 12"></polyline>
-                      </svg>
+                      <IconRight />
                     </button>
                     <button
                       @click="cancelChangeConvTitle(cidx, conversation)"
                       class="p-1 hover:text-white"
                     >
-                      <svg
-                        stroke="currentColor"
-                        fill="none"
-                        stroke-width="2"
-                        viewBox="0 0 24 24"
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                        class="h-4 w-4"
-                        height="1em"
-                        width="1em"
-                        xmlns="http://www.w3.org/2000/svg"
-                      >
-                        <line x1="18" y1="6" x2="6" y2="18"></line>
-                        <line x1="6" y1="6" x2="18" y2="18"></line>
-                      </svg>
+                      <IconDelete />
                     </button>
                   </div>
                 </div>
@@ -145,115 +160,62 @@ onMounted(() => {
                   <div
                     class="flex-1 text-ellipsis max-h-5 overflow-hidden break-all relative"
                   >
-                    Delete "{{ conversation.title }}"?
+                    要删除 "{{ conversation.title }}" 吗?
                     <div
                       class="absolute inset-y-0 right-0 w-8 z-10 bg-gradient-to-l from-gray-800"
                     ></div>
                   </div>
                   <div class="absolute flex right-1 z-10 text-gray-300 visible">
-                    <button @click="delConv(cidx)" class="p-1 hover:text-white">
-                      <svg
-                        stroke="currentColor"
-                        fill="none"
-                        stroke-width="2"
-                        viewBox="0 0 24 24"
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                        class="h-4 w-4"
-                        height="1em"
-                        width="1em"
-                        xmlns="http://www.w3.org/2000/svg"
-                      >
-                        <polyline points="20 6 9 17 4 12"></polyline>
-                      </svg>
+                    <button
+                      @click="delConv(conversation.idx)"
+                      class="p-1 hover:text-white"
+                    >
+                      <IconRight />
                     </button>
                     <button
                       @click="cancelDelConv(cidx, conversation)"
                       class="p-1 hover:text-white"
                     >
-                      <svg
-                        stroke="currentColor"
-                        fill="none"
-                        stroke-width="2"
-                        viewBox="0 0 24 24"
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                        class="h-4 w-4"
-                        height="1em"
-                        width="1em"
-                        xmlns="http://www.w3.org/2000/svg"
-                      >
-                        <line x1="18" y1="6" x2="6" y2="18"></line>
-                        <line x1="6" y1="6" x2="18" y2="18"></line>
-                      </svg>
+                      <IconDelete />
                     </button>
                   </div>
                 </a>
 
                 <a
                   v-else
-                  @click.stop.prevent="selectConversation(conversation, true)"
+                  @click.stop.prevent="selectConversation(conversation.idx)"
                   :class="{
                     'bg-gray-800 hover:bg-gray-800 pr-14':
-                      conversation.selected,
-                    'hover:bg-[#2A2B32] hover:pr-4': !conversation.selected,
+                      conversation.idx === state.selectConvId,
+                    'hover:bg-[#2A2B32] hover:pr-4':
+                      conversation.idx !== state.selectConvId,
                   }"
                   class="flex py-3 px-3 items-center gap-3 relative rounded-md cursor-pointer break-all group"
                 >
-                  <svg
-                    stroke="currentColor"
-                    fill="none"
-                    stroke-width="2"
-                    viewBox="0 0 24 24"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    class="h-4 w-4"
-                    height="1em"
-                    width="1em"
-                    xmlns="http://www.w3.org/2000/svg"
-                  >
-                    <path
-                      d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"
-                    ></path>
-                  </svg>
+                  <IconChat />
                   <div
                     class="flex-1 text-ellipsis max-h-5 overflow-hidden break-all relative"
                   >
                     {{ conversation.title }}
                     <div
                       :class="{
-                        'from-gray-800': conversation.selected,
+                        'from-gray-800':
+                          conversation.idx === state.selectConvId,
                         'from-gray-900 group-hover:from-[#2A2B32]':
-                          !conversation.selected,
+                          conversation.idx !== state.selectConvId,
                       }"
-                      class="absolute inset-y-0 right-0 w-8 z-10 bg-gradient-to-l"
+                      class="inset-y-0 right-0 w-8 z-10 bg-gradient-to-l"
                     ></div>
                   </div>
                   <div
-                    v-show="conversation.selected"
+                    v-show="conversation.idx === state.selectConvId"
                     class="absolute flex right-1 z-10 text-gray-300 visible"
                   >
                     <button
                       @click="editTitle(cidx, conversation)"
                       class="p-1 hover:text-white"
                     >
-                      <svg
-                        stroke="currentColor"
-                        fill="none"
-                        stroke-width="2"
-                        viewBox="0 0 24 24"
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                        class="h-4 w-4"
-                        height="1em"
-                        width="1em"
-                        xmlns="http://www.w3.org/2000/svg"
-                      >
-                        <path d="M12 20h9"></path>
-                        <path
-                          d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"
-                        ></path>
-                      </svg>
+                      <IconEdit />
                     </button>
                     <button
                       @click="conversation.delete = true"
@@ -273,7 +235,7 @@ onMounted(() => {
             class="flex py-3 px-3 items-center gap-3 rounded-md hover:bg-gray-500/10 transition-colors duration-200 text-white cursor-pointer text-sm"
           >
             <IconTrash />
-            Clear conversations
+            清空会话
           </a>
           <a
             @click="changeTheme(theme === 'light' ? 'dark' : 'light')"
