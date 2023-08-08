@@ -58,26 +58,24 @@ const props = defineProps<{
                 <div class="prose dark:prose-invert">
                   <div class="mb-5">
                     <h2 class="!mt-4 font-normal !mb-2">
-                      <b>New Chat For ZJU</b>
+                      <b>安全须知</b>
                     </h2>
                   </div>
-                  <div class="w-full h-[1px] bg-gray-300 opacity-20"></div>
-                  <h4 class="mb-4">
-                    new chat gpt for zju，前端使用vue3+vite搭建
-                  </h4>
                   <div class="flex gap-4 flex-col text-sm">
-                    <div
-                      class="flex p-4 bg-gray-50 dark:bg-white/5 rounded-md items-center gap-4 min-h-[71px]"
-                    >
-                      <div class="w-10 text-2xl text-center">🚨</div>
-                      <div class="flex-1 leading-5">notice text</div>
-                    </div>
                     <div
                       class="flex p-4 bg-gray-50 dark:bg-white/5 rounded-md items-center gap-4 min-h-[71px]"
                     >
                       <div class="w-10 text-2xl text-center">🔬</div>
                       <div class="flex-1 leading-5">
-                        contact infomation etc.
+                        当前服务体验仅供内部使用，服务生成的所有内容都是人工智能模型生成，我们对其生成内容的准确性，完整性和功能性不做任何保证，并且其生成的内容不代表我们的态度和观点。
+                      </div>
+                    </div>
+                    <div
+                      class="flex p-4 bg-gray-50 dark:bg-white/5 rounded-md items-center gap-4 min-h-[71px]"
+                    >
+                      <div class="w-10 text-2xl text-center">🚨</div>
+                      <div class="flex-1 leading-5">
+                        请尽量避免在应用中输入个人隐私数据，避免个人信息泄漏。
                       </div>
                     </div>
                   </div>
@@ -86,7 +84,7 @@ const props = defineProps<{
                       @click="props.onCancel"
                       class="btn flex justify-center gap-2 btn-primary ml-auto"
                     >
-                      Done
+                      我已阅读并知晓
                     </button>
                   </div>
                 </div>
