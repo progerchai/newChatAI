@@ -7,7 +7,6 @@ import IconDocumentation from './IconDocumentation.vue';
 import IconEcosystem from './IconEcosystem.vue';
 import IconEdit from './IconEdit.vue';
 import IconForward from './IconForward.vue';
-import IconGame from './IconGame.vue';
 import IconGood from './IconGood.vue';
 import IconLight from './IconLight.vue';
 import IconLightning from './IconLightning.vue';
@@ -30,7 +29,6 @@ export {
   IconEdit,
   IconRight,
   IconForward,
-  IconGame,
   IconGood,
   IconLight,
   IconLightning,

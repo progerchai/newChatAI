@@ -11,13 +11,12 @@ import {
   IconDelete,
   IconEdit,
   IconForward,
-  IconGame,
   IconLight,
   IconPlus,
   IconRight,
   IconTrash,
 } from '@/components/icons';
-import { getHistory, generateConv } from '@/service/home';
+import { generateConv, getHistory } from '@/service/home';
 import type { IConversation } from '@/types';
 import _ from 'lodash';
 import { onMounted, reactive, ref } from 'vue';
@@ -250,7 +249,7 @@ function newChat() {
             target="_blank"
             class="flex py-3 px-3 items-center gap-3 rounded-md hover:bg-gray-500/10 transition-colors duration-200 text-white cursor-pointer text-sm"
           >
-            <IconGame />
+            <IconForward />
             智海</a
           >
           <a
