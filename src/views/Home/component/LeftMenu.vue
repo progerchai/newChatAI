@@ -227,7 +227,7 @@ function newChat() {
           </div>
 
           <a
-            v-if="conversations.length > 0"
+            v-if="history.length > 0"
             @click.stop.prevent="clearConversations"
             class="flex py-3 px-3 items-center gap-3 rounded-md hover:bg-gray-500/10 transition-colors duration-200 text-white cursor-pointer text-sm"
           >
