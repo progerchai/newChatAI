@@ -27,7 +27,6 @@ interface State {
   selectConvId: number | undefined;
 }
 defineProps<{
-  newChat: () => void;
   conversations: IConversation[];
   convTitletmp: string | undefined;
   changeConvTitletmp: (tem: string) => void;
@@ -35,7 +34,6 @@ defineProps<{
   changeConvTitle: (idx: number, conv: any) => void;
   cancelChangeConvTitle: (idx: number, conv: any) => void;
   cancelDelConv: (idx: number, conv: any) => void;
-  delConv: (idx: number) => void;
   editTitle: (idx: number, conv: any) => void;
   changeTheme: (theme: 'light' | 'dark') => void;
   theme: 'light' | 'dark';
