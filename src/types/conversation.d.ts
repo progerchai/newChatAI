@@ -8,4 +8,5 @@ export interface IConversation {
   loading?: boolean;
   selected?: boolean;
   delete?: boolean;
+  editable?: boolean;
 }
