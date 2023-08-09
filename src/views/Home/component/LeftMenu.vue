@@ -25,16 +25,18 @@ interface State {
    * 被选中的对话id
    */
   selectConvId: number | undefined;
+  /**
+   * 标题暂存
+   */
+  convTitletmp: string | undefined;
 }
 defineProps<{
   conversations: IConversation[];
-  convTitletmp: string | undefined;
   changeConvTitletmp: (tem: string) => void;
   titleInputBlur: (idx: number, conv: any) => void;
   changeConvTitle: (idx: number, conv: any) => void;
   cancelChangeConvTitle: (idx: number, conv: any) => void;
   cancelDelConv: (idx: number, conv: any) => void;
-  editTitle: (idx: number, conv: any) => void;
   changeTheme: (theme: 'light' | 'dark') => void;
   theme: 'light' | 'dark';
 }>();
@@ -42,6 +44,7 @@ const accountId = -1;
 const history = ref<Array<IConversation>>([]);
 const state = reactive<State>({
   selectConvId: 0,
+  convTitletmp: '',
 });
 onMounted(() => {
   getHistory({ accountId }).then((res) => {
@@ -93,6 +96,18 @@ function newChat() {
     }
   });
 }
+/**
+ * 编辑标题
+ */
+function editTitle(idx: number, conv: IConversation) {
+  state.convTitletmp = conv.title;
+  conv.editable = true;
+  history.value[idx] = conv;
+  // TODO: 请求接口
+  setTimeout(() => {
+    document.getElementById('titleInput')?.focus();
+  }, 150);
+}
 </script>
 <template>
   <div
@@ -125,7 +140,7 @@ function newChat() {
                   <IconChat />
                   <input
                     id="titleInput"
-                    :value="convTitletmp"
+                    :value="state.convTitletmp"
                     @input="(e: Event) => changeConvTitletmp((e.target as any)?.value)"
                     @blur="titleInputBlur(cidx, conversation)"
                     type="text"

@@ -17,7 +17,12 @@ export const get = async (
   config?: AxiosRequestConfig
 ) => {
   const _url = url + queryString(data);
-  const response = await axios.get(_url, config || {});
+  const response = await axios.get(_url, {
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    ...config,
+  });
   return response.data;
 };
 
@@ -26,6 +31,11 @@ export const post = async (
   data?: object,
   config?: AxiosRequestConfig
 ) => {
-  const response = await axios.post(url, data || {}, config || {});
+  const response = await axios.post(url, data || {}, {
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    ...config,
+  });
   return response.data;
 };

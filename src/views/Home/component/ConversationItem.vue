@@ -52,7 +52,9 @@ function countAndConcat(str: string, substr: string) {
   // 根据判断结果返回相应的字符串
   return isOdd ? str + '\n' + substr : str;
 }
-
+/**
+ * markdown to html
+ */
 function mdToHtml(md: string, conv: IConversation) {
   console.log(md, conv);
 

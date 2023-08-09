@@ -7,7 +7,7 @@
  *@date: 2023-08-05 15:10:24
  */
 import '@/assets/index.css';
-import { IconPlus, IconPost } from '@/components/icons';
+import { IconButton, IconFresh, IconPost } from '@/components/icons';
 import type { IConversation } from '@/types';
 import axios from 'axios';
 import 'highlight.js/styles/github.css';
@@ -420,14 +420,6 @@ function selectConversation(conv: IConversation, loadConv: boolean) {
     })
     .catch((err) => {});
 }
-function editTitle(idx: number, conv: IConversation) {
-  state.convTitletmp = conv.title;
-  conv.editable = true;
-  state.conversation[idx] = conv;
-  setTimeout(() => {
-    document.getElementById('titleInput')?.focus();
-  }, 150);
-}
 function titleInputBlur(idx: number, conv: IConversation) {
   setTimeout(() => {
     cancelChangeConvTitle(idx, conv);
@@ -517,7 +509,6 @@ onMounted(() => {
         :cancel-del-conv="cancelDelConv"
         :del-conv="delConv"
         :select-conversation="selectConversation"
-        :edit-title="editTitle"
         :clear-conversations="clearConversations"
         :theme="state.theme"
         :change-theme="changeTheme"
@@ -545,7 +536,7 @@ onMounted(() => {
 
                   <div
                     v-if="state.conversation.length == 0"
-                    class="text-gray-800 w-full md:max-w-2xl lg:max-w-3xl md:h-full md:flex md:flex-col px-6 dark:text-gray-100"
+                    class="text-gray-800 w-full md:max-w-2xl lg:max-w-3xl md:h-full md:flex md:flex-col px-6 dark:text-gray-100 cover-container"
                   >
                     <img
                       class="home-cover"
@@ -571,7 +562,7 @@ onMounted(() => {
                     @click="handleScrollBottom"
                     class="cursor-pointer absolute right-6 bottom-[124px] md:bottom-[120px] z-10 rounded-full border border-gray-200 bg-gray-50 text-gray-600 dark:border-white/10 dark:bg-white/10 dark:text-gray-200"
                   >
-                    <IconPlus />
+                    <IconButton />
                   </button>
                 </transition>
               </div>
@@ -590,29 +581,16 @@ onMounted(() => {
                   class="flex ml-1 md:w-full md:m-auto md:mb-2 gap-0 md:gap-2 justify-center"
                 >
                   <button
-                    v-if="!state.convLoading && state.conversation.length > 0"
+                    v-if="
+                      !state.convLoading &&
+                      state.conversation.length > 0 &&
+                      false // 暂时隐藏
+                    "
                     @click.stop.prevent="chatRepeat"
                     id="chatRepeat"
                     class="btn flex justify-center gap-2 btn-neutral border-0 md:border"
                   >
-                    <svg
-                      stroke="currentColor"
-                      fill="none"
-                      stroke-width="1.5"
-                      viewBox="0 0 24 24"
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                      class="h-3 w-3"
-                      height="1em"
-                      width="1em"
-                      xmlns="http://www.w3.org/2000/svg"
-                    >
-                      <polyline points="1 4 1 10 7 10"></polyline>
-                      <polyline points="23 20 23 14 17 14"></polyline>
-                      <path
-                        d="M20.49 9A9 9 0 0 0 5.64 5.64L1 10m22 4l-4.64 4.36A9 9 0 0 1 3.51 15"
-                      ></path>
-                    </svg>
+                    <IconFresh />
                     <p class="none">Regenerate response</p>
                   </button>
 
