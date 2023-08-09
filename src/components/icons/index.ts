@@ -1,4 +1,5 @@
 import IconBad from './IconBad.vue';
+import IconBlock from './IconBlock.vue';
 import IconButton from './IconButton.vue';
 import IconChat from './IconChat.vue';
 import IconCommunity from './IconCommunity.vue';
@@ -22,6 +23,7 @@ import IconTrash from './IconTrash.vue';
 import IconWarning from './IconWarning.vue';
 export {
   IconBad,
+  IconBlock,
   IconButton,
   IconChat,
   IconCommunity,

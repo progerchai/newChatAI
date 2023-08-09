@@ -7,7 +7,7 @@
  *@date: 2023-08-05 15:10:24
  */
 import '@/assets/index.css';
-import { IconButton, IconFresh, IconPost } from '@/components/icons';
+import { IconBlock, IconButton, IconFresh, IconPost } from '@/components/icons';
 import type { IConversation } from '@/types';
 import axios from 'axios';
 import 'highlight.js/styles/github.css';
@@ -76,7 +76,11 @@ function closeSource() {
     rsource = undefined;
   }
 }
+/**
+ * 停止会话
+ */
 function stopChat() {
+  // TODO: 停止会话
   let { conversation, cid } = state;
   axios
     .put(`/api/stop/chat/${cid}`, {})
@@ -243,7 +247,7 @@ function send() {
   if (convLoading) {
     return;
   }
-  convLoading = true;
+  state.convLoading = true;
   let first = conversation.length == 0;
 
   conversation.push({
@@ -262,7 +266,7 @@ function send() {
 
   // 滚动到最下面
   handleScrollBottom();
-
+  // TODO: 发送消息
   var _source = (state.source = new EventSource(
     `/api/chat/${cid}?prompt=${encodeURIComponent(chatMsg)}`
   ));
@@ -601,27 +605,8 @@ onMounted(() => {
                     class="btn relative btn-neutral border-0 md:border"
                   >
                     <div class="flex w-full items-center justify-center gap-2">
-                      <svg
-                        stroke="currentColor"
-                        fill="none"
-                        stroke-width="1.5"
-                        viewBox="0 0 24 24"
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                        class="h-3 w-3"
-                        height="1em"
-                        width="1em"
-                        xmlns="http://www.w3.org/2000/svg"
-                      >
-                        <rect
-                          x="3"
-                          y="3"
-                          width="18"
-                          height="18"
-                          rx="2"
-                          ry="2"
-                        ></rect></svg
-                      >Stop generating
+                      <IconBlock />
+                      Stop generating
                     </div>
                   </button>
                 </div>
