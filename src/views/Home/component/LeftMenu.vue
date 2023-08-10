@@ -30,7 +30,7 @@ interface State {
    */
   convTitletmp: string | undefined;
 }
-defineProps<{
+const props = defineProps<{
   conversations: IConversation[];
   changeConvTitletmp: (tem: string) => void;
   titleInputBlur: (idx: number, conv: any) => void;
@@ -39,6 +39,7 @@ defineProps<{
   cancelDelConv: (idx: number, conv: any) => void;
   changeTheme: (theme: 'light' | 'dark') => void;
   theme: 'light' | 'dark';
+  onChangeSessionId: (id: number | undefined) => void;
 }>();
 const accountId = -1;
 const history = ref<Array<IConversation>>([]);
@@ -49,7 +50,7 @@ const state = reactive<State>({
 onMounted(() => {
   getHistory({ accountId }).then((res) => {
     if (res.code === 'SUCCESS') {
-      history.value = res.data.list;
+      history.value = res.data.list?.splice(0, 10);
       state.selectConvId = _.get(res, 'data.list[0].idx', 0);
     }
   });
@@ -60,6 +61,7 @@ onMounted(() => {
  */
 function selectConversation(idx: number | undefined) {
   state.selectConvId = idx;
+  props.onChangeSessionId(idx);
 }
 /**
  * 删除会话
@@ -67,7 +69,7 @@ function selectConversation(idx: number | undefined) {
 function delConv(idx: number | undefined) {
   const _conversations = _.cloneDeep(history.value);
   _.remove(_conversations, (o: IConversation) => o.idx === idx);
-  history.value = _conversations;
+  history.value = _conversations?.splice(0, 10);
 }
 /**
  * 清空会话
@@ -89,10 +91,11 @@ function newChat() {
     if (res.code === 'SUCCESS') {
       const newId = res.data;
       state.selectConvId = newId;
+      props.onChangeSessionId(newId);
       history.value = [
-        { idx: newId, title: `新会话-${newId}` },
+        { idx: newId, title: `新会话` },
         ...history.value,
-      ];
+      ]?.splice(0, 10);
     }
   });
 }

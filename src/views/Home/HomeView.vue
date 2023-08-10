@@ -38,10 +38,12 @@ interface State {
   rsource: any;
   tsource: any;
   cid: number | null;
+  selectedSessionId: number;
 }
 const accountId = -1;
 const inputChatRef = ref(null);
 const chatContainer = ref(null);
+const leftMenuRef = ref(null);
 const instance = getCurrentInstance();
 const state = reactive<State>({
   theme: 'light',
@@ -59,6 +61,7 @@ const state = reactive<State>({
   rsource: undefined,
   tsource: undefined,
   cid: null,
+  selectedSessionId: -1,
 });
 
 function closeSource() {
@@ -249,11 +252,12 @@ function send() {
   }
   state.convLoading = true;
   let first = conversation.length == 0;
-
-  conversation.push({
+  const _conversations = conversation;
+  _conversations.push({
     speaker: 'human',
     speech: chatMsg.trim().replace(/\n/g, ''),
   });
+  state.conversation = _conversations;
   state.chatMsg = '';
   let conv = {
     idx: 0,
@@ -270,13 +274,20 @@ function send() {
   var _source = (state.source = new EventSource(
     `/api/chat.json?prompt=${encodeURIComponent(
       chatMsg
-    )}&accountId=${accountId}&idx=${idx}`
+    )}&accountId=${accountId}&idx=${state.selectedSessionId}`
   ));
+  // 创建eventSource 失败
+  if (!_source.withCredentials) {
+    conv['loading'] = false;
+    state.convLoading = false;
+  }
 
-  // source.addEventListener('open', function () {
-  //   console.log('connect');
-  // });
-
+  source.addEventListener('open', function (e) {
+    console.log('connect', e);
+  });
+  source.addEventListener('error', function (e) {
+    console.log('err', e);
+  });
   //如果服务器响应报文中没有指明事件，默认触发message事件
   _source.addEventListener('message', function (e) {
     console.log(`resp:(${e.data})`);
@@ -288,15 +299,16 @@ function send() {
       state.convLoading = false;
 
       if (first) {
-        let newConv = {
-          id: cid,
-          title: '新建会话',
-        };
+        leftMenuRef.value.newChat();
 
-        generateConvTitle(newConv);
-        state.conversations.unshift(newConv);
-        selectConversation(newConv, false);
-        saveConversations();
+        // let newConv = {
+        //   id: cid,
+        //   title: '新建会话',
+        // };
+        // generateConvTitle(newConv);
+        // state.conversations.unshift(newConv);
+        // selectConversation(newConv, false);
+        // saveConversations();
       }
       refrechConversation();
       state.source = undefined;
@@ -482,10 +494,22 @@ function isScrollAndNotBottom() {
 
   state.isShowGoBottom = true;
 }
+/**
+ * 选中会话idx
+ */
+function onChangeSessionId(idx: number | undefined) {
+  state.selectedSessionId = idx;
+}
 watch(
   () => state.chatMsg,
   () => {
     changeHeight();
+  }
+);
+watch(
+  () => state.selectedSessionId,
+  () => {
+    console.log('选中的idx发生变化： ', state.selectedSessionId);
   }
 );
 onMounted(() => {
@@ -505,6 +529,7 @@ onMounted(() => {
     <div class="content">
       <!-- 菜单导航 -->
       <LeftMenu
+        ref="leftMenuRef"
         :new-chat="newChat"
         :conversations="state.conversations"
         :conv-titletmp="state.convTitletmp"
@@ -518,6 +543,7 @@ onMounted(() => {
         :clear-conversations="clearConversations"
         :theme="state.theme"
         :change-theme="changeTheme"
+        :on-change-session-id="onChangeSessionId"
       />
       <div class="flex flex-1 flex-col md:pl-[260px] content-right">
         <main
