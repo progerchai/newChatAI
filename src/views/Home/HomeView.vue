@@ -39,6 +39,7 @@ interface State {
   tsource: any;
   cid: number | null;
 }
+const accountId = -1;
 const inputChatRef = ref(null);
 const chatContainer = ref(null);
 const instance = getCurrentInstance();
@@ -267,7 +268,9 @@ function send() {
   handleScrollBottom();
   // TODO: 发送消息
   var _source = (state.source = new EventSource(
-    `/api/chat/${cid}?prompt=${encodeURIComponent(chatMsg)}`
+    `/api/chat.json?prompt=${encodeURIComponent(
+      chatMsg
+    )}&accountId=${accountId}&idx=${idx}`
   ));
 
   // source.addEventListener('open', function () {
@@ -541,15 +544,7 @@ onMounted(() => {
                     v-if="state.conversation.length == 0"
                     class="text-gray-800 w-full md:max-w-2xl lg:max-w-3xl md:h-full md:flex md:flex-col px-6 dark:text-gray-100 cover-container"
                   >
-                    <img
-                      class="home-cover"
-                      src="@/assets/imgs/home_cover.png"
-                    />
-                    <h1
-                      class="text-4xl font-semibold text-center mt-6 sm:mt-[20vh] ml-auto mr-auto mb-10 flex gap-2 items-center justify-center home-page-title"
-                    >
-                      智海三乐
-                    </h1>
+                    <img class="home-cover" src="@/assets/imgs/logo.png" />
                     <div class="welcome-text">
                       欢迎访问智海三乐，请提出你的人工智能知识问题，我们一起学习！
                     </div>
@@ -596,9 +591,8 @@ onMounted(() => {
                     <IconFresh />
                     <p class="none">Regenerate response</p>
                   </button>
-
                   <button
-                    v-if="state.convLoading"
+                    v-if="state.convLoading && false"
                     @click.stop.prevent="stopChat"
                     id="stopChat"
                     class="btn relative btn-neutral border-0 md:border"

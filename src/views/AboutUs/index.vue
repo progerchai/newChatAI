@@ -8,7 +8,10 @@
 </script>
 <template>
   <div class="content">
-    <h4>关于我们</h4>
+    <img class="content-logo" src="@/assets/imgs/logo.png" />
+    <div class="content-text">
+      在“教材建设、课程共享和平台增效”三位一体的人工智能教育教学新模式的基础上，浙江大学与高等教育出版社联合推出人工智能领域大模型“智海-三乐（wisdomBot）”，充分利用智能技术加快推动人才培养模式、教学方法改革，进而形成数字化和智能化的教育教学、科学研究基座能力。三乐将于23年秋冬学期在浙江大学图灵班及101核心课程《人工智能引论》试点高校的教学过程中进行试用，为师生提供智能问答、试题生成、学习导航等功能。
+    </div>
   </div>
 </template>
 
@@ -19,5 +22,18 @@
   display: flex;
   align-items: center;
   justify-between: center;
+  display: flex;
+  flex-direction: column;
+  padding: 0px 20%;
+
+  &-logo {
+    width: 100%;
+    height: 500px;
+    object-fit: cover;
+  }
+  &-text {
+    width: 100%;
+    font-size: 20px;
+  }
 }
 </style>

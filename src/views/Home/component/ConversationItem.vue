@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import type { IConversation } from '@/types';
 import _ from 'lodash';
-import katex from 'katex'
+import katex from 'katex';
 defineProps<{
   conv: IConversation;
   idx: number | undefined;
@@ -70,8 +70,7 @@ function last(conv: IConversation) {
     >
       <div class="w-[30px] flex flex-col relative items-end">
         <div
-          class="relative h-[30px] w-[30px] p-1 rounded-sm text-white flex items-center justify-center"
-          style="background-color: rgb(16, 163, 127)"
+          class="relative h-[30px] w-[30px] rounded-sm text-white flex items-center justify-center"
         >
           <img
             class="chat_avater"
@@ -140,8 +139,12 @@ function last(conv: IConversation) {
           <!--  whitespace-pre-wrap -->
           <div class="min-h-[20px] flex flex-col items-start gap-4">
             <div
-              v-html="katex.renderToString(_.get(conv, `speeches.${_.get(conv, 'idx')}`) ||
-                    '大模型正在配置调试中，请等待回复...',)"
+              v-html="
+                katex.renderToString(
+                  _.get(conv, `speeches.${_.get(conv, 'idx')}`) ||
+                    '大模型正在配置调试中，请等待回复...'
+                )
+              "
               :class="{ 'result-streaming': conv.loading }"
               class="markdown prose-r w-full break-words dark:prose-invert light"
             ></div>
@@ -177,4 +180,12 @@ function last(conv: IConversation) {
     </div>
   </div>
 </template>
-<style scoped lang="scss"></style>
+<style scoped lang="scss">
+.chat_avater {
+  width: 30px;
+  height: 30px;
+  object-fit: cover;
+  border-radius: 2px;
+  background-color: transparent;
+}
+</style>
