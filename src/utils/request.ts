@@ -3,9 +3,6 @@ import axios from 'axios';
 import _ from 'lodash';
 const queryString = (params: any) => {
   let str = '';
-  if (_.isObject(params)) {
-    return '';
-  }
   for (var key in params) {
     str += key + '=' + params[key] + '&';
   }
