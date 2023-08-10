@@ -10,7 +10,6 @@ import '@/assets/index.css';
 import { IconBlock, IconButton, IconFresh, IconPost } from '@/components/icons';
 import type { IConversation } from '@/types';
 import axios from 'axios';
-import 'highlight.js/styles/github.css';
 import _ from 'lodash';
 import {
   getCurrentInstance,
