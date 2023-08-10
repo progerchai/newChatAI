@@ -1,5 +1,6 @@
 /// <reference types="vite/client" />
 declare module 'lodash';
+declare module 'katex';
 
 declare module '*.vue' {
   import { DefineComponent } from 'vue';
