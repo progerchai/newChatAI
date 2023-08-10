@@ -41,4 +41,13 @@
     font-weight: 600;
   }
 }
+@media (max-width: 640px) {
+  .content {
+    padding: 12px;
+    &-logo {
+      width: 80%;
+      object-fit: contain;
+    }
+  }
+}
 </style>

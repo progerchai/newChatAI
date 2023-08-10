@@ -177,3 +177,12 @@ body {
   height: 400px;
   object-fit: cover;
 }
+
+@media (max-width: 640px) {
+  .home-cover {
+    height: unset;
+  }
+  .content-right {
+    width: 100vw;
+  }
+}
