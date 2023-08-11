@@ -14,12 +14,14 @@
     "@vitejs/plugin-legacy": "^4.1.1",
     "ahooks-vue": "^0.15.0",
     "axios": "^1.4.0",
+    "babel-runtime": "^6.26.0",
     "katex": "^0.16.8",
     "lodash": "^4.17.21",
     "sass": "^1.64.2",
     "socket.io-client": "^4.7.2",
     "vue": "^3.3.4",
     "vue-3-socket.io": "^1.0.5",
+    "vue-markdown": "^2.2.4",
     "vue-router": "^4.2.4"
   },
   "devDependencies": {

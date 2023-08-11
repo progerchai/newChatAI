@@ -4,6 +4,8 @@ import './assets/main.css';
 import { createApp } from 'vue';
 // import VueSocketIO from 'vue-3-socket.io';
 import App from './App.vue';
+import VueMarkdown from 'vue-markdown';
+import 'katex/dist/katex.min.css';
 import router from './router';
 const app = createApp(App);
 app.config.errorHandler = (err, instance, info) => {
@@ -18,5 +20,6 @@ app.config.errorHandler = (err, instance, info) => {
 // });
 app.use(router);
 // app.use(socketio);
+app.component('VueMarkdown',VueMarkdown)
 
 app.mount('#app');
