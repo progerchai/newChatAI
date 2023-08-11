@@ -44,7 +44,7 @@ const menu = [
   align-items: center;
   margin-right: 24px;
   &-img {
-    height: 42px;
+    height: 36px;
     width: unset;
     margin-right: 16px;
   }
