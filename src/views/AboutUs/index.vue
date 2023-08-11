@@ -8,7 +8,7 @@
 </script>
 <template>
   <div class="content">
-    <img class="content-logo" src="@/assets/imgs/logo.png" />
+    <img class="content-logo" src="@/assets/imgs/logo_cover.png" />
     <div class="content-text">
       在“教材建设、课程共享和平台增效”三位一体的人工智能教育教学新模式的基础上，浙江大学与高等教育出版社联合推出人工智能领域大模型
       <blod class="blod-text">“智海-三乐（wisdomBot）”</blod>

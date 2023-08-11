@@ -570,7 +570,10 @@ onMounted(() => {
                     v-if="state.conversation.length == 0"
                     class="text-gray-800 w-full md:max-w-2xl lg:max-w-3xl md:h-full md:flex md:flex-col px-6 dark:text-gray-100 cover-container"
                   >
-                    <img class="home-cover" src="@/assets/imgs/logo.png" />
+                    <img
+                      class="home-cover"
+                      src="@/assets/imgs/logo_cover.png"
+                    />
                     <div class="welcome-text">
                       欢迎访问智海三乐，请提出你的人工智能知识问题，我们一起学习！
                     </div>
