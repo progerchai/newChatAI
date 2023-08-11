@@ -2,6 +2,7 @@
 import type { IConversation } from '@/types';
 import _ from 'lodash';
 import katex from 'katex';
+import { IconGood, IconBad } from '@/components/icons';
 defineProps<{
   conv: IConversation;
   idx: number | undefined;
@@ -14,6 +15,10 @@ function next(conv: IConversation) {
   _.set(conv, 'idx', _.get(conv, 'idx') + 1);
   //   refrechConversation();
 }
+console.log(2222222, katex.renderToString(
+                    '大模型正在调试中，请等待回复...'
+                ))
+                const str = '<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow></mrow><annotation encoding="application/x-tex">%E5%A4%A7%E6%A8%A1%E5%9E%8B%E6%AD%A3%E5%9C%A8%E9%85%8D%E7%BD%AE%E8%B0%83%E8%AF%95%E4%B8%AD%EF%BC%8C%E8%AF%B7%E7%AD%89%E5%BE%85%E5%9B%9E%E5%A4%8D%E5%A4%A7%E6%A8%A1%E5%9E%8B%E6%AD%A3%E5%9C%A8%E9%85%8D%E7%BD%AE%E8%B0%83%E8%AF%95%E4%B8%AD%EF%BC%8C%E8%AF%B7%E7%AD%89%E5%BE%85%E5%9B%9E%E5%A4%8D%E5%A4%A7%E6%A8%A1%E5%9E%8B%E6%AD%A3%E5%9C%A8%E9%85%8D%E7%BD%AE%E8%B0%83%E8%AF%95%E4%B8%AD%EF%BC%8C%E8%AF%B7%E7%AD%89%E5%BE%85%E5%9B%9E%E5%A4%8D%E5%A4%A7%E6%A8%A1%E5%9E%8B%26nsbp%3B%232345%26nbsp%3B%E6%AD%A3%E5%9C%A8%E9%85%8D%E7%BD%AE%E8%B0%83%E8%AF%95%E4%B8%AD%EF%BC%8C%E8%AF%B7%E7%AD%89%E5%BE%85%E5%9B%9E%E5%A4%8D...</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"></span></span>'
 function last(conv: IConversation) {
   if (conv.idx == 0) {
     return;
@@ -187,5 +192,22 @@ function last(conv: IConversation) {
   object-fit: cover;
   border-radius: 2px;
   background-color: transparent;
+}
+</style>
+<style lang="scss">
+.katex {
+  font: unset;
+  &-html{
+    width: 100%;
+  }
+  .base{
+    width: 100%;
+    span{
+      word-break:break-all;
+      word-wrap:break-word;
+      white-space: pre-wrap;
+      display: inline-block;
+    }
+  }
 }
 </style>

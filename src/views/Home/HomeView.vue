@@ -283,10 +283,10 @@ function send() {
     state.convLoading = false;
   }
 
-  source.addEventListener('open', function (e) {
+  _source.addEventListener('open', function (e) {
     console.log('connect', e);
   });
-  source.addEventListener('error', function (e) {
+  _source.addEventListener('error', function (e) {
     console.log('err', e);
   });
   //如果服务器响应报文中没有指明事件，默认触发message事件
