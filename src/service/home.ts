@@ -22,7 +22,10 @@ export const getHistory = (params: { accountId: number }) => {
  * @param params
  * @returns
  */
-export const getSessionDetail = (params: { accountId: number }) => {
+export const getSessionDetail = (params: {
+  accountId: number;
+  sessionId: number;
+}) => {
   return get(
     'http://proger.cn:38080/app/mock/16/api/getSessionDetail.json',
     params

@@ -141,7 +141,7 @@ function last(conv: IConversation) {
             <div
               v-html="
                 katex.renderToString(
-                  _.get(conv, `speeches`, []).join('') ||
+                  [_.get(conv, `speeches`, [])].join('') ||
                     '大模型正在配置调试中，请等待回复...'
                 )
               "

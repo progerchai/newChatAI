@@ -22,6 +22,7 @@ import {
 import ConversationItem from './component/ConversationItem.vue';
 import LeftMenu from './component/LeftMenu.vue';
 import NoticeModal from './component/NoticeModal.vue';
+import { getSessionDetail } from '@/service/home';
 interface State {
   theme: 'light' | 'dark';
   popupShow: boolean;
@@ -510,6 +511,14 @@ watch(
   () => state.selectedSessionId,
   () => {
     console.log('选中的idx发生变化： ', state.selectedSessionId);
+    getSessionDetail({
+      accountId,
+      getSessionDetail: state.selectedSessionId,
+    }).then((res) => {
+      if (res.code === 'SUCCESS') {
+        state.conversation = res.data.list;
+      }
+    });
   }
 );
 onMounted(() => {
