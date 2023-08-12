@@ -284,6 +284,8 @@ function send() {
   }
 
   _source.addEventListener('open', function (e) {
+    let conv = conversation[conversation.length - 1];
+    conv['loading'] = true;
     console.log('connect', e);
   });
   _source.addEventListener('error', function (e) {
@@ -292,8 +294,9 @@ function send() {
   //如果服务器响应报文中没有指明事件，默认触发message事件
   _source.addEventListener('message', function (e) {
     console.log(`resp:(${e.data})`);
-
     let conv = conversation[conversation.length - 1];
+    conv['loading'] = true;
+
     if (e.data == '[DONE]') {
       _source.close();
       conv['loading'] = false;
