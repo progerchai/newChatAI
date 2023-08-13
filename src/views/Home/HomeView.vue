@@ -11,6 +11,7 @@ import { IconBlock, IconButton, IconFresh, IconPost } from '@/components/icons';
 import type { IConversation } from '@/types';
 import axios from 'axios';
 import _ from 'lodash';
+import { Typewriter } from '@/utils';
 import {
   getCurrentInstance,
   nextTick,
@@ -40,6 +41,7 @@ interface State {
   tsource: any;
   cid: number | null;
   selectedSessionId: number;
+  stashString: string;
 }
 const accountId = -1;
 const inputChatRef = ref(null);
@@ -63,8 +65,11 @@ const state = reactive<State>({
   tsource: undefined,
   cid: null,
   selectedSessionId: -1,
+  stashString: '',
 });
-
+const typewriter = new Typewriter((str: string) => {
+  state.stashString = str || '';
+});
 function closeSource() {
   let { source, tsource, rsource } = state;
   if (source) {
@@ -282,8 +287,10 @@ function send() {
   if (!_source.withCredentials) {
     conv['loading'] = false;
     state.convLoading = false;
+    typewriter.done();
   }
-
+  typewriter.start();
+  // const currentConvIndex = conversation.length - 1;
   _source.addEventListener('open', function (e) {
     let conv = conversation[conversation.length - 1];
     conv['loading'] = true;
@@ -302,6 +309,7 @@ function send() {
       _source.close();
       conv['loading'] = false;
       state.convLoading = false;
+      typewriter.done();
 
       if (first) {
         leftMenuRef.value.newChat();
@@ -328,7 +336,9 @@ function send() {
     // 滚动到最下面
     handleScrollBottom();
 
-    conv['speeches'][0] += content;
+    // conv['speeches'][0] += content;
+    typewriter.add(content);
+
     refrechConversation();
   });
 
@@ -505,6 +515,13 @@ function isScrollAndNotBottom() {
 function onChangeSessionId(idx: number | undefined) {
   state.selectedSessionId = idx;
 }
+watch(
+  () => state.stashString,
+  () => {
+    let conv = conversation[conversation.length - 1];
+    conv['speeches'][0] += state.stashString;
+  }
+);
 watch(
   () => state.chatMsg,
   () => {

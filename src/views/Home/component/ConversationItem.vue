@@ -4,8 +4,27 @@ import type { IConversation } from '@/types';
 import { marked } from 'marked';
 import hljs from 'highlight.js';
 import 'highlight.js/styles/github.css';
+import MarkdownIt from 'markdown-it';
 import katex from 'katex';
 import _ from 'lodash';
+
+const md = MarkdownIt({
+  highlight: function (str: string, lang: string) {
+    if (lang && hljs.getLanguage(lang)) {
+      try {
+        return `<div class="hl-code"><div class="hl-code-header"><span>${lang}</span></div><div class="hljs"><code>${
+          hljs.highlight(str, { language: lang, ignoreIllegals: true }).value
+        }</code></div></div>`;
+      } catch (__) {
+        console.log(__, 'error');
+      }
+    }
+    return `<div class="hl-code"><div class="hl-code-header"><span>${lang}</span></div><div class="hljs"><code>${md.utils.escapeHtml(
+      str
+    )}</code></div></div>`;
+  },
+});
+
 const text =
   '以下是一道关于支持向量机的单项选择题：<br><br>支持向量机（Support Vector Machine，SVM）是一种监督学习算法，用于分类和回归分析。SVM的主要思想是找到一个超平面，使得超平面上的数据点尽可能地被分离。以下关于SVM的说法错误的是：<br><br>A. SVM是一种线性分类算法<br>B. SVM具有较高的泛化能力<br>C. SVM可以处理高维数据<br>D. SVM只能用于二分类问题<br><br>答案：D. SVM只能用于二分类问题<br><br>解析：支持向量机可以用于二分类问题，也可以用于多分类问题。因此，选项D错误。';
 const katexStr = '$$\Gamma(z) = \int_0^\infty t^{z-1}e^{-t}dt\,.$$';
@@ -207,6 +226,7 @@ function last(conv: IConversation) {
                 '大模型正在配置调试中，请等待回复1...'
               "
             /> -->
+            <!-- <div v-html="md.render(text)"></div> -->
             <div
               v-html="
                 mdToHtml(
