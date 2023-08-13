@@ -48,7 +48,7 @@ const leftMenuRef = ref(null);
 const instance = getCurrentInstance();
 const state = reactive<State>({
   theme: 'light',
-  popupShow: true,
+  popupShow: localStorage.getItem('popupShowed') !== 'true',
   avatarIdx: 1,
   conversations: [],
   conversation: [],
@@ -134,6 +134,7 @@ function resetHeight() {
  */
 function closePopup() {
   state.popupShow = false;
+  localStorage.setItem('popupShowed', 'true');
 }
 function vueCopy(node: Element) {
   var code = node.getElementsByTagName('code')[0].innerHTML;
