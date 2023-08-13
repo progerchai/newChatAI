@@ -48,7 +48,7 @@ const leftMenuRef = ref(null);
 const instance = getCurrentInstance();
 const state = reactive<State>({
   theme: 'light',
-  popupShow: false, // TODO:
+  popupShow: true,
   avatarIdx: 1,
   conversations: [],
   conversation: [],
