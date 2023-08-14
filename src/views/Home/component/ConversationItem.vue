@@ -231,7 +231,7 @@ function last(conv: IConversation) {
               v-html="
                 mdToHtml(
                   [_.get(conv, `speeches`, [])].join('') ||
-                    '大模型正在配置调试中，请等待回复...'
+                    '正在排队处理中，请稍等......'
                 )
               "
               :class="{ 'result-streaming': conv.loading }"

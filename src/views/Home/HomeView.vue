@@ -356,7 +356,7 @@ function generateConvTitle(conv: IConversation) {
   //如果服务器响应报文中没有指明事件，默认触发message事件
   conv.title = '';
   _tsource.addEventListener('message', function (e) {
-    if (e.data == '[DONE]') {
+    if (e.data === '[DONE]' || e.data === '[ERROR]') {
       _tsource.close();
       selectConversation(conv, false);
       saveConversations();
