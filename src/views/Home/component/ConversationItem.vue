@@ -35,7 +35,6 @@ const props = defineProps<{
   conv: IConversation;
   idx: number | undefined;
 }>();
-console.log(222222, ' props.conv', props.conv);
 
 const renderer = {
   code(code: string, infostring: string, escaped: boolean) {
@@ -84,8 +83,6 @@ function countAndConcat(str: string, substr: string) {
 // marked.use(KatexExtension({}));
 
 function mdToHtml(md: string) {
-  console.log(2222, md);
-
   if (md == '') {
     return '<p></p>';
   }

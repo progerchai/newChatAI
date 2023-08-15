@@ -1,6 +1,6 @@
 import type { AxiosRequestConfig } from 'axios';
 import axios from 'axios';
-import _ from 'lodash';
+import { ElMessage } from 'element-plus';
 const perfix =
   import.meta.env.MODE === 'development' ? 'http://119.23.229.128' : '';
 const queryString = (params: any) => {
@@ -9,6 +9,11 @@ const queryString = (params: any) => {
     str += key + '=' + params[key] + '&';
   }
   return '?' + str.substr(0, str.length - 1);
+};
+const errorHandler = (data) => {
+  if (data?.code === 'ERROR') {
+    ElMessage.error(data?.message);
+  }
 };
 export const get = async (
   url: string,
@@ -22,6 +27,7 @@ export const get = async (
     },
     ...config,
   });
+  errorHandler(response.data);
   return response.data;
 };
 
@@ -36,5 +42,6 @@ export const post = async (
     },
     ...config,
   });
+  errorHandler(response.data);
   return response.data;
 };

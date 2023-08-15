@@ -11,6 +11,7 @@ import { IconBlock, IconButton, IconFresh, IconPost } from '@/components/icons';
 import type { IConversation } from '@/types';
 import axios from 'axios';
 import _ from 'lodash';
+import { ElMessage } from 'element-plus';
 // import { Typewriter } from '@/utils';
 import {
   getCurrentInstance,
@@ -23,7 +24,7 @@ import {
 import ConversationItem from './component/ConversationItem.vue';
 import LeftMenu from './component/LeftMenu.vue';
 import NoticeModal from './component/NoticeModal.vue';
-import { getSessionDetail } from '@/service/home';
+import { getSessionDetail, generateConv } from '@/service/home';
 interface State {
   theme: 'light' | 'dark';
   popupShow: boolean;
@@ -253,8 +254,8 @@ function judgeInput(e: KeyboardEvent) {
 /**
  * 发送chat 信息
  */
-function send() {
-  let { chatMsg, convLoading, conversation, cid } = state;
+async function send() {
+  let { chatMsg, convLoading, conversation, cid, selectedSessionId } = state;
   if (chatMsg.trim().length == 0) {
     return;
   }
@@ -262,7 +263,18 @@ function send() {
     return;
   }
   state.convLoading = true;
-  let first = conversation.length == 0;
+  if (selectedSessionId < 0) {
+    // 当前无会话，创建会话
+    const generateRes = await generateConv();
+    if (generateRes.code === 'SUCCESS') {
+      onChangeSessionId(generateRes.data);
+      leftMenuRef.value.newChat(generateRes.data);
+    } else {
+      ElMessage.error('创建新会话失败');
+      return;
+    }
+  }
+  return;
   const _conversations = conversation;
   _conversations.push({
     speaker: 'human',
@@ -307,7 +319,6 @@ function send() {
   _source.addEventListener('message', function (e) {
     console.log(`resp:(${e.data})`);
     let conv = conversation[conversation.length - 1];
-    console.log(2222, conv);
 
     conv['loading'] = true;
 
@@ -316,19 +327,6 @@ function send() {
       conv['loading'] = false;
       state.convLoading = false;
       // typewriter.done();
-
-      if (first) {
-        leftMenuRef.value.newChat();
-
-        // let newConv = {
-        //   id: cid,
-        //   title: '新建会话',
-        // };
-        // generateConvTitle(newConv);
-        // state.conversations.unshift(newConv);
-        // selectConversation(newConv, false);
-        // saveConversations();
-      }
       refrechConversation();
       state.source = undefined;
       return;
@@ -546,7 +544,6 @@ watch(
     }).then((res) => {
       if (res.code === 'SUCCESS') {
         state.conversation = res.data.list;
-        console.log(2222, 'res.data.list', res.data.list);
       }
     });
   }

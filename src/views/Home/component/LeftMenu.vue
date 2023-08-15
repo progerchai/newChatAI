@@ -44,17 +44,19 @@ const props = defineProps<{
 const accountId = -1;
 const history = ref<Array<IConversation>>([]);
 const state = reactive<State>({
-  selectConvId: 0,
+  selectConvId: -1,
   convTitletmp: '',
 });
-onMounted(() => {
+const getHistoryFunc = () => {
   getHistory({ accountId }).then((res) => {
     if (res.code === 'SUCCESS') {
       const data = res.data.list?.slice(0, 10);
-      state.selectConvId = _.get(data, '[0].idx', 0);
       history.value = data;
     }
   });
+};
+onMounted(() => {
+  getHistoryFunc();
 });
 /**
  * 选中会话
@@ -87,18 +89,22 @@ function saveConversations() {}
 /**
  * 新建会话
  */
-function newChat() {
-  generateConv({ accountId }).then((res) => {
-    if (res.code === 'SUCCESS') {
-      const newId = res.data;
-      state.selectConvId = newId;
-      props.onChangeSessionId(newId);
-      history.value = [
-        { idx: newId, title: `新会话` },
-        ...history.value,
-      ]?.splice(0, 10);
-    }
-  });
+function newChat(idx?: number) {
+  if (idx) {
+    getHistoryFunc();
+  } else {
+    generateConv({ accountId }).then((res) => {
+      if (res.code === 'SUCCESS') {
+        const newId = res.data;
+        state.selectConvId = newId;
+        props.onChangeSessionId(newId);
+        history.value = [
+          { idx: newId, title: `新会话` },
+          ...history.value,
+        ]?.splice(0, 10);
+      }
+    });
+  }
 }
 /**
  * 编辑标题
@@ -112,6 +118,9 @@ function editTitle(idx: number, conv: IConversation) {
     document.getElementById('titleInput')?.focus();
   }, 150);
 }
+defineExpose({
+  newChat,
+});
 </script>
 <template>
   <div
@@ -124,7 +133,11 @@ function editTitle(idx: number, conv: IConversation) {
       >
         <nav ref="navEle" class="flex h-full flex-1 flex-col space-y-1 p-2">
           <a
-            @click.stop="newChat"
+            @click.stop="
+              () => {
+                newChat();
+              }
+            "
             class="flex py-3 px-3 items-center gap-3 rounded-md hover:bg-gray-500/10 transition-colors duration-200 text-white cursor-pointer text-sm mb-2 flex-shrink-0 border border-white/20"
           >
             <IconPlus />新建会话
