@@ -50,8 +50,9 @@ const state = reactive<State>({
 onMounted(() => {
   getHistory({ accountId }).then((res) => {
     if (res.code === 'SUCCESS') {
-      history.value = res.data.list?.splice(0, 10);
-      state.selectConvId = _.get(res, 'data.list[0].idx', 0);
+      const data = res.data.list?.slice(0, 10);
+      state.selectConvId = _.get(data, '[0].idx', 0);
+      history.value = data;
     }
   });
 });

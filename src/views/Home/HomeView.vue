@@ -43,6 +43,8 @@ interface State {
   selectedSessionId: number;
   stashString: string;
 }
+const PREFIX =
+  import.meta.env.MODE === 'development' ? 'http://119.23.229.128' : '';
 const accountId = -1;
 const inputChatRef = ref(null);
 const chatContainer = ref(null);
@@ -92,7 +94,7 @@ function stopChat() {
   // TODO: 停止会话
   let { conversation, cid } = state;
   axios
-    .put(`/api/stop/chat/${cid}`, {})
+    .put(`${PREFIX}/api/stop/chat/${cid}`, {})
     .then((result) => {
       const rconv = conversation[conversation.length - 1];
       rconv['loading'] = false;
@@ -199,7 +201,9 @@ function chatRepeat() {
   rconv['speeches'].push('');
   refrechConversation();
 
-  const _rsource = (state.rsource = new EventSource(`/api/chat/repeat/${cid}`));
+  const _rsource = (state.rsource = new EventSource(
+    `${PREFIX}/api/chat/repeat/${cid}`
+  ));
   _rsource.addEventListener('open', function () {
     console.log('connect');
   });
@@ -264,7 +268,6 @@ function send() {
     speaker: 'human',
     speech: chatMsg.trim().replace(/\n/g, ''),
   });
-  state.conversation = _conversations;
   state.chatMsg = '';
   let conv = {
     idx: 0,
@@ -273,13 +276,14 @@ function send() {
     suitable: [0],
     speeches: [''],
   };
-  conversation.push(conv);
+  _conversations.push(conv);
+  state.conversation = _conversations;
 
   // 滚动到最下面
   handleScrollBottom();
   // TODO: 发送消息
   var _source = (state.source = new EventSource(
-    `/api/chat.json?prompt=${encodeURIComponent(
+    `${PREFIX}/api/chat.json?prompt=${encodeURIComponent(
       chatMsg
     )}&accountId=${accountId}&idx=${state.selectedSessionId}`
   ));
@@ -303,9 +307,11 @@ function send() {
   _source.addEventListener('message', function (e) {
     console.log(`resp:(${e.data})`);
     let conv = conversation[conversation.length - 1];
+    console.log(2222, conv);
+
     conv['loading'] = true;
 
-    if (e.data == '[DONE]') {
+    if (e.data === '[DONE]' || e.data === '[ERROR]') {
       _source.close();
       conv['loading'] = false;
       state.convLoading = false;
@@ -336,7 +342,7 @@ function send() {
     // 滚动到最下面
     handleScrollBottom();
 
-    conv['speeches'][0] += content;
+    conv['speeches'] += content;
     // typewriter.add(content);
 
     refrechConversation();
@@ -351,7 +357,9 @@ function send() {
 }
 function generateConvTitle(conv: IConversation) {
   const { cid } = state;
-  var _tsource = (state.tsource = new EventSource(`/api/chat/title/${cid}`));
+  var _tsource = (state.tsource = new EventSource(
+    `${PREFIX}/api/chat/title/${cid}`
+  ));
 
   //如果服务器响应报文中没有指明事件，默认触发message事件
   conv.title = '';
@@ -390,11 +398,11 @@ function newChat() {
     delete conv.delete;
   }
 
-  loadId();
+  // loadId();
 }
 function loadId() {
   axios
-    .post(`/api/generate/id`, {})
+    .post(`${PREFIX}/api/generate/id`, {})
     .then((result) => {
       console.log(result);
       const resp = result.data;
@@ -439,7 +447,7 @@ function selectConversation(conv: IConversation, loadConv: boolean) {
   }
 
   axios
-    .get(`/api/conv/${conv.id}`)
+    .get(`${PREFIX}/api/conv/${conv.id}`)
     .then((result) => {
       console.log(result);
       var resp = result.data;
@@ -538,6 +546,7 @@ watch(
     }).then((res) => {
       if (res.code === 'SUCCESS') {
         state.conversation = res.data.list;
+        console.log(2222, 'res.data.list', res.data.list);
       }
     });
   }
@@ -545,7 +554,7 @@ watch(
 onMounted(() => {
   let theme = localStorage.getItem('theme') || 'light';
   changeTheme(theme as 'dark' | 'light');
-  loadId();
+  // loadId();
   loadConversations();
   loadAvatar();
 
