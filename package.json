@@ -11,6 +11,7 @@
     "type-check": "vue-tsc --noEmit -p tsconfig.app.json --composite false"
   },
   "dependencies": {
+    "@types/marked": "^5.0.1",
     "@vitejs/plugin-legacy": "^4.1.1",
     "ahooks-vue": "^0.15.0",
     "axios": "^1.4.0",
@@ -20,6 +21,7 @@
     "lodash": "^4.17.21",
     "markdown-it": "^13.0.1",
     "marked": "^4.2.12",
+    "mathjax": "^3.2.2",
     "sass": "^1.64.2",
     "socket.io-client": "^4.7.2",
     "vue": "^3.3.4",

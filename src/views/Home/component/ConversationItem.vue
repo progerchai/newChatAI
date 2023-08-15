@@ -7,9 +7,12 @@ import 'highlight.js/styles/github.css';
 import MarkdownIt from 'markdown-it';
 import katex from 'katex';
 import _ from 'lodash';
+import KatexExtension from '@/utils/katex';
 
 const md = MarkdownIt({
   highlight: function (str: string, lang: string) {
+    console.log(22222, 12345, str, lang);
+
     if (lang && hljs.getLanguage(lang)) {
       try {
         return `<div class="hl-code"><div class="hl-code-header"><span>${lang}</span></div><div class="hljs"><code>${
@@ -26,6 +29,8 @@ const md = MarkdownIt({
 });
 
 const text =
+  '$$1 \Gamma(z) = \int_0^\infty t^{z-1}e^{-t}dt\,. $$' +
+  '``` console.log(22222) ```' +
   '以下是一道关于支持向量机的单项选择题：<br><br>支持向量机（Support Vector Machine，SVM）是一种监督学习算法，用于分类和回归分析。SVM的主要思想是找到一个超平面，使得超平面上的数据点尽可能地被分离。以下关于SVM的说法错误的是：<br><br>A. SVM是一种线性分类算法<br>B. SVM具有较高的泛化能力<br>C. SVM可以处理高维数据<br>D. SVM只能用于二分类问题<br><br>答案：D. SVM只能用于二分类问题<br><br>解析：支持向量机可以用于二分类问题，也可以用于多分类问题。因此，选项D错误。';
 const katexStr = '$$\Gamma(z) = \int_0^\infty t^{z-1}e^{-t}dt\,.$$';
 defineProps<{
@@ -76,18 +81,31 @@ function countAndConcat(str: string, substr: string) {
   // 根据判断结果返回相应的字符串
   return isOdd ? str + '\n' + substr : str;
 }
+// marked.use({ renderer });
+// marked.use(KatexExtension({}));
+
 function mdToHtml(md: string) {
   if (md == '') {
     return '<p></p>';
   }
 
   md = countAndConcat(md, '```');
+  const htmlText = marked(text, {
+    sanitize: true,
+    breaks: true,
+    renderer,
+    highlight: function (code: string) {
+      return hljs.highlightAuto(code).value;
+    },
+    math: true, // 启用MathJax
+  });
+  console.log(1234, htmlText);
 
   var htmlMD = marked.parse(md);
   htmlMD = htmlMD.trim();
   return htmlMD;
 }
-marked.use({ renderer });
+
 function suitable(idx: number | undefined, conv: IConversation, suit: any) {}
 function next(conv: IConversation) {
   if (conv.idx == _.get(conv, 'speeches.length') - 1) {
@@ -231,6 +249,7 @@ function last(conv: IConversation) {
               v-html="
                 mdToHtml(
                   [_.get(conv, `speeches`, [])].join('') ||
+                    text ||
                     '正在排队处理中，请稍等......'
                 )
               "

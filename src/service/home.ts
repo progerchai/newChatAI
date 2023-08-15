@@ -1,16 +1,12 @@
 import type { IConversation } from '@/types';
 import { get, post } from '@/utils';
-
 /**
  * 获取历史会话
  * @param params
  * @returns
  */
 export const getHistory = (params: { accountId: number }) => {
-  return get(
-    'http://proger.cn:38080/app/mock/16/api/getHistory.json',
-    params
-  ) as Promise<{
+  return get('/api/getHistory.json', params) as Promise<{
     data: {
       list: Array<{ id: number; title: string }>;
     };
@@ -26,10 +22,7 @@ export const getSessionDetail = (params: {
   accountId: number;
   sessionId: number;
 }) => {
-  return get(
-    'http://proger.cn:38080/app/mock/16/api/getSessionDetail.json',
-    params
-  ) as Promise<{
+  return get('/api/getSessionDetail.json', params) as Promise<{
     data: IConversation[];
     code: string;
   }>;
@@ -40,10 +33,7 @@ export const getSessionDetail = (params: {
  * @returns
  */
 export const generateConv = (params: { accountId: number }) => {
-  return post(
-    'http://proger.cn:38080/app/mock/16/api/generate.json',
-    params
-  ) as Promise<{
+  return post('/api/generate.json', params) as Promise<{
     data: number;
     code: string;
   }>;
