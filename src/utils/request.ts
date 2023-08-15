@@ -1,6 +1,8 @@
 import type { AxiosRequestConfig } from 'axios';
 import axios from 'axios';
 import _ from 'lodash';
+const perfix =
+  import.meta.env.MODE === 'development' ? 'http://119.23.229.128' : '';
 const queryString = (params: any) => {
   let str = '';
   for (var key in params) {
@@ -13,7 +15,7 @@ export const get = async (
   data?: object,
   config?: AxiosRequestConfig
 ) => {
-  const _url = url + queryString(data);
+  const _url = perfix + url + queryString(data);
   const response = await axios.get(_url, {
     headers: {
       'Content-Type': 'application/json',
@@ -28,7 +30,7 @@ export const post = async (
   data?: object,
   config?: AxiosRequestConfig
 ) => {
-  const response = await axios.post(url, data || {}, {
+  const response = await axios.post(perfix + url, data || {}, {
     headers: {
       'Content-Type': 'application/json',
     },
