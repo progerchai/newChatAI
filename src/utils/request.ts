@@ -10,7 +10,7 @@ const queryString = (params: any) => {
   }
   return '?' + str.substr(0, str.length - 1);
 };
-const errorHandler = (data) => {
+const errorHandler = (data: { code: string; message: string }) => {
   if (data?.code === 'ERROR') {
     ElMessage.error(data?.message);
   }
