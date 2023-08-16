@@ -265,7 +265,7 @@ async function send() {
   state.convLoading = true;
   if (selectedSessionId < 0) {
     // 当前无会话，创建会话
-    const generateRes = await generateConv();
+    const generateRes = await generateConv({accountId});
     if (generateRes.code === 'SUCCESS') {
       onChangeSessionId(generateRes.data);
       leftMenuRef.value.newChat(generateRes.data);
