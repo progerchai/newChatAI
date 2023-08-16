@@ -16,11 +16,11 @@ import {
   IconRight,
   IconTrash,
   Ellipsis,
-} from "@/components";
-import { generateConv, getHistory } from "@/service/home";
-import type { IConversation } from "@/types";
-import _ from "lodash";
-import { onMounted, reactive, ref } from "vue";
+} from '@/components';
+import { generateConv, getHistory } from '@/service/home';
+import type { IConversation } from '@/types';
+import _ from 'lodash';
+import { onMounted, reactive, ref } from 'vue';
 interface State {
   /**
    * 被选中的对话id
@@ -38,24 +38,33 @@ const props = defineProps<{
   changeConvTitle: (idx: number, conv: any) => void;
   cancelChangeConvTitle: (idx: number, conv: any) => void;
   cancelDelConv: (idx: number, conv: any) => void;
-  changeTheme: (theme: "light" | "dark") => void;
-  theme: "light" | "dark";
+  changeTheme: (theme: 'light' | 'dark') => void;
+  theme: 'light' | 'dark';
   onChangeSessionId: (id: number | undefined) => void;
 }>();
 const accountId = -1;
 const history = ref<Array<IConversation>>([]);
 const state = reactive<State>({
   selectConvId: -1,
-  convTitletmp: "",
+  convTitletmp: '',
 });
 const getHistoryFunc = async (idx?: number) => {
   await getHistory({ accountId }).then((res) => {
-    if (res.code === "SUCCESS") {
+    if (res.code === 'SUCCESS') {
       const data = res.data.list?.slice(0, 10);
       history.value = data;
       idx && selectConversation(idx);
     }
   });
+};
+const setHistoryTitle = (idx: number, title: string) => {
+  const value = history.value;
+  value.forEach((item) => {
+    if (item.idx === idx) {
+      item.title = title;
+    }
+  });
+  history.value = value;
 };
 onMounted(() => {
   getHistoryFunc();
@@ -96,14 +105,14 @@ async function newChat(idx?: number) {
     await getHistoryFunc(idx);
   } else {
     await generateConv({ accountId }).then((res) => {
-      if (res.code === "SUCCESS") {
+      if (res.code === 'SUCCESS') {
         const newId = res.data;
         state.selectConvId = newId;
         props.onChangeSessionId(newId);
-        history.value = [{ idx: newId, title: `新会话` }, ...history.value]?.splice(
-          0,
-          10
-        );
+        history.value = [
+          { idx: newId, title: `新会话` },
+          ...history.value,
+        ]?.splice(0, 10);
       }
     });
   }
@@ -117,11 +126,12 @@ function editTitle(idx: number, conv: IConversation) {
   history.value[idx] = conv;
   // TODO: 请求接口
   setTimeout(() => {
-    document.getElementById("titleInput")?.focus();
+    document.getElementById('titleInput')?.focus();
   }, 150);
 }
 defineExpose({
   newChat,
+  setHistoryTitle,
 });
 </script>
 <template>
@@ -227,10 +237,11 @@ defineExpose({
                   <div
                     class="flex-1 text-ellipsis max-h-5 overflow-hidden break-all relative"
                   >
-                    <Ellipsis :text="conversation.title " />
+                    <Ellipsis :text="conversation.title" />
                     <div
                       :class="{
-                        'from-gray-800': conversation.idx === state.selectConvId,
+                        'from-gray-800':
+                          conversation.idx === state.selectConvId,
                         'from-gray-900 group-hover:from-[#2A2B32]':
                           conversation.idx !== state.selectConvId,
                       }"
@@ -273,7 +284,7 @@ defineExpose({
           >
             <IconDark v-if="theme === 'light'" />
             <IconLight v-if="theme === 'dark'" />
-            {{ theme === "light" ? "暗色主题" : "亮色主题" }}
+            {{ theme === 'light' ? '暗色主题' : '亮色主题' }}
           </a>
           <a
             href="https://aiplusx.com.cn/"

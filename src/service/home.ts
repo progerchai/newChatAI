@@ -32,7 +32,7 @@ export const getSessionDetail = (params: {
  * @param params 账号id
  * @returns
  */
-export const generateConv = (params: { accountId: number }) => {
+export const generateConv = (params: { accountId: number; title?: string }) => {
   return post('/api/generate.json', params) as Promise<{
     data: number;
     code: string;
