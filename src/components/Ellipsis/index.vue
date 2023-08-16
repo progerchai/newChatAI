@@ -1,8 +1,10 @@
 <script setup lang="ts">
-withDefaults(defineProps<{ text: string; max?: number }>(), { max: 8 });
+withDefaults(defineProps<{ text: string | undefined; max?: number }>(), {
+  max: 8,
+});
 </script>
 <template>
   <span>
-    {{ text.length > max ? text.slice(0, max) + "..." : text }}
+    {{ text.length > max ? text.slice(0, max) + '...' : text }}
   </span>
 </template>
