@@ -15,7 +15,8 @@ import {
   IconPlus,
   IconRight,
   IconTrash,
-} from "@/components/icons";
+  Ellipsis,
+} from "@/components";
 import { generateConv, getHistory } from "@/service/home";
 import type { IConversation } from "@/types";
 import _ from "lodash";
@@ -226,7 +227,7 @@ defineExpose({
                   <div
                     class="flex-1 text-ellipsis max-h-5 overflow-hidden break-all relative"
                   >
-                    {{ conversation.title }}
+                    <Ellipsis :text="conversation.title " />
                     <div
                       :class="{
                         'from-gray-800': conversation.idx === state.selectConvId,
