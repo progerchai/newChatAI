@@ -274,7 +274,6 @@ async function send() {
       return;
     }
   }
-  return;
   const _conversations = conversation;
   _conversations.push({
     speaker: 'human',
