@@ -4,27 +4,7 @@ import type { IConversation } from '@/types';
 import { marked } from 'marked';
 import hljs from 'highlight.js';
 import 'highlight.js/styles/github.css';
-import MarkdownIt from 'markdown-it';
-import katex from 'katex';
 import _ from 'lodash';
-import KatexExtension from '@/utils/katex';
-
-const md = MarkdownIt({
-  highlight: function (str: string, lang: string) {
-    if (lang && hljs.getLanguage(lang)) {
-      try {
-        return `<div class="hl-code"><div class="hl-code-header"><span>${lang}</span></div><div class="hljs"><code>${
-          hljs.highlight(str, { language: lang, ignoreIllegals: true }).value
-        }</code></div></div>`;
-      } catch (__) {
-        console.log(__, 'error');
-      }
-    }
-    return `<div class="hl-code"><div class="hl-code-header"><span>${lang}</span></div><div class="hljs"><code>${md.utils.escapeHtml(
-      str
-    )}</code></div></div>`;
-  },
-});
 
 const text =
   '$$1 \Gamma(z) = \int_0^\infty t^{z-1}e^{-t}dt\,. $$' +
@@ -35,9 +15,10 @@ const props = defineProps<{
   conv: IConversation;
   idx: number | undefined;
 }>();
-
 const renderer = {
   code(code: string, infostring: string, escaped: boolean) {
+    console.log(22222, code, infostring, escaped);
+
     var codeHtml = code;
     if (infostring && infostring == 'html') {
       codeHtml = encodeURIComponent(code);
@@ -79,8 +60,7 @@ function countAndConcat(str: string, substr: string) {
   // 根据判断结果返回相应的字符串
   return isOdd ? str + '\n' + substr : str;
 }
-// marked.use({ renderer });
-// marked.use(KatexExtension({}));
+marked.use({ renderer });
 
 function mdToHtml(md: string) {
   if (md == '') {
@@ -88,26 +68,12 @@ function mdToHtml(md: string) {
   }
 
   md = countAndConcat(md, '```');
-  var htmlMD = marked.parse(md);
+  var htmlMD = marked(md);
   htmlMD = htmlMD.trim();
   return htmlMD;
 }
 
 function suitable(idx: number | undefined, conv: IConversation, suit: any) {}
-function next(conv: IConversation) {
-  if (conv.idx == _.get(conv, 'speeches.length') - 1) {
-    return;
-  }
-  _.set(conv, 'idx', _.get(conv, 'idx') + 1);
-  //   refrechConversation();
-}
-function last(conv: IConversation) {
-  if (conv.idx == 0) {
-    return;
-  }
-  _.set(conv, 'idx', _.get(conv, 'idx') - 1);
-  //   refrechConversation();
-}
 </script>
 <template>
   <!-- human -->
@@ -172,13 +138,6 @@ function last(conv: IConversation) {
         <div class="flex flex-grow flex-col gap-3">
           <!--  whitespace-pre-wrap -->
           <div class="min-h-[20px] flex flex-col items-start gap-4">
-            <!-- <vue-markdown
-              :source="
-                [_.get(conv, `speeches`, [])].join('') ||
-                '大模型正在配置调试中，请等待回复1...'
-              "
-            /> -->
-            <!-- <div v-html="md.render(text)"></div> -->
             <div
               v-html="
                 mdToHtml(
@@ -228,25 +187,5 @@ function last(conv: IConversation) {
   object-fit: cover;
   border-radius: 2px;
   background-color: transparent;
-}
-</style>
-<style lang="scss">
-.katex {
-  font: unset;
-
-  &-html {
-    width: 100%;
-  }
-
-  .base {
-    width: 100%;
-
-    span {
-      word-break: break-all;
-      word-wrap: break-word;
-      white-space: pre-wrap;
-      display: inline-block;
-    }
-  }
 }
 </style>

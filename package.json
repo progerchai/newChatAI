@@ -18,16 +18,10 @@
     "babel-runtime": "^6.26.0",
     "element-plus": "^2.3.9",
     "highlight.js": "^11.7.0",
-    "katex": "^0.16.8",
     "lodash": "^4.17.21",
-    "markdown-it": "^13.0.1",
     "marked": "^4.2.12",
-    "mathjax": "^3.2.2",
     "sass": "^1.64.2",
-    "socket.io-client": "^4.7.2",
     "vue": "^3.3.4",
-    "vue-3-socket.io": "^1.0.5",
-    "vue-markdown": "^2.2.4",
     "vue-router": "^4.2.4"
   },
   "devDependencies": {
