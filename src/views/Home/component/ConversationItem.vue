@@ -165,59 +165,6 @@ function last(conv: IConversation) {
             alt="chat_avater"
           />
         </div>
-
-        <!-- 多个消息 -->
-        <div
-          v-if="_.get(conv, 'speeches.length') > 1"
-          class="text-xs flex items-center justify-center gap-1 invisible absolute left-0 top-2 -ml-4 -translate-x-full group-hover:visible"
-        >
-          <button
-            @click.stop="last(conv)"
-            :disabled="!(_.get(conv, 'idx') > 0)"
-            class="dark:text-white disabled:text-gray-300 dark:disabled:text-gray-400"
-          >
-            <svg
-              stroke="currentColor"
-              fill="none"
-              stroke-width="1.5"
-              viewBox="0 0 24 24"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              class="h-3 w-3"
-              height="1em"
-              width="1em"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <polyline points="15 18 9 12 15 6"></polyline>
-            </svg>
-          </button>
-          <span class="flex-grow flex-shrink-0"
-            >{{ _.get(conv, 'idx') + 1 }} /
-            {{ _.get(conv, 'speeches', []).length }}</span
-          >
-          <button
-            @click.stop="next(conv)"
-            :disabled="
-              !(_.get(conv, 'idx') < _.get(conv, 'speeches', []).length - 1)
-            "
-            class="dark:text-white disabled:text-gray-300 dark:disabled:text-gray-400"
-          >
-            <svg
-              stroke="currentColor"
-              fill="none"
-              stroke-width="1.5"
-              viewBox="0 0 24 24"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              class="h-3 w-3"
-              height="1em"
-              width="1em"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <polyline points="9 18 15 12 9 6"></polyline>
-            </svg>
-          </button>
-        </div>
       </div>
       <div
         class="relative flex w-[calc(100%-50px)] flex-col gap-1 md:gap-3 lg:w-[calc(100%-115px)]"
