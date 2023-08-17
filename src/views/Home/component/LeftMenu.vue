@@ -287,21 +287,53 @@ defineExpose({
             {{ theme === 'light' ? '暗色主题' : '亮色主题' }}
           </a>
           <a
-            href="https://aiplusx.com.cn/"
+            href="https://www.zju.edu.cn/"
             target="_blank"
             class="flex py-3 px-3 items-center gap-3 rounded-md hover:bg-gray-500/10 transition-colors duration-200 text-white cursor-pointer text-sm"
           >
             <IconForward />
-            智海</a
-          >
+            浙江大学
+          </a>
           <a
             href="https://www.hep.com.cn/"
             target="_blank"
             class="flex py-3 px-3 items-center gap-3 rounded-md hover:bg-gray-500/10 transition-colors duration-200 text-white cursor-pointer text-sm"
           >
             <IconForward />
-            高教出版社</a
+            高教社
+          </a>
+          <a
+            href="https://www.aliyun.com/"
+            target="_blank"
+            class="flex py-3 px-3 items-center gap-3 rounded-md hover:bg-gray-500/10 transition-colors duration-200 text-white cursor-pointer text-sm"
           >
+            <IconForward />
+            阿里云
+          </a>
+          <a
+            href="http://unidt.cn/"
+            target="_blank"
+            class="flex py-3 px-3 items-center gap-3 rounded-md hover:bg-gray-500/10 transition-colors duration-200 text-white cursor-pointer text-sm"
+          >
+            <IconForward />
+            华院计算
+          </a>
+          <a
+            href="http://sias.zju.edu.cn/"
+            target="_blank"
+            class="flex py-3 px-3 items-center gap-3 rounded-md hover:bg-gray-500/10 transition-colors duration-200 text-white cursor-pointer text-sm"
+          >
+            <IconForward />
+            浙大上海高研院
+          </a>
+          <a
+            href="https://aiplusx.com.cn/"
+            target="_blank"
+            class="flex py-3 px-3 items-center gap-3 rounded-md hover:bg-gray-500/10 transition-colors duration-200 text-white cursor-pointer text-sm"
+          >
+            <IconForward />
+            智海
+          </a>
         </nav>
       </div>
     </div>
