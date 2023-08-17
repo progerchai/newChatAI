@@ -276,8 +276,7 @@ async function send() {
   }
 
   const _conversations = conversation;
-  if (_.get(conversation, '[0].speaker') !== 'human') {
-    // 第一条消息不是human、则认为是无会话
+  if (_.get(conversation, 'length',0) === 0) {
     // 无会话的时候，设置当前会话title 为用户prompt
     leftMenuRef.value.setHistoryTitle(selectedSessionId, chatMsg);
   }
