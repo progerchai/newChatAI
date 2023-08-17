@@ -1,13 +1,11 @@
 <script setup lang="ts">
 import { IconBad, IconGood } from '@/components/icons';
 import type { IConversation } from '@/types';
-import { marked } from 'marked';
 import hljs from 'highlight.js';
 import 'highlight.js/styles/github.css';
-import MarkdownIt from 'markdown-it';
-import katex from 'katex';
 import _ from 'lodash';
-import KatexExtension from '@/utils/katex';
+import MarkdownIt from 'markdown-it';
+import { marked } from 'marked';
 
 const md = MarkdownIt({
   highlight: function (str: string, lang: string) {

@@ -255,6 +255,7 @@ function judgeInput(e: KeyboardEvent) {
  * 发送chat 信息
  */
 async function send() {
+  return;
   let { chatMsg, convLoading, conversation, cid, selectedSessionId } = state;
   if (chatMsg.trim().length == 0) {
     return;
@@ -276,7 +277,7 @@ async function send() {
   }
 
   const _conversations = conversation;
-  if (_.get(conversation, 'length',0) === 0) {
+  if (_.get(conversation, 'length', 0) === 0) {
     // 无会话的时候，设置当前会话title 为用户prompt
     leftMenuRef.value.setHistoryTitle(selectedSessionId, chatMsg);
   }
@@ -569,6 +570,7 @@ onMounted(() => {
     <div class="content">
       <!-- 菜单导航 -->
       <LeftMenu
+        v-if="false"
         ref="leftMenuRef"
         :new-chat="newChat"
         :conversations="state.conversations"
@@ -585,7 +587,7 @@ onMounted(() => {
         :change-theme="changeTheme"
         :on-change-session-id="onChangeSessionId"
       />
-      <div class="flex flex-1 flex-col md:pl-[260px] content-right">
+      <div class="flex flex-1 flex-col content-right">
         <main
           class="relative w-full transition-width flex flex-col overflow-hidden items-stretch flex-1 content-main"
         >
@@ -615,7 +617,7 @@ onMounted(() => {
                       src="@/assets/imgs/logo_cover.png"
                     />
                     <div class="welcome-text">
-                      欢迎访问智海三乐，请提出你的人工智能知识问题，我们一起学习！
+                      非常感谢您对智海三乐的关注和支持！我们期待着在秋季学期与您见面，并一起探索人工智能的广阔世界。
                     </div>
                   </div>
 
@@ -683,6 +685,8 @@ onMounted(() => {
                     data-id="root"
                     style="max-height: 200px; height: 24px; overflow-y: hidden"
                     rows="1"
+                    placeholder="敬请期待"
+                    disabled
                     class="m-0 w-full resize-none border-0 bg-transparent p-0 pl-2 pr-7 focus:ring-0 focus-visible:ring-0 dark:bg-transparent md:pl-0"
                   ></textarea>
                   <button
@@ -699,7 +703,15 @@ onMounted(() => {
                       ><span class="load_dot2">·</span
                       ><span class="load_dot3">·</span>
                     </div>
-                    <IconPost v-else />
+                    <IconPost
+                      style="
+                         {
+                          cursor: 'not-allowed',
+                          pointerEvents: 'none'
+                        }
+                      "
+                      v-else
+                    />
                   </button>
                 </div>
               </div>
