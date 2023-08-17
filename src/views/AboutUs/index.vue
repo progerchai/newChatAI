@@ -44,6 +44,7 @@
 @media (max-width: 640px) {
   .content {
     padding: 12px;
+    padding-bottom: 20vh;
     &-logo {
       width: 80%;
       object-fit: contain;
