@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import { IconBad, IconGood } from "@/components/icons";
 import type { IConversation } from "@/types";
-import { marked } from "marked";
 import hljs from "highlight.js";
 import Markdown from "vue3-markdown-it";
 import _ from "lodash";
@@ -47,29 +46,6 @@ const renderer = {
     return `<p style="white-space:pre-wrap;">${text}</p>`;
   },
 };
-function countAndConcat(str: string, substr: string) {
-  // 使用正则表达式的全局匹配来查找子字符串
-  const matches = str.match(new RegExp(substr, "g"));
-
-  // 判断子字符串的个数是奇数还是偶数
-  const count = matches ? matches.length : 0;
-  const isOdd = count % 2 === 1;
-
-  // 根据判断结果返回相应的字符串
-  return isOdd ? str + "\n" + substr : str;
-}
-marked.use({ renderer });
-
-function mdToHtml(md: string) {
-  if (md == "") {
-    return "<p></p>";
-  }
-
-  md = countAndConcat(md, "```");
-  var htmlMD = marked(md);
-  htmlMD = htmlMD.trim();
-  return htmlMD;
-}
 
 function suitable(idx: number | undefined, conv: IConversation, suit: any) {}
 </script>
