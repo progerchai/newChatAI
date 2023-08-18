@@ -115,6 +115,8 @@ function suitable(idx: number | undefined, conv: IConversation, suit: any) {}
           <!--  whitespace-pre-wrap -->
           <div class="min-h-[20px] flex flex-col items-start gap-4">
             <Markdown
+              class="cus-markdown"
+              :html="true"
               :source="
                 [_.get(conv, `speeches`, [])].join('') ||
                 '正在排队处理中，请稍等......'
@@ -160,5 +162,24 @@ function suitable(idx: number | undefined, conv: IConversation, suit: any) {}
   object-fit: cover;
   border-radius: 2px;
   background-color: transparent;
+}
+.cus-markdown {
+  width: 100%;
+}
+</style>
+<style lang="scss">
+a {
+  white-space: break-spaces;
+  word-wrap: break-word;
+}
+mjx-assistive-mml {
+  clip: unset !important;
+  display: inline-block !important;
+  position: relative !important;
+}
+mjx-container {
+  svg {
+    display: none !important;
+  }
 }
 </style>
