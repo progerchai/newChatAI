@@ -1,16 +1,14 @@
 <script setup lang="ts">
-import { IconBad, IconGood } from '@/components/icons';
-import type { IConversation } from '@/types';
-import { marked } from 'marked';
-import hljs from 'highlight.js';
-import 'highlight.js/styles/github.css';
-import _ from 'lodash';
+import { IconBad, IconGood } from "@/components/icons";
+import type { IConversation } from "@/types";
+import { marked } from "marked";
+import hljs from "highlight.js";
+import Markdown from "vue3-markdown-it";
+import _ from "lodash";
+import * as mathjaxPlugin from "markdown-it-mathjax3";
 
-const text =
-  '$$1 \Gamma(z) = \int_0^\infty t^{z-1}e^{-t}dt\,. $$' +
-  '``` console.log(22222) ```' +
-  '以下是一道关于支持向量机的单项选择题：<br><br>支持向量机（Support Vector Machine，SVM）是一种监督学习算法，用于分类和回归分析。SVM的主要思想是找到一个超平面，使得超平面上的数据点尽可能地被分离。以下关于SVM的说法错误的是：<br><br>A. SVM是一种线性分类算法<br>B. SVM具有较高的泛化能力<br>C. SVM可以处理高维数据<br>D. SVM只能用于二分类问题<br><br>答案：D. SVM只能用于二分类问题<br><br>解析：支持向量机可以用于二分类问题，也可以用于多分类问题。因此，选项D错误。';
-const katexStr = '$$\Gamma(z) = \int_0^\infty t^{z-1}e^{-t}dt\,.$$';
+const katexStr = "$$\Gamma(z) = \int_0^\infty t^{z-1}e^{-t}dt\,.$$";
+const table = "|  表头   | 表头  |\n|  ----  | ----  |\n| 单元格  | 单元格 |\n| 单元格  | 单元格 |"
 const props = defineProps<{
   conv: IConversation;
   idx: number | undefined;
@@ -20,7 +18,7 @@ const renderer = {
     console.log(22222, code, infostring, escaped);
 
     var codeHtml = code;
-    if (infostring && infostring == 'html') {
+    if (infostring && infostring == "html") {
       codeHtml = encodeURIComponent(code);
     }
     if (infostring) {
@@ -31,7 +29,7 @@ const renderer = {
 
     return `<div class="bg-black mb-4 rounded-md">
       <div class="code_header flex items-center relative text-gray-200 bg-gray-800 px-4 py-2 text-xs font-sans">
-        <span>${infostring || ''}</span>
+        <span>${infostring || ""}</span>
         <button onclick="copy(this)" class="flex ml-auto gap-2">
           <svg stroke="currentColor" fill="none" stroke-width="2" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round" class="h-4 w-4" height="1em" width="1em" xmlns="http://www.w3.org/2000/svg">
             <path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"></path><rect x="8" y="2" width="8" height="4" rx="1" ry="1"></rect>
@@ -51,23 +49,23 @@ const renderer = {
 };
 function countAndConcat(str: string, substr: string) {
   // 使用正则表达式的全局匹配来查找子字符串
-  const matches = str.match(new RegExp(substr, 'g'));
+  const matches = str.match(new RegExp(substr, "g"));
 
   // 判断子字符串的个数是奇数还是偶数
   const count = matches ? matches.length : 0;
   const isOdd = count % 2 === 1;
 
   // 根据判断结果返回相应的字符串
-  return isOdd ? str + '\n' + substr : str;
+  return isOdd ? str + "\n" + substr : str;
 }
 marked.use({ renderer });
 
 function mdToHtml(md: string) {
-  if (md == '') {
-    return '<p></p>';
+  if (md == "") {
+    return "<p></p>";
   }
 
-  md = countAndConcat(md, '```');
+  md = countAndConcat(md, "```");
   var htmlMD = marked(md);
   htmlMD = htmlMD.trim();
   return htmlMD;
@@ -102,9 +100,7 @@ function suitable(idx: number | undefined, conv: IConversation, suit: any) {}
         class="relative flex w-[calc(100%-50px)] flex-col gap-1 md:gap-3 lg:w-[calc(100%-115px)]"
       >
         <div class="flex flex-grow flex-col gap-3">
-          <div
-            class="min-h-[20px] flex flex-col items-start gap-4 whitespace-pre-wrap"
-          >
+          <div class="min-h-[20px] flex flex-col items-start gap-4 whitespace-pre-wrap">
             {{ conv.speech }}
           </div>
         </div>
@@ -125,11 +121,7 @@ function suitable(idx: number | undefined, conv: IConversation, suit: any) {}
         <div
           class="relative h-[30px] w-[30px] rounded-sm text-white flex items-center justify-center"
         >
-          <img
-            class="chat_avater"
-            src="@/assets/imgs/chat.png"
-            alt="chat_avater"
-          />
+          <img class="chat_avater" src="@/assets/imgs/chat.png" alt="chat_avater" />
         </div>
       </div>
       <div
@@ -138,16 +130,10 @@ function suitable(idx: number | undefined, conv: IConversation, suit: any) {}
         <div class="flex flex-grow flex-col gap-3">
           <!--  whitespace-pre-wrap -->
           <div class="min-h-[20px] flex flex-col items-start gap-4">
-            <div
-              v-html="
-                mdToHtml(
-                  [_.get(conv, `speeches`, [])].join('') ||
-                    '正在排队处理中，请稍等......'
-                )
-              "
-              :class="{ 'result-streaming': conv.loading }"
-              class="markdown prose-r w-full break-words dark:prose-invert light"
-            ></div>
+            <Markdown
+              :source="[_.get(conv, `speeches`, [])].join('') || '正在排队处理中，请稍等......'"
+              :plugins="[{ plugin: mathjaxPlugin }]"
+            />
           </div>
         </div>
         <div class="flex justify-between">

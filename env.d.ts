@@ -2,6 +2,8 @@
 declare module 'lodash';
 declare module 'highlight.js';
 declare module 'marked';
+declare module 'vue3-markdown-it';
+declare module 'element-plus';
 
 declare module '*.vue' {
   import { DefineComponent } from 'vue';
