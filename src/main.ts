@@ -1,5 +1,6 @@
+import './style/global.css';
 import './assets/main.css';
-
+// import ElementUI from 'element-plus';
 import 'element-plus/dist/index.css';
 import { createApp } from 'vue';
 import App from './App.vue';
@@ -15,6 +16,7 @@ app.config.errorHandler = (err, instance, info) => {
 //     path: '/socket/',
 //   },
 // });
+// app.use(ElementUI);
 app.use(router);
 // app.use(socketio);
 

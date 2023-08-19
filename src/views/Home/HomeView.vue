@@ -11,7 +11,7 @@ import { IconBlock, IconButton, IconFresh, IconPost } from '@/components/icons';
 import type { IConversation } from '@/types';
 import axios from 'axios';
 import _ from 'lodash';
-import { ElMessage } from 'element-plus';
+// import { ElMessage, ElOption, ElSelect } from 'element-plus';
 // import { Typewriter } from '@/utils';
 import {
   getCurrentInstance,
@@ -47,9 +47,21 @@ interface State {
 const PREFIX =
   import.meta.env.MODE === 'development' ? 'http://119.23.229.128' : '';
 const accountId = -1;
+const options = [
+  {
+    value: 'bing',
+    label: '搜索引擎',
+  },
+  {
+    value: 'lib',
+    label: '知识库',
+  },
+  { value: 'default', label: '无' },
+];
 const inputChatRef = ref(null);
 const chatContainer = ref(null);
 const leftMenuRef = ref(null);
+const selectValue = ref('default');
 const instance = getCurrentInstance();
 const state = reactive<State>({
   theme: 'light',
@@ -276,7 +288,7 @@ async function send() {
   }
 
   const _conversations = conversation;
-  if (_.get(conversation, 'length',0) === 0) {
+  if (_.get(conversation, 'length', 0) === 0) {
     // 无会话的时候，设置当前会话title 为用户prompt
     leftMenuRef.value.setHistoryTitle(selectedSessionId, chatMsg);
   }
@@ -300,7 +312,9 @@ async function send() {
   var _source = (state.source = new EventSource(
     `${PREFIX}/api/chat.json?prompt=${encodeURIComponent(
       chatMsg
-    )}&accountId=${accountId}&idx=${state.selectedSessionId}`
+    )}&accountId=${accountId}&idx=${state.selectedSessionId}&plugin=${
+      selectValue.value
+    }`
   ));
   // 创建eventSource 失败
   if (!_source.withCredentials) {
@@ -672,6 +686,38 @@ onMounted(() => {
                     </div>
                   </button>
                 </div>
+                <div class="drop-down">
+                  <span class="drop-down-title">插件：</span>
+                  <img
+                    class="plugin-img"
+                    v-if="selectValue === 'bing'"
+                    src="https://s1.imagehub.cc/images/2023/08/19/bing.png"
+                    alt="plugin-img"
+                  />
+                  <img
+                    class="plugin-img"
+                    v-if="selectValue === 'lib'"
+                    src="https://s1.imagehub.cc/images/2023/08/19/library.png"
+                    alt="plugin-img"
+                  />
+                  <span v-if="selectValue === 'default'">无</span>
+                  <ElSelect
+                    v-model="selectValue"
+                    class="drop-down-select"
+                    @change="
+                      (e) => {
+                        selectValue.value = e;
+                      }
+                    "
+                  >
+                    <ElOption
+                      v-for="item in options"
+                      :key="item.value"
+                      :label="item.label"
+                      :value="item.value"
+                    />
+                  </ElSelect>
+                </div>
                 <div
                   class="flex flex-col w-full py-2 flex-grow md:py-3 md:pl-4 relative border border-black/10 bg-white dark:border-gray-900/50 dark:text-white dark:bg-gray-700 rounded-md shadow-[0_0_10px_rgba(0,0,0,0.10)] dark:shadow-[0_0_15px_rgba(0,0,0,0.10)]"
                 >
@@ -716,4 +762,46 @@ onMounted(() => {
 
 <style lang="scss" scoped>
 @import './Homeview.scss';
+</style>
+<style lang="scss">
+.drop-down {
+  margin-bottom: 6px;
+  // width: 100px;
+  display: flex;
+  align-items: center;
+  border-radius: 8px;
+  &-title {
+    margin-right: 4px;
+    white-space: pre;
+  }
+
+  &-select {
+    width: 0px;
+    .el-input__wrapper {
+      box-shadow: unset !important;
+      padding: unset !important;
+      &:focus {
+        box-shadow: unset !important;
+      }
+    }
+    .el-input__inner {
+      width: 0px;
+      display: contents;
+    }
+  }
+}
+.plugin-img {
+  width: 24px;
+  height: 24px;
+  object-fit: cover;
+}
+</style>
+<style scoped>
+:deep(.el-input__wrapper:focus) {
+  box-shadow: unset !important;
+}
+:deep(.el-input__wrapper.is-focus) {
+  box-shadow: unset !important;
+  color: orchid;
+}
 </style>

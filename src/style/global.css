@@ -1,0 +1,8 @@
+:deep(.el-input__wrapper:focus) {
+  box-shadow: unset !important;
+}
+
+:deep(.el-input__wrapper.is-focus) {
+  box-shadow: unset !important;
+  color: orchid;
+}
