@@ -11,7 +11,7 @@ import { IconBlock, IconButton, IconFresh, IconPost } from '@/components/icons';
 import type { IConversation } from '@/types';
 import axios from 'axios';
 import _ from 'lodash';
-// import { ElMessage, ElOption, ElSelect } from 'element-plus';
+import { ElMessage, ElOption, ElSelect } from 'element-plus';
 // import { Typewriter } from '@/utils';
 import {
   getCurrentInstance,
