@@ -1,6 +1,5 @@
 /// <reference types="vite/client" />
 declare module 'lodash';
-declare module 'katex';
 declare module 'highlight.js';
 declare module 'marked';
 declare module 'markdown-it';
