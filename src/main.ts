@@ -1,8 +1,9 @@
-import './style/global.css';
 import './assets/main.css';
+import './style/global.css';
 // import ElementUI from 'element-plus';
 import 'element-plus/dist/index.css';
 import { createApp } from 'vue';
+import global from './store/global';
 import App from './App.vue';
 import router from './router';
 const app = createApp(App);
@@ -18,6 +19,7 @@ app.config.errorHandler = (err, instance, info) => {
 // });
 // app.use(ElementUI);
 app.use(router);
+app.use(global, 'global');
 // app.use(socketio);
 
 app.mount('#app');

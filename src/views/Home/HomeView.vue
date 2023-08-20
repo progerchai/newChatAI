@@ -10,9 +10,10 @@ import '@/assets/index.css';
 import { IconBlock, IconButton, IconFresh, IconPost } from '@/components/icons';
 import type { IConversation } from '@/types';
 import axios from 'axios';
-import _ from 'lodash';
 import { ElMessage, ElOption, ElSelect } from 'element-plus';
-// import { Typewriter } from '@/utils';
+import _ from 'lodash';
+import { useStore } from 'vuex';
+import { generateConv, getSessionDetail } from '@/service/home';
 import {
   getCurrentInstance,
   nextTick,
@@ -24,7 +25,6 @@ import {
 import ConversationItem from './component/ConversationItem.vue';
 import LeftMenu from './component/LeftMenu.vue';
 import NoticeModal from './component/NoticeModal.vue';
-import { getSessionDetail, generateConv } from '@/service/home';
 interface State {
   theme: 'light' | 'dark';
   popupShow: boolean;
@@ -47,14 +47,24 @@ interface State {
 const PREFIX =
   import.meta.env.MODE === 'development' ? 'http://119.23.229.128' : '';
 const accountId = -1;
+const store = useStore('global');
+const { isPc } = store.state;
+
 const options = [
   {
     value: 'bing',
     label: '搜索引擎',
+    img: 'https://s1.imagehub.cc/images/2023/08/19/bing.png',
   },
   {
     value: 'lib',
     label: '知识库',
+    img: 'https://s1.imagehub.cc/images/2023/08/19/library.png',
+  },
+  {
+    value: 'wolfram',
+    label: 'wolfram',
+    img: 'https://s1.imagehub.cc/images/2023/08/20/wolfram.png',
   },
   { value: 'default', label: '无' },
 ];
@@ -654,6 +664,35 @@ onMounted(() => {
           <div
             class="absolute bottom-0 left-0 w-full border-t md:border-t-0 dark:border-white/20 md:border-transparent md:dark:border-transparent md:bg-vert-light-gradient bg-white dark:bg-gray-800 md:!bg-transparent dark:md:bg-vert-dark-gradient"
           >
+            <div v-if="!isPc">
+              <span class="drop-down-title">插件：</span>
+              <img
+                class="plugin-img"
+                v-if="
+                  _.find(options, (o) => o.value === selectValue).value !==
+                  'default'
+                "
+                :src="_.find(options, (o) => o.value === selectValue).img"
+                alt="plugin-img"
+              />
+              <span v-if="selectValue === 'default'">无</span>
+              <ElSelect
+                v-model="selectValue"
+                class="drop-down-select"
+                @change="
+                  (e) => {
+                    selectValue.value = e;
+                  }
+                "
+              >
+                <ElOption
+                  v-for="item in options"
+                  :key="item.value"
+                  :label="item.label"
+                  :value="item.value"
+                />
+              </ElSelect>
+            </div>
             <form
               class="stretch mx-2 flex flex-row gap-3 pt-2 last:mb-2 md:last:mb-6 lg:mx-auto lg:max-w-3xl lg:pt-6"
             >
@@ -686,18 +725,15 @@ onMounted(() => {
                     </div>
                   </button>
                 </div>
-                <div class="drop-down">
+                <div v-if="isPc" class="drop-down">
                   <span class="drop-down-title">插件：</span>
                   <img
                     class="plugin-img"
-                    v-if="selectValue === 'bing'"
-                    src="https://s1.imagehub.cc/images/2023/08/19/bing.png"
-                    alt="plugin-img"
-                  />
-                  <img
-                    class="plugin-img"
-                    v-if="selectValue === 'lib'"
-                    src="https://s1.imagehub.cc/images/2023/08/19/library.png"
+                    v-if="
+                      _.find(options, (o) => o.value === selectValue).value !==
+                      'default'
+                    "
+                    :src="_.find(options, (o) => o.value === selectValue).img"
                     alt="plugin-img"
                   />
                   <span v-if="selectValue === 'default'">无</span>
@@ -794,14 +830,11 @@ onMounted(() => {
   width: 24px;
   height: 24px;
   object-fit: cover;
+  display: inline-block;
 }
 </style>
 <style scoped>
-:deep(.el-input__wrapper:focus) {
-  box-shadow: unset !important;
-}
 :deep(.el-input__wrapper.is-focus) {
   box-shadow: unset !important;
-  color: orchid;
 }
 </style>
