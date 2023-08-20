@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { ElSpace } from 'element-plus';
 /*
  *@description: footer
  *@author: progerchai
@@ -15,7 +16,7 @@ const footerLinks = [
 ];
 </script>
 <template>
-  <div class="bg-gray-900 footer">
+  <ElSpace class="bg-gray-900 footer" wrap :size="[24, 12]">
     <a
       class="footer-item"
       v-for="{ name, link } in footerLinks"
@@ -24,7 +25,7 @@ const footerLinks = [
     >
       {{ name }}
     </a>
-  </div>
+  </ElSpace>
 </template>
 
 <style scoped lang="scss">
@@ -39,8 +40,8 @@ const footerLinks = [
   padding-right: 5%;
   align-items: center;
   &-item {
-    margin-right: 24px;
     color: #999;
+    white-space: pre;
     &:hover {
       color: #1d57ee;
     }

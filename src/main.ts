@@ -6,7 +6,6 @@ import { createApp } from 'vue';
 import App from './App.vue';
 import ElementUI from 'element-plus';
 import 'element-plus/dist/index.css';
-import VueMarkdown from 'vue-markdown';
 import 'katex/dist/katex.min.css';
 import router from './router';
 const app = createApp(App);
@@ -23,6 +22,5 @@ app.config.errorHandler = (err, instance, info) => {
 app.use(router);
 app.use(ElementUI);
 // app.use(socketio);
-app.component('VueMarkdown', VueMarkdown);
 
 app.mount('#app');

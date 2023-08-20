@@ -170,13 +170,6 @@ function last(conv: IConversation) {
         <div class="flex flex-grow flex-col gap-3">
           <!--  whitespace-pre-wrap -->
           <div class="min-h-[20px] flex flex-col items-start gap-4">
-            <!-- <vue-markdown
-              :source="
-                [_.get(conv, `speeches`, [])].join('') ||
-                '大模型正在配置调试中，请等待回复1...'
-              "
-            /> -->
-            <!-- <div v-html="md.render(text)"></div> -->
             <div
               v-html="
                 mdToHtml(
