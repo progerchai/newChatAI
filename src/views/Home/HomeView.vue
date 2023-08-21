@@ -92,9 +92,6 @@ const state = reactive<State>({
   selectedSessionId: -1,
   stashString: '',
 });
-// const typewriter = new Typewriter((str: string) => {
-//   // state.stashString = str || '';
-// });
 function closeSource() {
   let { source, tsource, rsource } = state;
   if (source) {
@@ -330,9 +327,7 @@ async function send() {
   if (!_source.withCredentials) {
     conv['loading'] = false;
     state.convLoading = false;
-    // typewriter.done();
   }
-  // typewriter.start();
   // const currentConvIndex = conversation.length - 1;
   _source.addEventListener('open', function (e) {
     let conv = conversation[conversation.length - 1];
@@ -353,7 +348,6 @@ async function send() {
       _source.close();
       conv['loading'] = false;
       state.convLoading = false;
-      // typewriter.done();
       refrechConversation();
       state.source = undefined;
       return;
@@ -369,7 +363,6 @@ async function send() {
 
     conv['speeches'] += content;
     state.conversation = conversation;
-    // typewriter.add(content);
 
     refrechConversation();
   });
@@ -636,7 +629,7 @@ onMounted(() => {
                   >
                     <img
                       class="home-cover"
-                      src="@/assets/imgs/logo_cover.png"
+                      src="https://s1.imagehub.cc/images/2023/08/21/logo_cover.png"
                     />
                     <div class="welcome-text">
                       欢迎访问智海三乐，请提出你的人工智能知识问题，我们一起学习！

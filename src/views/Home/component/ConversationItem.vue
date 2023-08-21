@@ -65,7 +65,7 @@ function suitable(idx: number | undefined, conv: IConversation, suit: any) {}
         >
           <img
             class="chat_avater"
-            src="@/assets/imgs/chat.png"
+            src="https://s1.imagehub.cc/images/2023/08/21/chat.png"
             alt="chat_avater"
           />
         </div>
