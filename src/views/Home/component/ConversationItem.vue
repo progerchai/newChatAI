@@ -10,7 +10,6 @@ const props = defineProps<{
   conv: IConversation;
   idx: number | undefined;
 }>();
-
 function suitable(idx: number | undefined, conv: IConversation, suit: any) {}
 </script>
 <template>
