@@ -1,5 +1,5 @@
 export interface IConversation {
-  id: number; // 小会话id
+  id?: number; // 小会话id
   idx?: number; // 大会话下标
   title?: string;
   speaker?: 'human' | 'ai';
