@@ -6,6 +6,7 @@
  *@date: 2023-08-05 15:59:07
  */
 import {
+  Ellipsis,
   IconChat,
   IconDark,
   IconDelete,
@@ -15,9 +16,14 @@ import {
   IconPlus,
   IconRight,
   IconTrash,
-  Ellipsis,
 } from '@/components';
-import { generateConv, getHistory } from '@/service/home';
+import {
+  changeSessionTitle,
+  clearSession,
+  deleteSession,
+  generateConv,
+  getHistory,
+} from '@/service/home';
 import type { IConversation } from '@/types';
 import _ from 'lodash';
 import { onMounted, reactive, ref } from 'vue';
@@ -33,9 +39,7 @@ interface State {
 }
 const props = defineProps<{
   conversations: IConversation[];
-  changeConvTitletmp: (tem: string) => void;
   titleInputBlur: (idx: number, conv: any) => void;
-  changeConvTitle: (idx: number, conv: any) => void;
   cancelChangeConvTitle: (idx: number, conv: any) => void;
   cancelDelConv: (idx: number, conv: any) => void;
   changeTheme: (theme: 'light' | 'dark') => void;
@@ -81,17 +85,45 @@ function selectConversation(idx: number | undefined) {
  * 删除会话
  */
 function delConv(idx: number | undefined) {
-  const _conversations = _.cloneDeep(history.value);
-  _.remove(_conversations, (o: IConversation) => o.idx === idx);
-  history.value = _conversations?.splice(0, 10);
+  deleteSession({ accountId, sessionId: Number(idx) }).then((res) => {
+    if (res.code === 'SUCCESS') {
+      const _conversations = _.cloneDeep(history.value);
+      _.remove(_conversations, (o: IConversation) => o.idx === idx);
+      history.value = _conversations?.splice(0, 10);
+      state.selectConvId = -1;
+      props.onChangeSessionId(-1);
+    }
+  });
+}
+/**
+ * 编辑标题
+ */
+function changeConvTitle(cidx: number, conv: IConversation) {
+  changeSessionTitle({
+    sessionId: Number(conv.idx),
+    title: String(state.convTitletmp),
+    accountId,
+  }).then((res) => {
+    if (res.code === 'SUCCESS') {
+      state.convTitletmp = '';
+      conv.editable = false;
+      getHistoryFunc(conv.idx);
+    }
+  });
+}
+function changeConvTitletmp(title: string) {
+  state.convTitletmp = title;
 }
 /**
  * 清空会话
  */
 function clearConversations() {
-  history.value = [];
-  state.selectConvId = 0;
-  saveConversations();
+  clearSession({ accountId }).then((res) => {
+    if (res.code === 'SUCCESS') {
+      history.value = [];
+      state.selectConvId = -1;
+    }
+  });
 }
 /**
  * 保存会话
@@ -118,13 +150,11 @@ async function newChat(idx?: number) {
   }
 }
 /**
- * 编辑标题
+ * 开启编辑标题
  */
-function editTitle(idx: number, conv: IConversation) {
+function openEditTitle(conv: IConversation) {
   state.convTitletmp = conv.title;
   conv.editable = true;
-  history.value[idx] = conv;
-  // TODO: 请求接口
   setTimeout(() => {
     document.getElementById('titleInput')?.focus();
   }, 150);
@@ -253,7 +283,7 @@ defineExpose({
                     class="absolute flex right-1 z-10 text-gray-300 visible"
                   >
                     <button
-                      @click="editTitle(cidx, conversation)"
+                      @click="openEditTitle(conversation)"
                       class="p-1 hover:text-white"
                     >
                       <IconEdit />

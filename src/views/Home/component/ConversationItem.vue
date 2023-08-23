@@ -1,16 +1,31 @@
 <script setup lang="ts">
 import { IconBad, IconGood } from '@/components/icons';
-import type { IConversation } from '@/types';
-import Markdown from 'vue3-markdown-it';
+import { comment } from '@/service/home';
+import type { IConversation, ISuitable } from '@/types';
 import 'highlight.js/styles/monokai.css';
 import _ from 'lodash';
 import mathjaxPlugin from 'markdown-it-mathjax3';
-
+import Markdown from 'vue3-markdown-it';
+const accountId = -1;
 const props = defineProps<{
   conv: IConversation;
   idx: number | undefined;
+  onChangeConversation: (idx: number, conv: IConversation) => void;
 }>();
-function suitable(idx: number | undefined, conv: IConversation, suit: any) {}
+function suitable(index: number, conv: IConversation, suit: ISuitable) {
+  comment({
+    accountId,
+    sessionId: Number(conv.idx),
+    suitable: suit,
+    id: Number(conv.id),
+  }).then((res) => {
+    if (res.code === 'SUCCESS') {
+      const _conv = _.cloneDeep(conv);
+      _conv.suitable = suit;
+      props.onChangeConversation(index, _conv);
+    }
+  });
+}
 </script>
 <template>
   <!-- human -->
@@ -91,20 +106,20 @@ function suitable(idx: number | undefined, conv: IConversation, suit: any) {}
             class="text-gray-400 flex self-end lg:self-center justify-center mt-2 gap-3 md:gap-4 lg:gap-1 lg:absolute lg:top-0 lg:translate-x-full lg:right-0 lg:mt-0 lg:pl-2 visible"
           >
             <button
-              @click.stop="suitable(idx, conv, 1)"
-              v-if="conv.suitable == 0 || conv.suitable == 1"
+              @click.stop="suitable(Number(idx), conv, -1)"
+              v-if="conv.suitable === 0 || conv.suitable === -1"
               :class="{
-                suitable_selected: conv.suitable == 1,
+                suitable_selected: conv.suitable === -1,
               }"
               class="p-1 rounded-md hover:bg-gray-100 hover:text-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-gray-200 disabled:dark:hover:text-gray-400"
             >
               <IconBad />
             </button>
             <button
-              @click.stop="suitable(idx, conv, -1)"
-              v-if="conv.suitable == 0 || conv.suitable == -1"
+              @click.stop="suitable(Number(idx), conv, 1)"
+              v-if="conv.suitable === 0 || conv.suitable === 1"
               :class="{
-                suitable_selected: conv.suitable == -1,
+                suitable_selected: conv.suitable === 1,
               }"
               class="p-1 rounded-md hover:bg-gray-100 hover:text-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-gray-200 disabled:dark:hover:text-gray-400"
             >

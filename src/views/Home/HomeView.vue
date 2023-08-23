@@ -36,7 +36,6 @@ interface State {
   convLoading: boolean;
   isShowGoBottom: boolean;
   oldConv: IConversation | null;
-  convTitletmp: string | undefined;
   source: any;
   rsource: any;
   tsource: any;
@@ -84,7 +83,6 @@ const state = reactive<State>({
   convLoading: false,
   isShowGoBottom: false,
   oldConv: null,
-  convTitletmp: '',
   source: undefined,
   rsource: undefined,
   tsource: undefined,
@@ -485,11 +483,6 @@ function titleInputBlur(idx: number, conv: IConversation) {
     cancelChangeConvTitle(idx, conv);
   }, 100);
 }
-function changeConvTitle(idx: number, conv: IConversation) {
-  conv.title = state.convTitletmp;
-  saveConversations();
-  cancelChangeConvTitle(idx, conv);
-}
 function cancelChangeConvTitle(idx: number, conv: IConversation) {
   conv.editable = false;
   state.conversations[idx] = conv;
@@ -542,6 +535,14 @@ function isScrollAndNotBottom() {
 function onChangeSessionId(idx: number | undefined) {
   state.selectedSessionId = idx;
 }
+/**
+ * 修改会话内容
+ */
+function onChangeConversation(index: number, conv: IConversation) {
+  const _conversation = _.cloneDeep(state.conversation);
+  _conversation[index] = conv;
+  state.conversation = _conversation;
+}
 // watch(
 //   () => state.stashString,
 //   () => {
@@ -589,10 +590,7 @@ onMounted(() => {
         ref="leftMenuRef"
         :new-chat="newChat"
         :conversations="state.conversations"
-        :conv-titletmp="state.convTitletmp"
-        :change-conv-titletmp="(tmp:string)=>{state.convTitletmp = tmp}"
         :title-input-blur="titleInputBlur"
-        :change-conv-title="changeConvTitle"
         :cancel-change-conv-title="cancelChangeConvTitle"
         :cancel-del-conv="cancelDelConv"
         :del-conv="delConv"
@@ -620,7 +618,11 @@ onMounted(() => {
                 >
                   <!-- 对话item -->
                   <template v-for="(conv, idx) in state.conversation">
-                    <ConversationItem :conv="conv" :idx="idx" />
+                    <ConversationItem
+                      :conv="conv"
+                      :idx="idx"
+                      :on-change-conversation="onChangeConversation"
+                    />
                   </template>
 
                   <div
