@@ -5,7 +5,7 @@ import { fileURLToPath, URL } from 'node:url';
 import { visualizer } from 'rollup-plugin-visualizer';
 import { defineConfig } from 'vite';
 import viteCompression from 'vite-plugin-compression';
-import { Plugin as importToCDN } from 'vite-plugin-cdn-import';
+// import { Plugin as importToCDN } from 'vite-plugin-cdn-import';
 
 // https://vitejs.dev/config/
 export default defineConfig({
@@ -16,20 +16,20 @@ export default defineConfig({
   plugins: [
     vue(),
     vueJsx(),
-    importToCDN({
-      modules: [
-        {
-          name: 'vue3-markdown-it',
-          var: 'Markdown',
-          path: 'https://cdn.jsdelivr.net/npm/vue3-markdown-it@1.0.10/dist/vue3-markdown-it.umd.min.js',
-        },
-        {
-          name: 'markdown-it-mathjax3',
-          var: 'mathjaxPlugin',
-          path: 'https://cdn.jsdelivr.net/npm/markdown-it-mathjax3@4.3.2/index.min.js',
-        },
-      ],
-    }),
+    // importToCDN({
+    //   modules: [
+    //     {
+    //       name: 'vue3-markdown-it',
+    //       var: 'Markdown',
+    //       path: 'https://cdn.jsdelivr.net/npm/vue3-markdown-it@1.0.10/dist/vue3-markdown-it.umd.min.js',
+    //     },
+    //     {
+    //       name: 'markdown-it-mathjax3',
+    //       var: 'mathjaxPlugin',
+    //       path: 'https://cdn.jsdelivr.net/npm/markdown-it-mathjax3@4.3.2/index.min.js',
+    //     },
+    //   ],
+    // }),
     legacy({
       targets: ['defaults', 'not IE 11'],
     }),
@@ -45,11 +45,14 @@ export default defineConfig({
   resolve: {
     alias: {
       '@': fileURLToPath(new URL('./src', import.meta.url)),
-      ...(process.env.NODE_ENV === 'production' ?
-        {
-          'vue3-markdown-it': 'https://cdn.jsdelivr.net/npm/vue3-markdown-it@1.0.10/dist/vue3-markdown-it.umd.min.js',
-          'markdown-it-mathjax3': 'https://cdn.jsdelivr.net/npm/markdown-it-mathjax3@4.3.2/index.min.js',
-        } : {})
+      // ...(process.env.NODE_ENV === 'production'
+      //   ? {
+      //       'vue3-markdown-it':
+      //         'https://cdn.jsdelivr.net/npm/vue3-markdown-it@1.0.10/dist/vue3-markdown-it.umd.min.js',
+      //       'markdown-it-mathjax3':
+      //         'https://cdn.jsdelivr.net/npm/markdown-it-mathjax3@4.3.2/index.min.js',
+      //     }
+      //   : {}),
     },
   },
   build: {
