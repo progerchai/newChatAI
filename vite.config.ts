@@ -45,6 +45,11 @@ export default defineConfig({
   resolve: {
     alias: {
       '@': fileURLToPath(new URL('./src', import.meta.url)),
+      ...(process.env.NODE_ENV === 'production' ?
+        {
+          'vue3-markdown-it': 'https://cdn.jsdelivr.net/npm/vue3-markdown-it@1.0.10/dist/vue3-markdown-it.umd.min.js',
+          'markdown-it-mathjax3': 'https://cdn.jsdelivr.net/npm/markdown-it-mathjax3@4.3.2/index.min.js',
+        } : {})
     },
   },
   build: {
