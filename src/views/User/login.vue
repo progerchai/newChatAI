@@ -7,6 +7,8 @@
  */
 import { ref, unref } from 'vue';
 import type { ILoginData, IRegisterData } from '@/types';
+import { login } from '@/service/user';
+
 const loading = ref(false);
 const formRef = ref();
 const registerFormRef = ref();
@@ -28,10 +30,18 @@ const handleActions = () => {
 const handleLogin = async () => {
   loading.value = true;
   const form = unref(formRef);
+
   await form.validate((valid: any, fields: any) => {
     if (valid) {
-      // TODO: 调登录接口
-      loading.value = false;
+      login({
+        account: loginFormData.account,
+        password: loginFormData.password,
+      }).then((res) => {
+        if (res.code === 'SUCCESS') {
+          location.href = '/';
+        }
+        loading.value = false;
+      });
     } else {
       loading.value = false;
     }
