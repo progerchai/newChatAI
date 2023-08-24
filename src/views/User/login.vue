@@ -6,12 +6,12 @@
  *@date: 2023-08-24 22:14:17
  */
 import { ref, unref } from 'vue';
-import type { FormInstance } from 'element-plus';
+import type { ILoginData, IRegisterData } from '@/types';
 const loading = ref(false);
-const formRef = ref<FormInstance>();
-const registerFormRef = ref<FormInstance>();
-const loginFormData = ref({});
-const registerFormData = ref({});
+const formRef = ref();
+const registerFormRef = ref();
+const loginFormData = ref<ILoginData>({} as any);
+const registerFormData = ref<IRegisterData>({} as any);
 const isLogin = ref(true);
 const rules = {
   account: [{ required: true, message: '此项为必填', trigger: 'blur' }],
@@ -28,7 +28,7 @@ const handleActions = () => {
 const handleLogin = async () => {
   loading.value = true;
   const form = unref(formRef);
-  await form.validate((valid, fields) => {
+  await form.validate((valid: any, fields: any) => {
     if (valid) {
       // TODO: 调登录接口
       loading.value = false;
