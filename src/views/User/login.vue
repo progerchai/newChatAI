@@ -34,8 +34,8 @@ const handleLogin = async () => {
   await form.validate((valid: any, fields: any) => {
     if (valid) {
       login({
-        account: loginFormData.account,
-        password: loginFormData.password,
+        account: loginFormData.value.account,
+        password: loginFormData.value.password,
       }).then((res) => {
         if (res.code === 'SUCCESS') {
           location.href = '/';
