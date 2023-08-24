@@ -1,3 +1,7 @@
+:root {
+  --main-color: #4f94d3;
+}
+
 :deep(.el-input__wrapper:focus) {
   box-shadow: unset !important;
 }
