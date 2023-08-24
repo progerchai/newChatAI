@@ -13,6 +13,11 @@ const queryString = (params: any) => {
 const errorHandler = (data: { code: string; message: string }) => {
   if (data?.code === 'ERROR') {
     ElMessage.error(data?.message);
+  } else if (data?.code === 'UNLOGIN') {
+    ElMessage.error('请前往登录');
+    setTimeout(() => {
+      location.href = '/login';
+    }, 1500);
   }
 };
 export const get = async (

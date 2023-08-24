@@ -1,10 +1,12 @@
 <script setup lang="ts">
 import { RouterView } from 'vue-router';
 import Header from './layout/Header.vue';
+
+const isSinglePage = ['/login'].includes(location.pathname);
 </script>
 
 <template>
-  <Header />
+  <Header v-if="!isSinglePage" />
   <RouterView />
 </template>
 
