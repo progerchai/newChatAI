@@ -828,8 +828,3 @@ onMounted(() => {
   display: inline-block;
 }
 </style>
-<style scoped>
-:deep(.el-input__wrapper.is-focus) {
-  box-shadow: unset !important;
-}
-</style>
