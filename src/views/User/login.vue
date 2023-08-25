@@ -86,7 +86,7 @@ const handleRegister = async () => {
         </el-form>
         <!-- 注册form  -->
         <el-form
-          class="form"
+          class="form registerForm"
           ref="registerFormRef"
           v-if="!isLogin"
           :rules="rules"
@@ -148,7 +148,7 @@ const handleRegister = async () => {
   </div>
 </template>
 
-<style scoped lang="scss">
+<style lang="scss">
 .content {
   width: 100%;
   height: 100%;
@@ -166,6 +166,7 @@ const handleRegister = async () => {
     width: 50%;
     min-width: 500px;
     max-width: 800px;
+    min-height: 360px;
     display: flex;
     background: #ffffff;
     box-shadow: 0px 2px 24px 0px rgba(221, 221, 221, 0.5);
@@ -223,6 +224,15 @@ const handleRegister = async () => {
   .el-form-item {
     margin-right: 0px;
     width: 100%;
+  }
+
+  .el-input__inner {
+    font-size: 12px;
+  }
+}
+.registerForm {
+  .el-form-item__label {
+    width: 100px;
   }
 }
 </style>
