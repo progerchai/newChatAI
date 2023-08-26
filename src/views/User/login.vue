@@ -18,7 +18,7 @@ const isLogin = ref(true);
 /**
  * 验证邮箱
  */
-const validateEmail = (rule, value, callback) => {
+const validateEmail = (rule: any, value: string, callback: any) => {
   if (
     !/^([a-zA-Z0-9_-])+@([a-zA-Z0-9_-])+((.[a-zA-Z0-9_-]{2,3}){1,2})$/.test(
       value
@@ -32,7 +32,7 @@ const validateEmail = (rule, value, callback) => {
 /**
  * 验证手机号
  */
-const validatePhone = (rule, value, callback) => {
+const validatePhone = (rule: any, value: string, callback: any) => {
   if (!/^1[3|4|5|7|8|9][0-9]{9}$/.test(value)) {
     callback(new Error('手机格式错误'));
   } else {
@@ -64,7 +64,7 @@ const handleLogin = async () => {
   loading.value = true;
   const form = unref(formRef);
 
-  await form.validate((valid: any, fields: any) => {
+  await form.validate((valid: boolean, fields: any) => {
     if (valid) {
       login({
         account: loginFormData.value.account,
@@ -83,7 +83,7 @@ const handleLogin = async () => {
 const handleRegister = async () => {
   // 注册
   const form = unref(registerFormRef);
-  form.validate((valid, fields) => {
+  form.validate((valid: boolean, fields: any) => {
     if (valid) {
       // TODO: 发送验证码
     }
@@ -94,7 +94,7 @@ const handleRegister = async () => {
  */
 const handleCode = () => {
   const form = unref(registerFormRef);
-  form.validateField('email', (valid) => {
+  form.validateField('email', (valid: boolean) => {
     if (valid) {
       // TODO: 发送验证码
     }

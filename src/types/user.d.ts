@@ -3,7 +3,8 @@ export interface ILoginData {
   password: string;
 }
 export interface IRegisterData {
-  account: string;
+  email: string;
+  phone: string;
   password: string;
   rePassword: string;
   code: number;
