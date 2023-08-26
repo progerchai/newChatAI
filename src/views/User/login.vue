@@ -15,11 +15,44 @@ const registerFormRef = ref();
 const loginFormData = ref<ILoginData>({} as any);
 const registerFormData = ref<IRegisterData>({} as any);
 const isLogin = ref(true);
+/**
+ * 验证邮箱
+ */
+const validateEmail = (rule, value, callback) => {
+  if (
+    !/^([a-zA-Z0-9_-])+@([a-zA-Z0-9_-])+((.[a-zA-Z0-9_-]{2,3}){1,2})$/.test(
+      value
+    )
+  ) {
+    callback(new Error('邮箱格式错误'));
+  } else {
+    callback();
+  }
+};
+/**
+ * 验证手机号
+ */
+const validatePhone = (rule, value, callback) => {
+  if (!/^1[3|4|5|7|8|9][0-9]{9}$/.test(value)) {
+    callback(new Error('手机格式错误'));
+  } else {
+    callback();
+  }
+};
+
 const rules = {
+  email: [
+    { required: true, message: '邮箱不能为空', trigger: 'blur' },
+    { validator: validateEmail, trigger: 'blur' },
+  ],
   account: [{ required: true, message: '此项为必填', trigger: 'blur' }],
-  password: [{ required: true, message: '此项为必填', trigger: 'blur' }],
-  code: [{ required: true, message: '此项为必填', trigger: 'blur' }],
-  rePassword: [{ required: true, message: '此项为必填', trigger: 'blur' }],
+  phone: [
+    { required: true, message: '手机号为必填', trigger: 'blur' },
+    { validator: validatePhone, trigger: 'blur' },
+  ],
+  password: [{ required: true, message: '请填写密码', trigger: 'blur' }],
+  code: [{ required: true, message: '请填写验证码', trigger: 'blur' }],
+  rePassword: [{ required: true, message: '请验证密码', trigger: 'blur' }],
 };
 const handleActions = () => {
   isLogin.value = isLogin.value !== true;
@@ -49,6 +82,23 @@ const handleLogin = async () => {
 };
 const handleRegister = async () => {
   // 注册
+  const form = unref(registerFormRef);
+  form.validate((valid, fields) => {
+    if (valid) {
+      // TODO: 发送验证码
+    }
+  });
+};
+/**
+ * 发送验证码
+ */
+const handleCode = () => {
+  const form = unref(registerFormRef);
+  form.validateField('email', (valid) => {
+    if (valid) {
+      // TODO: 发送验证码
+    }
+  });
 };
 </script>
 <template>
@@ -93,16 +143,28 @@ const handleRegister = async () => {
           :inline="true"
           :model="registerFormData"
         >
-          <el-form-item prop="account" label="账号：">
+          <el-form-item prop="email" label="邮箱：">
             <el-input
-              v-model.trim="registerFormData.account"
+              v-model.trim="registerFormData.email"
               placeholder="请输入邮箱"
             ></el-input>
           </el-form-item>
-          <el-form-item prop="code" label="验证码：">
+          <el-form-item prop="code" label="验证码：" class="code-item">
             <el-input
               v-model.trim="registerFormData.code"
               placeholder="请输入验证码"
+            ></el-input>
+            <el-button
+              type="primary"
+              @click="handleCode"
+              class="handle-code-btn"
+              >发送验证码</el-button
+            >
+          </el-form-item>
+          <el-form-item prop="phone" label="手机号：">
+            <el-input
+              v-model.trim="registerFormData.phone"
+              placeholder="请输入手机号"
             ></el-input>
           </el-form-item>
           <el-form-item prop="password" label="密码：">
@@ -228,6 +290,15 @@ const handleRegister = async () => {
 
   .el-input__inner {
     font-size: 12px;
+  }
+  .code-item {
+    .el-input {
+      flex: 1;
+    }
+    .handle-code-btn {
+      width: 80px;
+      font-size: 12px;
+    }
   }
 }
 .registerForm {
