@@ -9,3 +9,8 @@ export interface IRegisterData {
   rePassword: string;
   code: number;
 }
+
+export interface IUser {
+  accountId: number;
+  name: number;
+}
