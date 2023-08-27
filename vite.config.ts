@@ -12,13 +12,13 @@ export default defineConfig({
   base: './',
   server: {
     hmr: true,
-    proxy: {
-      '^/api': {
-        target: 'http://119.23.229.128',
-        changeOrigin: true, //开启代理
-        rewrite: (path) => path.replace(/^\/api/, ''),
-      },
-    },
+    // proxy: {
+    //   '^/api': {
+    //     target: 'http://119.23.229.128',
+    //     changeOrigin: true, //开启代理
+    //     rewrite: (path) => path.replace(/^\/api/, ''),
+    //   },
+    // },
   },
   plugins: [
     vue(),
