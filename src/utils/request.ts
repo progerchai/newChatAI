@@ -1,8 +1,8 @@
 import type { AxiosRequestConfig } from 'axios';
 import axios from 'axios';
 import { ElMessage } from 'element-plus';
-const perfix = '';
-import.meta.env.MODE === 'development' ? 'http://119.23.229.128' : '';
+const isDev = import.meta.env.MODE === 'development';
+const perfix = ''; // isDev ? 'http://119.23.229.128' : '';
 const queryString = (params: any) => {
   let str = '';
   for (var key in params) {
@@ -16,7 +16,9 @@ const errorHandler = (data: { code: string; message: string }) => {
   } else if (data?.code === 'UNLOGIN') {
     ElMessage.error('请前往登录');
     setTimeout(() => {
-      location.href = '/login';
+      if (!isDev) {
+        location.href = '/login';
+      }
     }, 1500);
   }
 };
