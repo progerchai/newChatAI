@@ -1,8 +1,8 @@
 import type { AxiosRequestConfig } from 'axios';
 import axios from 'axios';
 import { ElMessage } from 'element-plus';
-const perfix =
-  import.meta.env.MODE === 'development' ? 'http://119.23.229.128' : '';
+const perfix = '';
+import.meta.env.MODE === 'development' ? 'http://119.23.229.128' : '';
 const queryString = (params: any) => {
   let str = '';
   for (var key in params) {
@@ -32,6 +32,7 @@ export const get = async (
     },
     ...config,
   });
+  console.log(22222, response);
   errorHandler(response.data);
   return response.data;
 };
