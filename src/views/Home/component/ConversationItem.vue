@@ -6,7 +6,6 @@ import 'highlight.js/styles/monokai.css';
 import _ from 'lodash';
 import mathjaxPlugin from 'markdown-it-mathjax3';
 import Markdown from 'vue3-markdown-it';
-const accountId = -1;
 const props = defineProps<{
   conv: IConversation;
   idx: number | undefined;
@@ -14,7 +13,6 @@ const props = defineProps<{
 }>();
 function suitable(index: number, conv: IConversation, suit: ISuitable) {
   comment({
-    accountId,
     sessionId: Number(conv.idx),
     suitable: suit,
     id: Number(conv.id),

@@ -11,6 +11,6 @@ export interface IRegisterData {
 }
 
 export interface IUser {
-  accountId: number;
+  uid: number;
   name: number;
 }

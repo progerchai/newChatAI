@@ -46,14 +46,13 @@ const props = defineProps<{
   theme: 'light' | 'dark';
   onChangeSessionId: (id: number | undefined) => void;
 }>();
-const accountId = -1;
 const history = ref<Array<IConversation>>([]);
 const state = reactive<State>({
   selectConvId: -1,
   convTitletmp: '',
 });
 const getHistoryFunc = async (idx?: number) => {
-  await getHistory({ accountId }).then((res) => {
+  await getHistory().then((res) => {
     if (res.code === 'SUCCESS') {
       const data = res.data.list?.slice(0, 10);
       history.value = data;
@@ -85,11 +84,11 @@ function selectConversation(idx: number | undefined) {
  * 删除会话
  */
 function delConv(idx: number | undefined) {
-  deleteSession({ accountId, sessionId: Number(idx) }).then((res) => {
+  deleteSession({ sessionId: Number(idx) }).then((res) => {
     if (res.code === 'SUCCESS') {
       const _conversations = _.cloneDeep(history.value);
       _.remove(_conversations, (o: IConversation) => o.idx === idx);
-      history.value = _conversations?.splice(0, 10);
+      history.value = _conversations;
       state.selectConvId = -1;
       props.onChangeSessionId(-1);
     }
@@ -102,7 +101,6 @@ function changeConvTitle(cidx: number, conv: IConversation) {
   changeSessionTitle({
     sessionId: Number(conv.idx),
     title: String(state.convTitletmp),
-    accountId,
   }).then((res) => {
     if (res.code === 'SUCCESS') {
       state.convTitletmp = '';
@@ -118,7 +116,7 @@ function changeConvTitletmp(title: string) {
  * 清空会话
  */
 function clearConversations() {
-  clearSession({ accountId }).then((res) => {
+  clearSession().then((res) => {
     if (res.code === 'SUCCESS') {
       history.value = [];
       state.selectConvId = -1;
@@ -136,7 +134,7 @@ async function newChat(idx?: number) {
   if (idx) {
     await getHistoryFunc(idx);
   } else {
-    await generateConv({ accountId }).then((res) => {
+    await generateConv({}).then((res) => {
       if (res.code === 'SUCCESS') {
         const newId = res.data;
         state.selectConvId = newId;

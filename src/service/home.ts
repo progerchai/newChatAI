@@ -5,8 +5,8 @@ import { get, post } from '@/utils';
  * @param params
  * @returns
  */
-export const getHistory = (params: { accountId: number }) => {
-  return get('/api/getHistory.json', params) as Promise<{
+export const getHistory = () => {
+  return get('/api/getHistory.json') as Promise<{
     data: {
       list: Array<{ id: number; title: string }>;
     };
@@ -18,10 +18,7 @@ export const getHistory = (params: { accountId: number }) => {
  * @param params
  * @returns
  */
-export const getSessionDetail = (params: {
-  accountId: number;
-  sessionId: number;
-}) => {
+export const getSessionDetail = (params: { sessionId: number }) => {
   return get('/api/getSessionDetail.json', params) as Promise<{
     data: IConversation[];
     code: string;
@@ -32,7 +29,7 @@ export const getSessionDetail = (params: {
  * @param params 账号id
  * @returns
  */
-export const generateConv = (params: { accountId: number; title?: string }) => {
+export const generateConv = (params: { title?: string }) => {
   return post('/api/generate.json', params) as Promise<{
     data: number;
     code: string;
@@ -42,10 +39,7 @@ export const generateConv = (params: { accountId: number; title?: string }) => {
 /**
  * 删除会话
  */
-export const deleteSession = (params: {
-  accountId: number;
-  sessionId: number;
-}) => {
+export const deleteSession = (params: { sessionId: number }) => {
   return post('/api/deleteSession.json', params) as Promise<{
     data: number;
     code: string;
@@ -55,7 +49,6 @@ export const deleteSession = (params: {
  * 编辑会话标题
  */
 export const changeSessionTitle = (params: {
-  accountId: number;
   sessionId: number;
   title: string;
 }) => {
@@ -68,8 +61,8 @@ export const changeSessionTitle = (params: {
 /**
  * 编辑会话标题
  */
-export const clearSession = (params: { accountId: number }) => {
-  return post('/api/clearSession.json', params) as Promise<{
+export const clearSession = () => {
+  return post('/api/clearSession.json') as Promise<{
     data: number;
     code: string;
   }>;
@@ -79,7 +72,6 @@ export const clearSession = (params: { accountId: number }) => {
  * 会话点踩
  */
 export const comment = (params: {
-  accountId: number;
   sessionId: number;
   suitable: ISuitable;
   id: number;

@@ -44,7 +44,6 @@ interface State {
   stashString: string;
 }
 const PREFIX = '';
-const accountId = -1;
 const store = useStore('global');
 const { isPc } = store.state;
 
@@ -281,7 +280,7 @@ async function send() {
   state.convLoading = true;
   if (selectedSessionId < 0) {
     // 当前无会话，创建会话
-    const generateRes = await generateConv({ accountId, title: chatMsg });
+    const generateRes = await generateConv({ title: chatMsg });
     if (generateRes.code === 'SUCCESS') {
       onChangeSessionId(generateRes.data);
       await leftMenuRef.value.newChat(generateRes.data);
@@ -314,11 +313,9 @@ async function send() {
   // 滚动到最下面
   handleScrollBottom();
   var _source = (state.source = new EventSource(
-    `${PREFIX}/api/chat.json?prompt=${encodeURIComponent(
-      chatMsg
-    )}&accountId=${accountId}&idx=${state.selectedSessionId}&plugin=${
-      selectValue.value
-    }`,
+    `${PREFIX}/api/chat.json?prompt=${encodeURIComponent(chatMsg)}&idx=${
+      state.selectedSessionId
+    }&plugin=${selectValue.value}`,
     { withCredentials: true }
   ));
   // 创建eventSource 失败
@@ -561,7 +558,6 @@ watch(
   () => {
     console.log('选中的idx发生变化： ', state.selectedSessionId);
     getSessionDetail({
-      accountId,
       getSessionDetail: state.selectedSessionId,
     }).then((res) => {
       if (res.code === 'SUCCESS') {
