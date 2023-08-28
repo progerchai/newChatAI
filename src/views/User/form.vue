@@ -94,6 +94,14 @@ const handleCode = () => {
     }
   });
 };
+const handleLoginFormSelect = (key: string) => {
+  const form = unref(formRef);
+  form.clearValidate([key]);
+};
+const handleRegisterFormSelect = (key: string) => {
+  const form = unref(registerFormRef);
+  form.clearValidate([key]);
+};
 </script>
 <template>
   <div class="form-content">
@@ -111,6 +119,7 @@ const handleCode = () => {
         <el-input
           v-model.trim="loginFormData.account"
           placeholder="请输入邮箱或账号关联的手机号"
+          @input="handleLoginFormSelect('account')"
         ></el-input>
       </el-form-item>
       <el-form-item prop="password" label="密码：">
@@ -119,6 +128,7 @@ const handleCode = () => {
           placeholder="请输入密码"
           type="password"
           autocomplete="off"
+          @input="handleLoginFormSelect('password')"
         ></el-input>
       </el-form-item>
     </el-form>
@@ -135,12 +145,14 @@ const handleCode = () => {
         <el-input
           v-model.trim="registerFormData.email"
           placeholder="请输入邮箱"
+          @input="handleRegisterFormSelect('email')"
         ></el-input>
       </el-form-item>
       <el-form-item prop="code" label="验证码：" class="code-item">
         <el-input
           v-model.trim="registerFormData.code"
           placeholder="请输入验证码"
+          @input="handleRegisterFormSelect('code')"
         ></el-input>
         <el-button type="primary" @click="handleCode" class="handle-code-btn"
           >发送验证码</el-button
@@ -150,11 +162,13 @@ const handleCode = () => {
         <el-input
           v-model.trim="registerFormData.phone"
           placeholder="请输入手机号"
+          @input="handleRegisterFormSelect('phone')"
         ></el-input>
       </el-form-item>
       <el-form-item prop="password" label="密码：">
         <el-input
           v-model.trim="registerFormData.password"
+          @input="handleRegisterFormSelect('password')"
           placeholder="请输入密码"
           type="password"
           autocomplete="off"
@@ -163,6 +177,7 @@ const handleCode = () => {
       <el-form-item prop="rePassword" label="确认密码：">
         <el-input
           v-model.trim="registerFormData.rePassword"
+          @input="handleRegisterFormSelect('rePassword')"
           placeholder="请确认密码"
           type="rePassword"
           autocomplete="off"
