@@ -193,7 +193,7 @@ const handleCode = () => {
   </div>
 </template>
 
-<style scoped lang="scss">
+<style lang="scss">
 .form-content {
   flex: 1;
   padding: 20px 24px;
@@ -235,6 +235,8 @@ const handleCode = () => {
 
   .el-input__inner {
     font-size: 12px;
+    padding-left: 0px;
+    padding-right: 0px;
   }
   .code-item {
     .el-input {
