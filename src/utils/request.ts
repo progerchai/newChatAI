@@ -2,7 +2,8 @@ import type { AxiosRequestConfig } from 'axios';
 import axios from 'axios';
 import { ElMessage } from 'element-plus';
 const isDev = import.meta.env.MODE === 'development';
-const prefix = isDev ? 'http://119.23.229.128' : '';
+// const prefix = isDev ? 'http://119.23.229.128' : '';
+const prefix = '';
 const queryString = (params: any) => {
   let str = '';
   for (var key in params) {
@@ -10,22 +11,22 @@ const queryString = (params: any) => {
   }
   return '?' + str.substr(0, str.length - 1);
 };
-const directLogin = ()=>{
+const directLogin = () => {
   setTimeout(() => {
     if (!isDev) {
       location.href = '/login';
     }
   }, 1500);
-}
+};
 const errorHandler = (data: { code: string; message: string }) => {
   if (data?.code === 'ERROR') {
     ElMessage.error(data?.message);
   } else if (data?.code === 'UNLOGIN') {
     ElMessage.error('请前往登录');
-    directLogin()
+    directLogin();
   } else if (data?.code === 'INVALID_TOKEN') {
     ElMessage.error('登陆已过期，请重新登录');
-    directLogin()
+    directLogin();
   }
 };
 export const get = async (
@@ -40,7 +41,6 @@ export const get = async (
     },
     ...config,
   });
-  console.log(222,response)
   errorHandler(response.data);
   return response.data;
 };

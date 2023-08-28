@@ -43,8 +43,7 @@ interface State {
   selectedSessionId: number;
   stashString: string;
 }
-const PREFIX =
-  import.meta.env.MODE === 'development' ? 'http://119.23.229.128' : '';
+const PREFIX = '';
 const accountId = -1;
 const store = useStore('global');
 const { isPc } = store.state;
@@ -319,7 +318,8 @@ async function send() {
       chatMsg
     )}&accountId=${accountId}&idx=${state.selectedSessionId}&plugin=${
       selectValue.value
-    }`
+    }`,
+    { withCredentials: true }
   ));
   // 创建eventSource 失败
   if (!_source.withCredentials) {
