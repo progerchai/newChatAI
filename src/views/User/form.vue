@@ -7,6 +7,7 @@ import { ref, unref } from 'vue';
 const isDev = import.meta.env.MODE === 'development';
 const loading = ref(false);
 const formRef = ref();
+const countDown = ref(-1);
 const registerFormRef = ref();
 const loginFormData = ref<ILoginData>({} as any);
 const registerFormData = ref<IRegisterData>({} as any);
@@ -53,6 +54,16 @@ const rules = {
 };
 const handleActions = () => {
   isLogin.value = isLogin.value !== true;
+};
+const countDownFunc = () => {
+  countDown.value = 59;
+  const interval = setInterval(() => {
+    countDown.value = countDown.value - 1;
+    if (countDown.value <= 0) {
+      clearInterval(interval);
+      countDown.value = -1;
+    }
+  }, 1000);
 };
 /**
  * 登录
@@ -121,6 +132,7 @@ const handleCode = () => {
         if (res.code === 'SUCCESS') {
           ElMessage.success('验证码已发送');
         }
+        countDownFunc();
       });
     }
   });
@@ -185,8 +197,14 @@ const handleRegisterFormSelect = (key: string) => {
           placeholder="请输入验证码"
           @input="handleRegisterFormSelect('code')"
         ></el-input>
-        <el-button type="primary" @click="handleCode" class="handle-code-btn"
-          >发送验证码</el-button
+        <el-button
+          type="primary"
+          @click="handleCode"
+          class="handle-code-btn"
+          :disabled="countDown !== -1"
+          >{{
+            countDown !== -1 ? `${countDown}s 后重试` : '发送验证码'
+          }}</el-button
         >
       </el-form-item>
       <el-form-item prop="phone" label="手机号：">
