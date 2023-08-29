@@ -13,7 +13,7 @@ declare module 'vuex' {
 }
 
 declare module '*.vue' {
-  import { DefineComponent } from 'vue';
-  const component: DefineComponent<{}, {}, any>;
+  import { defineComponent } from 'vue';
+  const component: defineComponent<{}, {}, any>;
   export default component;
 }

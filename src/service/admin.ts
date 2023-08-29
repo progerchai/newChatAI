@@ -81,6 +81,12 @@ export function changeUserStatus(userId: number, status: string) {
 
 // 查询用户列表
 export function listUser(query: string) {
+  return new Promise((resolve) => {
+    resolve({
+      rows: [],
+      total: 0,
+    });
+  });
   //   return request({
   //     url: '/system/user/list',
   //     method: 'get',

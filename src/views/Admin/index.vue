@@ -12,16 +12,15 @@ import {
   deptTreeSelect,
 } from '@/service/admin';
 import { useRouter } from 'vue-router';
+import { getCurrentInstance, toRefs, reactive, ref } from 'vue';
 const router = useRouter();
-
 const { proxy } = getCurrentInstance();
-console.log(2222, 'admin');
-
-const { sys_normal_disable, sys_user_sex } = proxy.useDict(
-  'sys_normal_disable',
-  'sys_user_sex'
-);
-
+// const { sys_normal_disable, sys_user_sex } = proxy.useDict(
+//   'sys_normal_disable',
+//   'sys_user_sex'
+// );
+const sys_normal_disable = {};
+const sys_user_sex = {};
 const userList = ref([]);
 const open = ref(false);
 const loading = ref(true);
@@ -52,6 +51,7 @@ const upload = reactive({
   // 上传的地址
   url: import.meta.env.VITE_APP_BASE_API + '/system/user/importData',
 });
+
 // 列显隐信息
 const columns = ref([
   { key: 0, label: `用户id`, visible: true },
@@ -111,35 +111,35 @@ const data = reactive({
     ],
   },
 });
-
 const { queryParams, form, rules } = toRefs(data);
-
 /** 通过条件过滤节点  */
 const filterNode = (value, data) => {
   if (!value) return true;
   return data.label.indexOf(value) !== -1;
 };
 /** 根据名称筛选部门树 */
-watch(deptName, (val) => {
-  proxy.$refs['deptTreeRef'].filter(val);
-});
+// watch(deptName, (val) => {
+//   proxy.$refs['deptTreeRef'].filter(val);
+// });
 /** 查询部门下拉树结构 */
 function getDeptTree() {
-  deptTreeSelect().then((response) => {
-    deptOptions.value = response.data;
-  });
+  // deptTreeSelect().then((response) => {
+  //   deptOptions.value = response.data;
+  // });
+  deptOptions.value = [];
 }
 /** 查询用户列表 */
 function getList() {
   loading.value = true;
-  listUser(proxy.addDateRange(queryParams.value, dateRange.value)).then(
-    (res) => {
-      loading.value = false;
-      userList.value = res.rows;
-      total.value = res.total;
-    }
-  );
+  // listUser('').then((res) => {
+  loading.value = false;
+  //   userList.value = res.rows;
+  // total.value = res.total;
+  userList.value = [];
+  total.value = 0;
+  // });
 }
+
 /** 节点单击事件 */
 function handleNodeClick(data) {
   queryParams.value.deptId = data.id;
@@ -172,6 +172,7 @@ function handleDelete(row) {
     })
     .catch(() => {});
 }
+
 /** 导出按钮操作 */
 function handleExport() {
   proxy.download(
@@ -255,6 +256,7 @@ function importTemplate() {
 const handleFileUploadProgress = (event, file, fileList) => {
   upload.isUploading = true;
 };
+
 /** 文件上传成功处理 */
 const handleFileSuccess = (response, file, fileList) => {
   upload.open = false;
@@ -345,6 +347,7 @@ function submitForm() {
 
 getDeptTree();
 getList();
+console.log(222, proxy);
 </script>
 <template>
   <div class="app-container">
