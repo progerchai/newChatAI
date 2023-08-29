@@ -19,7 +19,7 @@ const directLogin = () => {
   }, 1500);
 };
 const errorHandler = (data: { code: string; message: string }) => {
-  if (data?.code === 'ERROR') {
+  if (['FAILED', 'ERROR'].includes(data?.code)) {
     ElMessage.error(data?.message);
   } else if (data?.code === 'UNLOGIN') {
     ElMessage.error('请前往登录');

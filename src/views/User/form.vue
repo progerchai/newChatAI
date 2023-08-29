@@ -109,10 +109,10 @@ const handleRegister = async () => {
         rePassword,
       }).then((res) => {
         if (res.code === 'SUCCESS') {
-          ElMessage.success('注册成功,请前往登录');
+          ElMessage.success('注册成功');
           setTimeout(() => {
             if (!isDev) {
-              location.href = '/login';
+              location.href = '/';
             }
           }, 1500);
         }
