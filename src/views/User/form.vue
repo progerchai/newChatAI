@@ -1,8 +1,10 @@
 <script setup lang="ts">
-import { login } from '@/service/user';
+import { login, sendEmailCode, register } from '@/service/user';
 import type { ILoginData, IRegisterData } from '@/types';
+import { ElMessage } from 'element-plus';
 import { ref, unref } from 'vue';
 
+const isDev = import.meta.env.MODE === 'development';
 const loading = ref(false);
 const formRef = ref();
 const registerFormRef = ref();
@@ -44,6 +46,7 @@ const rules = {
     { required: true, message: '手机号为必填', trigger: 'blur' },
     { validator: validatePhone, trigger: 'blur' },
   ],
+  username: [{ required: true, message: '请填写姓名', trigger: 'blur' }],
   password: [{ required: true, message: '请填写密码', trigger: 'blur' }],
   code: [{ required: true, message: '请填写验证码', trigger: 'blur' }],
   rePassword: [{ required: true, message: '请验证密码', trigger: 'blur' }],
@@ -79,7 +82,30 @@ const handleRegister = async () => {
   const form = unref(registerFormRef);
   form.validate((valid: boolean, fields: any) => {
     if (valid) {
-      // TODO: 发送验证码
+      // 注册
+      const { email, phone, username, code, password, rePassword } =
+        registerFormData.value;
+      if (password !== rePassword) {
+        ElMessage.error('密码校验失败');
+        return;
+      }
+      register({
+        email,
+        phone,
+        username,
+        code,
+        password,
+        rePassword,
+      }).then((res) => {
+        if (res.code === 'SUCCESS') {
+          ElMessage.success('注册成功,请前往登录');
+          setTimeout(() => {
+            if (!isDev) {
+              location.href = '/login';
+            }
+          }, 1500);
+        }
+      });
     }
   });
 };
@@ -90,7 +116,12 @@ const handleCode = () => {
   const form = unref(registerFormRef);
   form.validateField('email', (valid: boolean) => {
     if (valid) {
-      // TODO: 发送验证码
+      // 发送验证码
+      sendEmailCode({ email: registerFormData.value.email }).then((res) => {
+        if (res.code === 'SUCCESS') {
+          ElMessage.success('验证码已发送');
+        }
+      });
     }
   });
 };
@@ -163,6 +194,13 @@ const handleRegisterFormSelect = (key: string) => {
           v-model.trim="registerFormData.phone"
           placeholder="请输入手机号"
           @input="handleRegisterFormSelect('phone')"
+        ></el-input>
+      </el-form-item>
+      <el-form-item prop="username" label="姓名：">
+        <el-input
+          v-model.trim="registerFormData.username"
+          placeholder="请输入姓名"
+          @input="handleRegisterFormSelect('username')"
         ></el-input>
       </el-form-item>
       <el-form-item prop="password" label="密码：">

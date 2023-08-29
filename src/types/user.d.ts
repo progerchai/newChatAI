@@ -7,7 +7,8 @@ export interface IRegisterData {
   phone: string;
   password: string;
   rePassword: string;
-  code: number;
+  code: string;
+  username: string;
 }
 
 export interface IUser {
