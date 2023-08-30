@@ -94,7 +94,7 @@ const handleRegister = async () => {
   form.validate((valid: boolean, fields: any) => {
     if (valid) {
       // 注册
-      const { email, phone, username, code, password, rePassword } =
+      const { email, phone, username, code, password, rePassword, inviteCode } =
         registerFormData.value;
       if (password !== rePassword) {
         ElMessage.error('密码校验失败');
@@ -107,6 +107,7 @@ const handleRegister = async () => {
         code,
         password,
         rePassword,
+        inviteCode,
       }).then((res) => {
         if (res.code === 'SUCCESS') {
           ElMessage.success('注册成功');
@@ -235,7 +236,15 @@ const handleRegisterFormSelect = (key: string) => {
           v-model.trim="registerFormData.rePassword"
           @input="handleRegisterFormSelect('rePassword')"
           placeholder="请确认密码"
-          type="rePassword"
+          type="password"
+          autocomplete="off"
+        ></el-input>
+      </el-form-item>
+      <el-form-item prop="inviteCode" label="邀请码：">
+        <el-input
+          v-model.trim="registerFormData.inviteCode"
+          @input="handleRegisterFormSelect('inviteCode')"
+          placeholder="请选填邀请码"
           autocomplete="off"
         ></el-input>
       </el-form-item>
@@ -297,7 +306,7 @@ const handleRegisterFormSelect = (key: string) => {
   }
 }
 .form {
-  width: 80%;
+  width: 90%;
   margin-bottom: 40px;
   .el-form-item {
     margin-right: 0px;

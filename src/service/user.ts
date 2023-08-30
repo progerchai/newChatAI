@@ -29,6 +29,7 @@ export const register = (params: {
   code: string;
   password: string;
   rePassword: string;
+  inviteCode?: string;
 }) => {
   return post('/api/user/register.json', params) as Promise<{
     data: number;

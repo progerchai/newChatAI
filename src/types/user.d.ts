@@ -9,6 +9,7 @@ export interface IRegisterData {
   rePassword: string;
   code: string;
   username: string;
+  inviteCode?: string;
 }
 
 export interface IUser {
