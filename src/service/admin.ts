@@ -4,11 +4,7 @@ import type { IUser } from '@/types';
  * 获取列表树
  */
 export const deptTreeSelect = () => {
-  //   return post('/api/user/login.json', params) as Promise<{
-  //     data: number;
-  //     code: string;
-  //   }>;
-  return [
+  const value = [
     {
       id: 100,
       label: '浙江大学',
@@ -46,6 +42,9 @@ export const deptTreeSelect = () => {
       ],
     },
   ];
+  return new Promise((resolve) => {
+    resolve({ data: value });
+  });
 };
 
 // 新增用户
@@ -83,7 +82,14 @@ export function changeUserStatus(userId: number, status: string) {
 export function listUser(query: string) {
   return new Promise((resolve) => {
     resolve({
-      rows: [],
+      rows: [
+        {
+          uid: 1,
+          userName: 'xxx1',
+          deptName: '浙江大学',
+          phone: '1586872xxxx',
+        },
+      ],
       total: 0,
     });
   });
