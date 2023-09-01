@@ -62,11 +62,11 @@ const handleChange = (data) => {
 const columns = ref([
   { key: 0, label: `用户id`, visible: true },
   { key: 1, label: `用户名称`, visible: true },
-  { key: 2, label: `用户昵称`, visible: true },
-  { key: 3, label: `学校`, visible: true },
-  { key: 4, label: `手机号码`, visible: true },
-  { key: 5, label: `状态`, visible: true },
-  { key: 6, label: `创建时间`, visible: true },
+  { key: 2, label: `学校`, visible: true },
+  { key: 3, label: `手机号码`, visible: true },
+  { key: 4, label: `状态`, visible: true },
+  { key: 5, label: `创建时间`, visible: true },
+  { key: 6, label: `角色权限`, visible: true },
 ]);
 
 const data = reactive({
@@ -412,11 +412,6 @@ getList();
               >删除</el-button
             >
           </el-col>
-          <!-- <right-toolbar
-            v-model:showSearch="showSearch"
-            @queryTable="getList"
-            :columns="columns"
-          ></right-toolbar> -->
         </el-row>
 
         <el-table
