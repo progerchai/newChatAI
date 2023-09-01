@@ -30,7 +30,7 @@ const validateEmail = (rule: any, value: string, callback: any) => {
  * 验证手机号
  */
 const validatePhone = (rule: any, value: string, callback: any) => {
-  if (!/^1[3|4|5|7|8|9][0-9]{9}$/.test(value)) {
+  if (!/^1[3|4|5|6|7|8|9][0-9]{9}$/.test(value)) {
     callback(new Error('手机格式错误'));
   } else {
     callback();
