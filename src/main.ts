@@ -14,6 +14,7 @@ import { createApp } from 'vue';
 import App from './App.vue';
 import './assets/main.css';
 import directive from './directive'; // directive
+import plugins from './plugins';
 import router from './router';
 import global from './store/global';
 import './style/global.css';
@@ -32,6 +33,7 @@ app.config.globalProperties.selectDictLabels = selectDictLabels;
 app.use(ElementUI);
 app.use(elementIcons);
 app.component('svg-icon', SvgIcon);
+app.use(plugins);
 app.use(router);
 app.use(global, 'global');
 directive(app);
