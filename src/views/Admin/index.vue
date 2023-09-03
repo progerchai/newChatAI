@@ -144,26 +144,27 @@ function handleDelete(row) {
   const uids = row.uid || ids.value;
   proxy.$modal
     .confirm('是否确认删除用户id为"' + uids + '"的数据项？')
-    .then(function () {
-      return delUser(uids);
-    })
     .then(() => {
-      getList();
-      proxy.$modal.msgSuccess('删除成功');
-    })
-    .catch(() => {});
+      delUser(uids).then((res) => {
+        if (res.code === 'SUCCESS') {
+          getList();
+          proxy.$modal.msgSuccess('删除成功');
+        }
+      });
+    });
 }
 
 /** 用户状态修改  */
 function handleStatusChange(row) {
-  let text = row.status === '0' ? '启用' : '停用';
+  let text = row.status === 0 ? '启用' : '停用';
   proxy.$modal
-    .confirm('确认要"' + text + '""' + row.userName + '"用户吗?')
-    .then(function () {
-      return changeUserStatus(row.uid, row.status);
-    })
+    .confirm('确认要' + text + '"' + row.userName + '"用户吗?')
     .then(() => {
-      proxy.$modal.msgSuccess(text + '成功');
+      changeUserStatus({ uid: row.uid, status: row.status }).then((res) => {
+        if (res.code === 'SUCCESS') {
+          proxy.$modal.msgSuccess(text + '成功');
+        }
+      });
     })
     .catch(function () {
       row.status = row.status === '0' ? '1' : '0';
@@ -458,12 +459,13 @@ getList();
             v-if="columns[4].visible"
           >
             <template #default="scope">
-              <el-switch
-                v-model="scope.row.status"
-                active-value="0"
-                inactive-value="1"
-                @change="handleStatusChange(scope.row)"
-              ></el-switch>
+              <span @click="handleStatusChange(scope.row)">
+                <el-switch
+                  v-model="scope.row.status"
+                  active-value="0"
+                  inactive-value="1"
+                />
+              </span>
             </template>
           </el-table-column>
           <el-table-column
