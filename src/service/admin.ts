@@ -1,5 +1,5 @@
-import { post } from '@/utils';
-import type { IUser } from '@/types';
+import { post, get } from '@/utils';
+import type { IUser, IAdminList } from '@/types';
 /**
  * 获取列表树
  */
@@ -45,16 +45,23 @@ export const deptTreeSelect = () => {
   return new Promise((resolve) => {
     resolve({ data: value });
   });
+  return get('/api/role/getAdminList.json') as Promise<{
+    data: IAdminList;
+    code: string;
+  }>;
 };
 
 // 新增用户
-export function addUser() {
-  // return request({
-  //   url: '/system/user',
-  //   method: 'post',
-  //   data: data
-  // })
-}
+export const addUser = (params: {
+  username: string;
+  email: string;
+  phone: string;
+}) => {
+  return post('/api/role/createUser.json', params) as Promise<{
+    data: number;
+    code: string;
+  }>;
+};
 
 // 修改用户
 export function updateUser(data: IUser) {
@@ -74,27 +81,29 @@ export const changeUserStatus = (params: { uid: number; status: 0 | 1 }) => {
 };
 
 // 查询用户列表
-export function listUser(query: string) {
+export const listUser = (params: { uid: number }) => {
   return new Promise((resolve) => {
     resolve({
       rows: [
         {
           uid: 1,
-          userName: 'xxx1',
+          userName: '测试用户',
           deptName: '浙江大学',
           phone: '1586872xxxx',
           status: 0,
+          token: 20000,
+          usedToken: 355,
+          createTime: '2023-08-20 15:40:23',
         },
       ],
       total: 0,
     });
   });
-  //   return request({
-  //     url: '/system/user/list',
-  //     method: 'get',
-  //     params: query,
-  //   });
-}
+  return get('/api/role/getUserInfo.json') as Promise<{
+    data: IAdminList;
+    code: string;
+  }>;
+};
 
 // 用户密码重置
 export function resetUserPwd(userId: number, password: string) {

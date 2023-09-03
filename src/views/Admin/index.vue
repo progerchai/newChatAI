@@ -1,19 +1,18 @@
 <script setup>
-import { getToken } from '@/utils';
-import { DepartTree } from './components';
-
 import {
+  addUser,
   changeUserStatus,
-  listUser,
-  resetUserPwd,
   delUser,
   getUser,
+  listUser,
+  resetUserPwd,
   updateUser,
-  addUser,
-  deptTreeSelect,
 } from '@/service/admin';
+import { getToken } from '@/utils';
+import dayjs from 'dayjs';
+import { getCurrentInstance, reactive, ref, toRefs } from 'vue';
 import { useRouter } from 'vue-router';
-import { getCurrentInstance, toRefs, reactive, ref, watch } from 'vue';
+import { DepartTree } from './components';
 const router = useRouter();
 const { proxy } = getCurrentInstance();
 // const { sys_normal_disable, sys_user_sex } = proxy.useDict(
@@ -60,13 +59,15 @@ const handleChange = (data) => {
 };
 // 列显隐信息
 const columns = ref([
-  { key: 0, label: `用户id`, visible: true },
-  { key: 1, label: `用户名称`, visible: true },
-  { key: 2, label: `学校`, visible: true },
-  { key: 3, label: `手机号码`, visible: true },
-  { key: 4, label: `状态`, visible: true },
-  { key: 5, label: `创建时间`, visible: true },
-  { key: 6, label: `角色权限`, visible: true },
+  { label: `用户id`, visible: true },
+  { label: `用户名称`, visible: true },
+  { label: `学校`, visible: true },
+  { label: `手机号码`, visible: true },
+  { label: `状态`, visible: true },
+  { label: `token额度`, visible: true },
+  { label: `已用token`, visible: true },
+  { label: `创建时间`, visible: true },
+  { label: `角色权限`, visible: true },
 ]);
 
 const data = reactive({
@@ -469,14 +470,30 @@ getList();
             </template>
           </el-table-column>
           <el-table-column
+            label="token额度"
+            align="center"
+            key="token"
+            prop="token"
+            v-if="columns[5].visible"
+            width="120"
+          />
+          <el-table-column
+            label="已用token"
+            align="center"
+            key="usedToken"
+            prop="usedToken"
+            v-if="columns[6].visible"
+            width="120"
+          />
+          <el-table-column
             label="创建时间"
             align="center"
             prop="createTime"
-            v-if="columns[5].visible"
+            v-if="columns[7].visible"
             width="160"
           >
             <template #default="scope">
-              <span>{{ parseTime(scope.row.createTime) }}</span>
+              <span>{{ dayjs(scope.row.createTime, 'YYYY-MM-DD HH:mm') }}</span>
             </template>
           </el-table-column>
           <el-table-column
