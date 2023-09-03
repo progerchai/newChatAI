@@ -493,7 +493,9 @@ getList();
             width="160"
           >
             <template #default="scope">
-              <span>{{ dayjs(scope.row.createTime, 'YYYY-MM-DD HH:mm') }}</span>
+              <span>{{
+                dayjs(scope.row.createTime).format('YYYY-MM-DD HH:mm')
+              }}</span>
             </template>
           </el-table-column>
           <el-table-column
