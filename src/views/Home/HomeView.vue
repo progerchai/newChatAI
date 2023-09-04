@@ -556,7 +556,6 @@ watch(
 watch(
   () => state.selectedSessionId,
   () => {
-    console.log('选中的idx发生变化： ', state.selectedSessionId);
     getSessionDetail({
       getSessionDetail: state.selectedSessionId,
     }).then((res) => {

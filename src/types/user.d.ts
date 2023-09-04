@@ -14,5 +14,10 @@ export interface IRegisterData {
 
 export interface IUser {
   uid: number;
-  name: number;
+  userName?: number;
+  phone?: string;
+  status?: 1 | 0;
+  email?: string;
+  password?: string;
+  quota?: number;
 }

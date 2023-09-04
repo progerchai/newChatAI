@@ -1,5 +1,5 @@
 import { post, get } from '@/utils';
-import type { IUser, IAdminList } from '@/types';
+import type { IUser, IAdminList, IRole } from '@/types';
 /**
  * 获取列表树
  */
@@ -64,12 +64,11 @@ export const addUser = (params: {
 };
 
 // 修改用户
-export function updateUser(data: IUser) {
-  // return request({
-  //   url: '/system/user',
-  //   method: 'put',
-  //   data: data
-  // })
+export function updateUser(params: IUser) {
+  return post('/api/role/updateStatus.json', params) as Promise<{
+    data: number;
+    code: string;
+  }>;
 }
 
 // 用户状态修改
@@ -106,16 +105,11 @@ export const listUser = (params: { uid: number }) => {
 };
 
 // 用户密码重置
-export function resetUserPwd(userId: number, password: string) {
-  const data = {
-    userId,
-    password,
-  };
-  //   return request({
-  //     url: '/system/user/resetPwd',
-  //     method: 'put',
-  //     data: data,
-  //   });
+export function resetUserPwd(params: { uid: number; password: string }) {
+  return updateUser(params).then((res) => {
+    if (res.code === 'SUCCESS') {
+    }
+  });
 }
 
 // 删除用户
@@ -128,3 +122,20 @@ export const delUser = (params: { uids: number[] }) => {
 
 // 查询用户详细
 export function getUser(userId: number) {}
+
+/**
+ * 获取用户角色
+ * @returns IRole
+ */
+export const getRole = () => {
+  return new Promise((resolve) => {
+    resolve({
+      data: 'super_admin',
+      code: 'SUCCESS',
+    });
+  });
+  return get('/api/role/getRole.json') as Promise<{
+    data: IRole;
+    code: string;
+  }>;
+};

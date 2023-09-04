@@ -7,6 +7,7 @@ import {
   listUser,
   resetUserPwd,
   updateUser,
+  getRole,
 } from '@/service/admin';
 import { getToken } from '@/utils';
 import dayjs from 'dayjs';
@@ -36,6 +37,7 @@ const deptOptions = ref(undefined);
 const initPassword = ref(undefined);
 const postOptions = ref([]);
 const roleOptions = ref([]);
+const role = ref('normal');
 /*** 用户导入参数 */
 const upload = reactive({
   // 是否显示弹出层（用户导入）
@@ -184,11 +186,7 @@ function handleCommand(command, row) {
       break;
   }
 }
-/** 跳转角色分配 */
-function handleAuthRole(row) {
-  const uid = row.uid;
-  router.push('/system/user-auth/role/' + uid);
-}
+
 /** 重置密码按钮操作 */
 function handleResetPwd(row) {
   proxy
@@ -200,8 +198,10 @@ function handleResetPwd(row) {
       inputErrorMessage: '用户密码长度必须介于 5 和 20 之间',
     })
     .then(({ value }) => {
-      resetUserPwd(row.uid, value).then((response) => {
-        proxy.$modal.msgSuccess('修改成功，新密码是：' + value);
+      resetUserPwd({ uid: row.uid, password: value }).then((res) => {
+        if (res.code === 'SUCCESS') {
+          proxy.$modal.msgSuccess('修改成功，新密码是：' + value);
+        }
       });
     })
     .catch(() => {});
@@ -311,8 +311,16 @@ function submitForm() {
     }
   });
 }
+const getRoleFunc = () => {
+  getRole().then((res) => {
+    if (res.code === 'SUCCESS') {
+      role.value = res.data;
+    }
+  });
+};
 
 getList();
+getRoleFunc();
 </script>
 <template>
   <div class="app-container">
@@ -508,7 +516,7 @@ getList();
               <el-tooltip
                 content="修改"
                 placement="top"
-                v-if="scope.row.uid !== 1"
+                v-if="['super_admin'].includes(role)"
               >
                 <el-button
                   link
@@ -521,7 +529,7 @@ getList();
               <el-tooltip
                 content="删除"
                 placement="top"
-                v-if="scope.row.uid !== 1"
+                v-if="['super_admin'].includes(role)"
               >
                 <el-button
                   link
@@ -534,7 +542,7 @@ getList();
               <el-tooltip
                 content="重置密码"
                 placement="top"
-                v-if="scope.row.uid !== 1"
+                v-if="['super_admin'].includes(role)"
               >
                 <el-button
                   link
@@ -542,19 +550,6 @@ getList();
                   icon="Key"
                   @click="handleResetPwd(scope.row)"
                   v-hasPermi="['system:user:resetPwd']"
-                ></el-button>
-              </el-tooltip>
-              <el-tooltip
-                content="分配角色"
-                placement="top"
-                v-if="scope.row.uid !== 1"
-              >
-                <el-button
-                  link
-                  type="primary"
-                  icon="CircleCheck"
-                  @click="handleAuthRole(scope.row)"
-                  v-hasPermi="['system:user:edit']"
                 ></el-button>
               </el-tooltip>
             </template>

@@ -306,14 +306,14 @@ defineExpose({
             <IconTrash />
             清空会话
           </a>
-          <a
+          <!-- <a
             @click="changeTheme(theme === 'light' ? 'dark' : 'light')"
             class="flex py-3 px-3 items-center gap-3 rounded-md hover:bg-gray-500/10 transition-colors duration-200 text-white cursor-pointer text-sm"
           >
             <IconDark v-if="theme === 'light'" />
             <IconLight v-if="theme === 'dark'" />
             {{ theme === 'light' ? '暗色主题' : '亮色主题' }}
-          </a>
+          </a> -->
           <a
             href="https://www.zju.edu.cn/"
             target="_blank"

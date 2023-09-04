@@ -15,7 +15,6 @@ export class Typewriter {
   }
   // 添加字符串到队列
   add(str: string) {
-    console.log(222222, 'add', str);
     if (!str) return;
     this.queue.push(...str.split(''));
   }
