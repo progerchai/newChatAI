@@ -108,8 +108,31 @@ export const listUser = (params: { uid: number }) => {
       total: 0,
     });
   });
-  return get('/api/role/getUserInfo.json') as Promise<{
+  return get('/api/role/getUserList.json') as Promise<{
     data: IAdminList;
+    code: string;
+  }>;
+};
+
+// 查询用户列表
+export const getUserInfo = () => {
+  return new Promise((resolve) => {
+    resolve({
+      data: {
+        uid: 2,
+        userName: '测试名称',
+        deptName: '浙江大学',
+        phone: '1586872xxxx',
+        status: 0,
+        token: 20000,
+        usedToken: 355,
+        createTime: '2023-08-20 15:40:23',
+      },
+      code: 'SUCCESS',
+    });
+  });
+  return get('/api/role/getUserInfo.json') as Promise<{
+    data: IUser;
     code: string;
   }>;
 };

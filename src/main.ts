@@ -34,7 +34,7 @@ app.use(ElementUI);
 app.use(elementIcons);
 app.component('svg-icon', SvgIcon);
 app.use(plugins);
-app.use(router);
 app.use(global, 'global');
+app.use(router);
 directive(app);
 app.mount('#app');

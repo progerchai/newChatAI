@@ -1,9 +1,10 @@
-import { getRole } from '@/service/admin';
-import type { IRole } from '@/types';
+import { getRole, getUserInfo } from '@/service/admin';
+import type { IRole, IUser } from '@/types';
 import { createStore } from 'vuex';
 interface State {
   isPc: boolean;
   role: IRole;
+  userInfo: IUser;
 }
 const store = createStore<State>({
   state: {
@@ -11,10 +12,15 @@ const store = createStore<State>({
       /(phone|pad|pod|iPhone|iPod|ios|iPad|Android|Mobile|BlackBerry|IEMobile|MQQBrowser|JUC|Fennec|wOSBrowser|BrowserNG|WebOS|Symbian|Windows Phone)/i
     ),
     role: 'normal',
+    userInfo: { uid: -1 },
   },
   mutations: {
     setUserRole(state, role) {
       state.role = role;
+    },
+    setUserInfo(state, info) {
+      console.log(2222, 33, info);
+      state.userInfo = info;
     },
   },
   actions: {
@@ -22,6 +28,14 @@ const store = createStore<State>({
       getRole().then((res: any) => {
         if (res.code === 'SUCCESS') {
           commit('setUserRole', res.data);
+        }
+      });
+    },
+    getUserInfoFunc({ state, commit }, payload) {
+      getUserInfo().then((res: any) => {
+        console.log(2222, res);
+        if (res.code === 'SUCCESS') {
+          commit('setUserInfo', res.data);
         }
       });
     },

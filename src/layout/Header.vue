@@ -6,10 +6,17 @@
  *@date: 2023-08-05 17:41:39
  */
 import { RouterLink } from 'vue-router';
+import { useStore } from 'vuex';
+const store = useStore('global');
+const { role, userInfo } = store.state;
 const menu = [
   { title: '首页', route: '/' },
   { title: '关于我们', route: '/about' },
 ];
+console.log(2222, role, userInfo);
+if (['super_admin', 'admin'].includes(role)) {
+  menu.push({ title: '管理', route: '/admin' });
+}
 </script>
 <template>
   <div class="bg-gray-900 header">
@@ -27,6 +34,11 @@ const menu = [
       :to="route"
       >{{ title }}</RouterLink
     >
+    <div class="user">
+      <span class="user-name" v-if="!!userInfo?.userName">{{
+        userInfo.userName
+      }}</span>
+    </div>
   </div>
 </template>
 
@@ -62,5 +74,16 @@ const menu = [
 }
 .menu-item + .menu-item {
   margin-left: 24px;
+}
+.user {
+  display: flex;
+  flex: 1;
+  justify-content: flex-end;
+  &-name {
+    cursor: pointer;
+    &:hover {
+      color: #2861fc;
+    }
+  }
 }
 </style>

@@ -5,6 +5,7 @@ const isSinglePage = ['/login'].includes(location.pathname);
 import { useStore } from 'vuex';
 const { dispatch } = useStore('global');
 dispatch('getUserRole');
+dispatch('getUserInfoFunc');
 </script>
 
 <template>
