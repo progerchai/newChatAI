@@ -94,6 +94,16 @@ export const listUser = (params: { uid: number }) => {
           usedToken: 355,
           createTime: '2023-08-20 15:40:23',
         },
+        {
+          uid: 2,
+          userName: '测试用户',
+          deptName: '浙江大学',
+          phone: '1586872xxxx',
+          status: 0,
+          token: 20000,
+          usedToken: 355,
+          createTime: '2023-08-20 15:40:23',
+        },
       ],
       total: 0,
     });

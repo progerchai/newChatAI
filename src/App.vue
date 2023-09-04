@@ -1,8 +1,10 @@
 <script setup lang="ts">
 import { RouterView } from 'vue-router';
 import Header from './layout/Header.vue';
-
 const isSinglePage = ['/login'].includes(location.pathname);
+import { useStore } from 'vuex';
+const { dispatch } = useStore('global');
+dispatch('getUserRole');
 </script>
 
 <template>

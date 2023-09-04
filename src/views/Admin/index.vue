@@ -7,15 +7,16 @@ import {
   listUser,
   resetUserPwd,
   updateUser,
-  getRole,
 } from '@/service/admin';
 import { getToken } from '@/utils';
 import dayjs from 'dayjs';
 import { getCurrentInstance, reactive, ref, toRefs } from 'vue';
 import { useRouter } from 'vue-router';
+import { useStore } from 'vuex';
 import { DepartTree } from './components';
 const router = useRouter();
 const { proxy } = getCurrentInstance();
+const store = useStore('global');
 // const { sys_normal_disable, sys_user_sex } = proxy.useDict(
 //   'sys_normal_disable',
 //   'sys_user_sex'
@@ -37,7 +38,7 @@ const deptOptions = ref(undefined);
 const initPassword = ref(undefined);
 const postOptions = ref([]);
 const roleOptions = ref([]);
-const role = ref('normal');
+const { role } = store.state;
 /*** 用户导入参数 */
 const upload = reactive({
   // 是否显示弹出层（用户导入）
@@ -311,16 +312,8 @@ function submitForm() {
     }
   });
 }
-const getRoleFunc = () => {
-  getRole().then((res) => {
-    if (res.code === 'SUCCESS') {
-      role.value = res.data;
-    }
-  });
-};
 
 getList();
-getRoleFunc();
 </script>
 <template>
   <div class="app-container">
