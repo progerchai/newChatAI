@@ -13,10 +13,13 @@ import dayjs from 'dayjs';
 import { getCurrentInstance, reactive, ref, toRefs } from 'vue';
 import { useRouter } from 'vue-router';
 import { useStore } from 'vuex';
-import { DepartTree } from './components';
+import { DepartTree } from './components/index';
 const router = useRouter();
 const { proxy } = getCurrentInstance();
 const store = useStore('global');
+if (!['super_admin', 'admin'].includes(store.state.role)) {
+  router.push('/404.html');
+}
 // const { sys_normal_disable, sys_user_sex } = proxy.useDict(
 //   'sys_normal_disable',
 //   'sys_user_sex'
