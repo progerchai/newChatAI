@@ -17,6 +17,7 @@ import { DepartTree } from './components/index';
 const router = useRouter();
 const { proxy } = getCurrentInstance();
 const store = useStore('global');
+const isAdmin = store.state.role === 'super_admin';
 if (!['super_admin', 'admin'].includes(store.state.role)) {
   router.push('/404.html');
 }
@@ -322,11 +323,11 @@ getList();
   <div class="app-container">
     <el-row :gutter="20">
       <!--学校数据-->
-      <el-col :span="4" :xs="24">
+      <el-col :span="4" :xs="24" v-if="isAdmin">
         <DepartTree :on-change="handleChange" />
       </el-col>
       <!--用户数据-->
-      <el-col :span="20" :xs="24">
+      <el-col :span="isAdmin ? 20 : 24" :xs="24">
         <el-form
           :model="queryParams"
           ref="queryRef"
@@ -467,8 +468,8 @@ getList();
               <span @click="handleStatusChange(scope.row)">
                 <el-switch
                   v-model="scope.row.status"
-                  active-value="0"
-                  inactive-value="1"
+                  active-value="1"
+                  inactive-value="0"
                 />
               </span>
             </template>

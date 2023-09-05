@@ -51,6 +51,7 @@ const rules = {
   password: [{ required: true, message: '请填写密码', trigger: 'blur' }],
   code: [{ required: true, message: '请填写验证码', trigger: 'blur' }],
   rePassword: [{ required: true, message: '请验证密码', trigger: 'blur' }],
+  inviteCode: [{ required: true, message: '请填写邀请码', trigger: 'blur' }],
 };
 const handleActions = () => {
   isLogin.value = isLogin.value !== true;
@@ -244,7 +245,7 @@ const handleRegisterFormSelect = (key: string) => {
         <el-input
           v-model.trim="registerFormData.inviteCode"
           @input="handleRegisterFormSelect('inviteCode')"
-          placeholder="请选填邀请码"
+          placeholder="请填写邀请码"
           autocomplete="off"
         ></el-input>
       </el-form-item>

@@ -19,7 +19,6 @@ const store = createStore<State>({
       state.role = role;
     },
     setUserInfo(state, info) {
-      console.log(2222, 33, info);
       state.userInfo = info;
     },
   },
@@ -33,7 +32,6 @@ const store = createStore<State>({
     },
     getUserInfoFunc({ state, commit }, payload) {
       getUserInfo().then((res: any) => {
-        console.log(2222, res);
         if (res.code === 'SUCCESS') {
           commit('setUserInfo', res.data);
         }
