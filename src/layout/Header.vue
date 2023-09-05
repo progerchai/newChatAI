@@ -5,18 +5,35 @@
  *@email: progerchai@gmail.com
  *@date: 2023-08-05 17:41:39
  */
+import type { IUser } from '@/types';
+import _ from 'lodash';
+import { ref, watch } from 'vue';
 import { RouterLink } from 'vue-router';
 import { useStore } from 'vuex';
 const store = useStore('global');
-const { role, userInfo } = store.state;
-const menu = [
+const menu = ref([
   { title: '首页', route: '/' },
   { title: '关于我们', route: '/about' },
-];
-console.log(2222, role, userInfo);
-if (['super_admin', 'admin'].includes(role)) {
-  menu.push({ title: '管理', route: '/admin' });
-}
+]);
+const userInfo = ref<IUser>({ uid: -1 });
+
+watch(
+  () => store.state.role,
+  (newValue) => {
+    if (['super_admin', 'admin'].includes(newValue)) {
+      const _menu = _.cloneDeep(menu.value);
+      _menu.push({ title: '管理', route: '/admin' });
+      menu.value = _menu;
+    }
+  }
+);
+
+watch(
+  () => store.state.userInfo,
+  (newValue) => {
+    userInfo.value = newValue;
+  }
+);
 </script>
 <template>
   <div class="bg-gray-900 header">
