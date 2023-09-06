@@ -18,18 +18,38 @@
       ，充分利用智能技术加快推动人才培养模式、教学方法改革，进而形成数字化和智能化的教育教学、科学研究基座能力。三乐将于23年秋冬学期在浙江大学图灵班及101核心课程《人工智能引论》试点高校的教学过程中进行试用，为师生提供智能问答、试题生成、学习导航等功能。
     </div>
   </div>
+  <div class="footer">
+    <a class="footer-item" href="https://www.zju.edu.cn/" target="_blank">
+      浙江大学
+    </a>
+    <a class="footer-item" href="https://www.hep.com.cn/" target="_blank">
+      高教社
+    </a>
+    <a class="footer-item" href="https://www.aliyun.com/" target="_blank">
+      阿里云
+    </a>
+    <a class="footer-item" href="http://unidt.cn/" target="_blank">
+      华院计算
+    </a>
+    <a class="footer-item" href="http://sias.zju.edu.cn/" target="_blank">
+      浙大上海高研院
+    </a>
+    <a class="footer-item" href="https://aiplusx.com.cn/" target="_blank">
+      智海
+    </a>
+  </div>
 </template>
 
 <style scoped lang="scss">
 .content {
   width: 100%;
-  height: 100%;
   display: flex;
   align-items: center;
-  justify-between: center;
+  justify-content: center;
   display: flex;
   flex-direction: column;
   padding: 0px 20%;
+  padding-bottom: 120px;
 
   &-logo {
     width: 80%;
@@ -47,10 +67,26 @@
 @media (max-width: 640px) {
   .content {
     padding: 12px;
+    padding-bottom: 120px;
     &-logo {
       width: 80%;
       object-fit: contain;
     }
+  }
+}
+.footer {
+  background-color: rgba(32, 33, 35, 1);
+  position: fixed;
+  bottom: 0px;
+  left: 0px;
+  width: 100%;
+  height: 120px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  &-item + &-item {
+    margin-left: 24px;
   }
 }
 </style>
