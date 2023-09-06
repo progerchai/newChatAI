@@ -1,5 +1,6 @@
 import { getRole, getUserInfo } from '@/service/admin';
 import type { IRole, IUser } from '@/types';
+import Cookies from 'js-cookie';
 import { createStore } from 'vuex';
 interface State {
   isPc: boolean;
@@ -31,7 +32,8 @@ const store = createStore<State>({
       });
     },
     getUserInfoFunc({ state, commit }, payload) {
-      getUserInfo().then((res: any) => {
+      const uid = Cookies.get('uid');
+      getUserInfo({ uid }).then((res: any) => {
         if (res.code === 'SUCCESS') {
           commit('setUserInfo', res.data);
         }

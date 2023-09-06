@@ -24,6 +24,11 @@ const router = createRouter({
       component: () => import('../views/Admin/index.vue'),
     },
     {
+      path: '/profile',
+      name: 'profile',
+      component: () => import('../views/Profile/index.vue'),
+    },
+    {
       path: '/:pathMatch(.*)',
       name: '404',
       component: () => import('../layout/404.vue'),

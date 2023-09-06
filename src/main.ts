@@ -18,6 +18,7 @@ import plugins from './plugins';
 import router from './router';
 import global from './store/global';
 import './style/global.css';
+import './style/panel.css';
 const app = createApp(App);
 app.config.errorHandler = (err, instance, info) => {
   // 向追踪服务报告错误S

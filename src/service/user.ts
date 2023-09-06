@@ -36,3 +36,17 @@ export const register = (params: {
     code: string;
   }>;
 };
+
+/**
+ * 重置密码
+ */
+export const resetPassword = (params: {
+  oldPassword: string;
+  password: string;
+  rePassword: string;
+}) => {
+  return post('/api/user/resetPassword.json', params) as Promise<{
+    data: number;
+    code: string;
+  }>;
+};

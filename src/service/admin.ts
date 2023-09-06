@@ -1,5 +1,6 @@
 import { post, get } from '@/utils';
 import type { IUser, IAdminList, IRole } from '@/types';
+
 /**
  * 获取列表树
  */
@@ -115,23 +116,23 @@ export const listUser = (params: { uid: number }) => {
 };
 
 // 查询用户列表
-export const getUserInfo = () => {
-  return new Promise((resolve) => {
-    resolve({
-      data: {
-        uid: 2,
-        userName: '测试名称',
-        deptName: '浙江大学',
-        phone: '1586872xxxx',
-        status: 0,
-        token: 20000,
-        usedToken: 355,
-        createTime: '2023-08-20 15:40:23',
-      },
-      code: 'SUCCESS',
-    });
-  });
-  return get('/api/role/getUserInfo.json') as Promise<{
+export const getUserInfo = (params: { uid: number }) => {
+  // return new Promise((resolve) => {
+  //   resolve({
+  //     data: {
+  //       uid: 2,
+  //       userName: '测试名称',
+  //       deptName: '浙江大学',
+  //       phone: '1586872xxxx',
+  //       status: 0,
+  //       token: 20000,
+  //       usedToken: 355,
+  //       createTime: '2023-08-20 15:40:23',
+  //     },
+  //     code: 'SUCCESS',
+  //   });
+  // });
+  return get('/api/role/getUserInfo.json', params) as Promise<{
     data: IUser;
     code: string;
   }>;
@@ -161,12 +162,6 @@ export function getUser(userId: number) {}
  * @returns IRole
  */
 export const getRole = () => {
-  return new Promise((resolve) => {
-    resolve({
-      data: 'super_admin',
-      code: 'SUCCESS',
-    });
-  });
   return get('/api/role/getRole.json') as Promise<{
     data: IRole;
     code: string;

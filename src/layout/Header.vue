@@ -8,7 +8,7 @@
 import type { IUser } from '@/types';
 import _ from 'lodash';
 import { ref, watch } from 'vue';
-import { RouterLink } from 'vue-router';
+import { RouterLink, useRouter } from 'vue-router';
 import { useStore } from 'vuex';
 const store = useStore('global');
 const menu = ref([
@@ -16,7 +16,7 @@ const menu = ref([
   { title: '关于我们', route: '/about' },
 ]);
 const userInfo = ref<IUser>({ uid: -1 });
-
+const router = useRouter();
 watch(
   () => store.state.role,
   (newValue) => {
@@ -52,9 +52,12 @@ watch(
       >{{ title }}</RouterLink
     >
     <div class="user">
-      <span class="user-name" v-if="!!userInfo?.userName">{{
-        userInfo.userName
-      }}</span>
+      <span
+        class="user-name"
+        v-if="!!userInfo?.userName"
+        @click="router.push('/profile')"
+        >{{ userInfo.userName }}</span
+      >
     </div>
   </div>
 </template>
