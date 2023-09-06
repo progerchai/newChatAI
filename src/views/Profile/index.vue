@@ -21,6 +21,10 @@ const roleDict = {
   admin: '教师',
   normal: '学生',
 };
+const sexDict = {
+  0: '女',
+  1: '男',
+};
 </script>
 
 <template>
@@ -34,13 +38,22 @@ const roleDict = {
             </div>
           </template>
           <div>
-            <!-- <div class="text-center">
-              <userAvatar :user="state.user" />
-            </div> -->
             <ul class="list-group list-group-striped">
               <li class="list-group-item">
                 用户名称
                 <div class="pull-right">{{ state.user.userName }}</div>
+              </li>
+              <li class="list-group-item">
+                用户id
+                <div class="pull-right">{{ state.user.uid }}</div>
+              </li>
+              <li class="list-group-item">
+                绑定教师id
+                <div class="pull-right">{{ state.user.teacherId }}</div>
+              </li>
+              <li class="list-group-item">
+                用户学校
+                <div class="pull-right">{{ state.user.deptName }}</div>
               </li>
               <li class="list-group-item">
                 手机号码
@@ -51,14 +64,32 @@ const roleDict = {
                 <div class="pull-right">{{ state.user.email }}</div>
               </li>
               <li class="list-group-item">
+                性别
+                <div class="pull-right">
+                  {{ sexDict[state.user.sex] || '未知' }}
+                </div>
+              </li>
+              <li class="list-group-item">
                 所属角色
                 <div class="pull-right">{{ roleDict[role] }}</div>
               </li>
               <li class="list-group-item">
                 创建日期
                 <div class="pull-right">
-                  {{ dayjs(state.user.createTime).format('YYYY-MM-DD HH:mm') }}
+                  {{
+                    state.user.createTime
+                      ? dayjs(state.user.createTime).format('YYYY-MM-DD HH:mm')
+                      : null
+                  }}
                 </div>
+              </li>
+              <li class="list-group-item">
+                token额度
+                <div class="pull-right">{{ state.user.token }}</div>
+              </li>
+              <li class="list-group-item">
+                已用token
+                <div class="pull-right">{{ state.user.usedToken }}</div>
               </li>
             </ul>
           </div>

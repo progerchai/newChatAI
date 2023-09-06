@@ -1,6 +1,9 @@
 <script setup>
 import { updateUser } from '@/service/admin';
 import { ref, getCurrentInstance } from 'vue';
+import { useStore } from 'vuex';
+const store = useStore('global');
+const isAdmin = store.state.role === 'super_admin';
 
 const props = defineProps({
   user: {
@@ -51,15 +54,6 @@ function close() {
     <el-form-item label="用户昵称" prop="userName">
       <el-input v-model="user.userName" maxlength="30" />
     </el-form-item>
-    <el-form-item label="用户id" prop="uid">
-      <el-input v-model="user.uid" maxlength="30" />
-    </el-form-item>
-    <el-form-item label="绑定教师id" prop="teacherId">
-      <el-input v-model="user.teacherId" maxlength="30" />
-    </el-form-item>
-    <el-form-item label="用户学校" prop="deptName">
-      <el-input v-model="user.deptName" maxlength="30" />
-    </el-form-item>
     <el-form-item label="手机号码" prop="phone">
       <el-input v-model="user.phone" maxlength="11" />
     </el-form-item>
@@ -72,10 +66,10 @@ function close() {
         <el-radio label="1">女</el-radio>
       </el-radio-group>
     </el-form-item>
-    <el-form-item label="token额度" prop="token">
+    <el-form-item label="token额度" prop="token" v-if="isAdmin">
       <el-input v-model="user.token" maxlength="50" />
     </el-form-item>
-    <el-form-item label="已用token" prop="usedToken">
+    <el-form-item label="已用token" prop="usedToken" v-if="isAdmin">
       <el-input v-model="user.usedToken" maxlength="50" />
     </el-form-item>
     <el-form-item>
