@@ -273,7 +273,8 @@ function cancel() {
 }
 /** 新增按钮操作 */
 function handleAdd() {
-  reset();
+  proxy.$modal.notify('暂未开放，敬请期待');
+  proxy.reset();
   getUser().then((response) => {
     postOptions.value = response.posts;
     roleOptions.value = response.roles;
