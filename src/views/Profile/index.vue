@@ -9,7 +9,7 @@ const router = useRouter();
 const store = useStore('global');
 const user = store.state?.userInfo;
 const role = store.state?.role;
-if (!user) {
+if (!user || user.uid === -1) {
   router.push('/404.html');
 }
 const activeTab = ref('userinfo');
@@ -28,7 +28,7 @@ const sexDict = {
 </script>
 
 <template>
-  <div class="app-container">
+  <div class="app-container" v-if="user && user.uid !== -1">
     <el-row :gutter="20">
       <el-col :span="6" :xs="24">
         <el-card class="box-card">

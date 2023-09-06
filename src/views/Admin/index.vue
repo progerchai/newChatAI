@@ -17,8 +17,9 @@ import { DepartTree } from './components/index';
 const router = useRouter();
 const { proxy } = getCurrentInstance();
 const store = useStore('global');
-const isAdmin = store.state.role === 'super_admin';
-if (!['super_admin', 'admin'].includes(store.state.role)) {
+const isSuperAdmin = store.state.role === 'super_admin';
+const isAdmin = ['super_admin', 'admin'].includes(store.state.role);
+if (!isAdmin) {
   router.push('/404.html');
 }
 // const { sys_normal_disable, sys_user_sex } = proxy.useDict(
@@ -320,14 +321,14 @@ function submitForm() {
 getList();
 </script>
 <template>
-  <div class="app-container">
+  <div class="app-container" v-if="isAdmin">
     <el-row :gutter="20">
       <!--学校数据-->
-      <el-col :span="4" :xs="24" v-if="isAdmin">
+      <el-col :span="4" :xs="24" v-if="isSuperAdmin">
         <DepartTree :on-change="handleChange" />
       </el-col>
       <!--用户数据-->
-      <el-col :span="isAdmin ? 20 : 24" :xs="24">
+      <el-col :span="isSuperAdmin ? 20 : 24" :xs="24">
         <el-form
           :model="queryParams"
           ref="queryRef"
