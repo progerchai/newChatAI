@@ -18,8 +18,8 @@ const props = defineProps({
   },
 });
 function getDeptTree() {
-  deptTreeSelect().then((response) => {
-    deptOptions.value = response.data;
+  deptTreeSelect().then((res) => {
+    deptOptions.value = res.data;
   });
 }
 /** 节点单击事件 */

@@ -91,6 +91,10 @@ const sexDict = {
                 已用token
                 <div class="pull-right">{{ state.user.usedToken }}</div>
               </li>
+              <li class="list-group-item">
+                邀请码
+                <div class="pull-right">{{ state.user.inviteCode }}</div>
+              </li>
             </ul>
           </div>
         </el-card>

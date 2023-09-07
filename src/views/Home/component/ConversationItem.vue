@@ -156,4 +156,7 @@ mjx-container {
     display: none !important;
   }
 }
+button {
+  background-color: transparent;
+}
 </style>

@@ -5,47 +5,6 @@ import type { IUser, IAdminList, IRole } from '@/types';
  * 获取列表树
  */
 export const deptTreeSelect = () => {
-  const value = [
-    {
-      id: 100,
-      label: '浙江大学',
-      children: [
-        {
-          id: 101,
-          label: '李老师',
-        },
-        {
-          id: 103,
-          label: '陈老师',
-        },
-        {
-          id: 104,
-          label: '周老师',
-        },
-        {
-          id: 105,
-          label: '欧阳老师',
-        },
-      ],
-    },
-    {
-      id: 102,
-      label: '北京大学',
-      children: [
-        {
-          id: 108,
-          label: '李老师',
-        },
-        {
-          id: 109,
-          label: '刘老师',
-        },
-      ],
-    },
-  ];
-  return new Promise((resolve) => {
-    resolve({ data: value });
-  });
   return get('/api/role/getAdminList.json') as Promise<{
     data: IAdminList;
     code: string;
@@ -81,7 +40,12 @@ export const changeUserStatus = (params: { uid: number; status: 0 | 1 }) => {
 };
 
 // 查询用户列表
-export const listUser = (params: { uid: number }) => {
+export const listUser = (params: {
+  userName?: string;
+  phone?: string;
+  status?: 1 | 0;
+  range: string;
+}) => {
   return new Promise((resolve) => {
     resolve({
       rows: [
@@ -109,7 +73,7 @@ export const listUser = (params: { uid: number }) => {
       total: 0,
     });
   });
-  return get('/api/role/getUserList.json') as Promise<{
+  return get('/api/role/getUserList.json', params) as Promise<{
     data: IAdminList;
     code: string;
   }>;

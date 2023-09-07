@@ -8,7 +8,6 @@ const user = reactive({
   password: undefined,
   rePassword: undefined,
 });
-console.log(222);
 const equalToPassword = (rule, value, callback) => {
   if (user.password !== value) {
     callback(new Error('两次输入的密码不一致'));

@@ -22,11 +22,10 @@ const isAdmin = ['super_admin', 'admin'].includes(store.state.role);
 if (!isAdmin) {
   router.push('/404.html');
 }
-// const { sys_normal_disable, sys_user_sex } = proxy.useDict(
-//   'sys_normal_disable',
-//   'sys_user_sex'
-// );
-const sys_normal_disable = {};
+const sys_normal_disable = [
+  { value: 1, label: '启用' },
+  { value: 0, label: '停用' },
+];
 const sys_user_sex = {};
 const userList = ref([]);
 const open = ref(false);
@@ -87,6 +86,7 @@ const data = reactive({
     phone: undefined,
     status: undefined,
     deptId: undefined,
+    dateRange: undefined,
   },
   rules: {
     userName: [
@@ -128,7 +128,8 @@ const { queryParams, form, rules } = toRefs(data);
 /** 查询用户列表 */
 function getList() {
   loading.value = true;
-  listUser('').then((res) => {
+  console.log(22223, queryParams.value);
+  listUser(queryParams).then((res) => {
     userList.value = res.rows;
     total.value = res.total;
     loading.value = false;
@@ -372,7 +373,7 @@ getList();
           </el-form-item>
           <el-form-item label="创建时间" style="width: 308px">
             <el-date-picker
-              v-model="dateRange"
+              v-model="queryParams.dateRange"
               value-format="YYYY-MM-DD"
               type="daterange"
               range-separator="-"
