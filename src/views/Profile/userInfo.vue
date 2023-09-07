@@ -3,7 +3,7 @@ import { updateUser } from '@/service/admin';
 import { ref, getCurrentInstance } from 'vue';
 import { useStore } from 'vuex';
 const store = useStore('global');
-const isAdmin = store.state.role === 'super_admin';
+const isSuperAdmin = store.state.role === 'super_admin';
 
 const props = defineProps({
   user: {
@@ -68,10 +68,10 @@ function close() {
         <el-radio label="1">女</el-radio>
       </el-radio-group>
     </el-form-item>
-    <el-form-item label="token额度" prop="token" v-if="isAdmin">
+    <el-form-item label="token额度" prop="token" v-if="isSuperAdmin">
       <el-input v-model="user.token" maxlength="50" />
     </el-form-item>
-    <el-form-item label="已用token" prop="usedToken" v-if="isAdmin">
+    <el-form-item label="已用token" prop="usedToken" v-if="isSuperAdmin">
       <el-input v-model="user.usedToken" maxlength="50" />
     </el-form-item>
     <el-form-item>

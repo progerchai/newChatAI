@@ -10,6 +10,7 @@ const store = useStore('global');
 const user = store.state?.userInfo;
 const role = store.state?.role;
 const isAdmin = ['admin', 'super_admin'].includes(role);
+const isSuperAdmin = ['super_admin'].includes(role);
 if (!user || user.uid === -1) {
   router.push('/404.html');
 }
