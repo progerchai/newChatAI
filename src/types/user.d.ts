@@ -52,7 +52,7 @@ export interface IUser {
   /**
    * 关联的老师id
    */
-  teacherId: number;
+  teacherId?: number;
   /**
    * 邀请码
    */
