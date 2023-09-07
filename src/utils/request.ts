@@ -21,12 +21,14 @@ const directLogin = () => {
 const errorHandler = (data: { code: string; message: string }) => {
   if (['FAILED', 'ERROR'].includes(data?.code)) {
     ElMessage.error(data?.message);
-  } else if (data?.code === 'UNLOGIN') {
-    ElMessage.error('请前往登录');
-    directLogin();
-  } else if (data?.code === 'INVALID_TOKEN') {
-    ElMessage.error('登陆已过期，请重新登录');
-    directLogin();
+  } else if (location.pathname !== '/login') {
+    if (data?.code === 'UNLOGIN') {
+      ElMessage.error('请前往登录');
+      directLogin();
+    } else if (data?.code === 'INVALID_TOKEN') {
+      ElMessage.error('登陆已过期，请重新登录');
+      directLogin();
+    }
   }
 };
 export const get = async (
