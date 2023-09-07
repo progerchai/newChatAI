@@ -128,7 +128,6 @@ const { queryParams, form, rules } = toRefs(data);
 /** 查询用户列表 */
 function getList() {
   loading.value = true;
-  console.log(22223, queryParams.value);
   listUser(queryParams).then((res) => {
     userList.value = res.rows;
     total.value = res.total;
@@ -166,7 +165,7 @@ function handleDelete(row) {
 
 /** 用户状态修改  */
 function handleStatusChange(row) {
-  let text = row.status === 0 ? '启用' : '停用';
+  let text = row.status === 0 ? '停用' : '启用';
   proxy.$modal
     .confirm('确认要' + text + '"' + row.userName + '"用户吗?')
     .then(() => {
@@ -286,6 +285,7 @@ function handleAdd() {
 }
 /** 修改按钮操作 */
 function handleUpdate(row) {
+  proxy.$modal.notify('暂未开放，敬请期待');
   reset();
   const uid = row.uid || ids.value;
   getUser(uid).then((response) => {
@@ -471,8 +471,8 @@ getList();
               <span @click="handleStatusChange(scope.row)">
                 <el-switch
                   v-model="scope.row.status"
-                  active-value="1"
-                  inactive-value="0"
+                  :active-value="1"
+                  :inactive-value="0"
                 />
               </span>
             </template>

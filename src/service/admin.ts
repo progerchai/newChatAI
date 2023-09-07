@@ -24,8 +24,8 @@ export const addUser = (params: {
 };
 
 // 修改用户
-export function updateUser(params: IUser) {
-  return post('/api/role/updateStatus.json', params) as Promise<{
+export function updateUser(params: Omit<IUser, 'uid'>) {
+  return post('/api/role/updateUser.json', params) as Promise<{
     data: number;
     code: string;
   }>;
@@ -54,13 +54,13 @@ export const listUser = (params: {
           userName: '测试用户',
           deptName: '浙江大学',
           phone: '1586872xxxx',
-          status: 0,
+          status: 1,
           token: 20000,
           usedToken: 355,
           createTime: '2023-08-20 15:40:23',
         },
         {
-          uid: 2,
+          uid: 3,
           userName: '测试用户',
           deptName: '浙江大学',
           phone: '1586872xxxx',
@@ -104,10 +104,7 @@ export const getUserInfo = (params: { uid: number }) => {
 
 // 用户密码重置
 export function resetUserPwd(params: { uid: number; password: string }) {
-  return updateUser(params).then((res) => {
-    if (res.code === 'SUCCESS') {
-    }
-  });
+  return updateUser(params);
 }
 
 // 删除用户

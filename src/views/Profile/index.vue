@@ -9,6 +9,7 @@ const router = useRouter();
 const store = useStore('global');
 const user = store.state?.userInfo;
 const role = store.state?.role;
+const isAdmin = ['admin', 'super_admin'].includes(role);
 if (!user || user.uid === -1) {
   router.push('/404.html');
 }
@@ -47,7 +48,7 @@ const sexDict = {
                 用户id
                 <div class="pull-right">{{ state.user.uid }}</div>
               </li>
-              <li class="list-group-item">
+              <li class="list-group-item" v-if="!isAdmin">
                 绑定教师id
                 <div class="pull-right">{{ state.user.teacherId }}</div>
               </li>
@@ -91,7 +92,7 @@ const sexDict = {
                 已用token
                 <div class="pull-right">{{ state.user.usedToken }}</div>
               </li>
-              <li class="list-group-item">
+              <li class="list-group-item" v-if="isAdmin">
                 邀请码
                 <div class="pull-right">{{ state.user.inviteCode }}</div>
               </li>

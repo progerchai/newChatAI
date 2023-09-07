@@ -37,9 +37,11 @@ const rules = ref({
 function submit() {
   proxy.$refs.userRef.validate((valid) => {
     if (valid) {
-      // updateUser(props.user).then((response) => {
-      //   proxy.$modal.msgSuccess('修改成功');
-      // });
+      updateUser(props.user).then((res) => {
+        if (res.code === 'SUCCESS') {
+          proxy.$modal.msgSuccess('修改成功');
+        }
+      });
     }
   });
 }
