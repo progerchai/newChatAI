@@ -46,33 +46,6 @@ export const listUser = (params: {
   status?: 1 | 0;
   range: string;
 }) => {
-  return new Promise((resolve) => {
-    resolve({
-      rows: [
-        {
-          uid: 1,
-          userName: '测试用户',
-          deptName: '浙江大学',
-          phone: '1586872xxxx',
-          status: 1,
-          token: 20000,
-          usedToken: 355,
-          createTime: '2023-08-20 15:40:23',
-        },
-        {
-          uid: 3,
-          userName: '测试用户',
-          deptName: '浙江大学',
-          phone: '1586872xxxx',
-          status: 0,
-          token: 20000,
-          usedToken: 355,
-          createTime: '2023-08-20 15:40:23',
-        },
-      ],
-      total: 0,
-    });
-  });
   return get('/api/role/getUserList.json', params) as Promise<{
     data: IAdminList;
     code: string;
@@ -81,21 +54,6 @@ export const listUser = (params: {
 
 // 查询用户列表
 export const getUserInfo = (params: { uid: number }) => {
-  // return new Promise((resolve) => {
-  //   resolve({
-  //     data: {
-  //       uid: 2,
-  //       userName: '测试名称',
-  //       deptName: '浙江大学',
-  //       phone: '1586872xxxx',
-  //       status: 0,
-  //       token: 20000,
-  //       usedToken: 355,
-  //       createTime: '2023-08-20 15:40:23',
-  //     },
-  //     code: 'SUCCESS',
-  //   });
-  // });
   return get('/api/role/getUserInfo.json', params) as Promise<{
     data: IUser;
     code: string;

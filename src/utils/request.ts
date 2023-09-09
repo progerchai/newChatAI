@@ -25,7 +25,7 @@ const errorHandler = (data: { code: string; message: string }) => {
     if (data?.code === 'UNLOGIN') {
       ElMessage.error('请前往登录');
       directLogin();
-    } else if (data?.code === 'INVALID_TOKEN') {
+    } else if (['EXPIRE', 'INVALID_TOKEN'].includes(data?.code)) {
       ElMessage.error('登陆已过期，请重新登录');
       directLogin();
     }

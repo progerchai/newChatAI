@@ -5,6 +5,33 @@
  *@email: progerchai@gmail.com
  *@date: 2023-08-06 15:53:36
  */
+const linkDict = [
+  {
+    label: '浙江大学',
+    link: 'https://www.zju.edu.cn/',
+    logo: 'https://s1.imagehub.cc/images/2023/09/09/zju.png',
+  },
+  {
+    label: '高教社',
+    link: 'https://www.hep.com.cn/',
+    logo: 'https://s1.imagehub.cc/images/2023/09/09/hep.png',
+  },
+  {
+    label: '阿里云',
+    link: 'https://www.aliyun.com/',
+    logo: 'https://s1.imagehub.cc/images/2023/09/09/aliyun.png',
+  },
+  {
+    label: '华院计算',
+    link: 'http://unidt.cn/',
+    logo: 'https://s1.imagehub.cc/images/2023/09/09/unidt.png',
+  },
+  {
+    label: '智海',
+    link: 'https://aiplusx.com.cn/',
+    logo: 'https://s1.imagehub.cc/images/2023/09/09/zhihai.webp',
+  },
+];
 </script>
 <template>
   <div class="content">
@@ -19,23 +46,14 @@
     </div>
   </div>
   <div class="footer">
-    <a class="footer-item" href="https://www.zju.edu.cn/" target="_blank">
-      浙江大学
-    </a>
-    <a class="footer-item" href="https://www.hep.com.cn/" target="_blank">
-      高教社
-    </a>
-    <a class="footer-item" href="https://www.aliyun.com/" target="_blank">
-      阿里云
-    </a>
-    <a class="footer-item" href="http://unidt.cn/" target="_blank">
-      华院计算
-    </a>
-    <a class="footer-item" href="http://sias.zju.edu.cn/" target="_blank">
-      浙大上海高研院
-    </a>
-    <a class="footer-item" href="https://aiplusx.com.cn/" target="_blank">
-      智海
+    <a
+      class="footer-item"
+      :href="item.link"
+      target="_blank"
+      v-for="item in linkDict"
+    >
+      <img class="footer-item-logo" :src="item.logo" :alt="item.label" />
+      {{ item.label }}
     </a>
   </div>
 </template>
@@ -75,18 +93,32 @@
   }
 }
 .footer {
-  background-color: rgba(32, 33, 35, 1);
+  // background-color: rgba(32, 33, 35, 1);
+  background-color: #6f6f6f;
   position: fixed;
   bottom: 0px;
   left: 0px;
   width: 100%;
-  height: 120px;
+  height: 160px;
   display: flex;
   align-items: center;
   justify-content: center;
   color: #fff;
+  padding-top: 20px;
+  padding-bottom: 20px;
   &-item + &-item {
     margin-left: 24px;
+  }
+  &-item {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    &-logo {
+      width: 140px;
+      height: 100px;
+      object-fit: contain;
+    }
   }
 }
 </style>
