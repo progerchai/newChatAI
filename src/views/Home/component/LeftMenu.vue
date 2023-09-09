@@ -23,6 +23,7 @@ import {
   deleteSession,
   generateConv,
   getHistory,
+  sendFeed,
 } from '@/service/home';
 import type { IConversation } from '@/types';
 import _ from 'lodash';
@@ -112,6 +113,7 @@ function changeConvTitle(cidx: number, conv: IConversation) {
 function changeConvTitletmp(title: string) {
   state.convTitletmp = title;
 }
+
 /**
  * 清空会话
  */
@@ -120,6 +122,18 @@ function clearConversations() {
     if (res.code === 'SUCCESS') {
       history.value = [];
       state.selectConvId = -1;
+    }
+  });
+}
+// 打开反馈弹窗
+function openFeedModal() {}
+/**
+ * 提交反馈
+ */
+function submitFeed() {
+  sendFeed({ content: 'xxxx' }).then((res) => {
+    if (res.code === 'SUCCESS') {
+      console.log('反馈提交成功');
     }
   });
 }
@@ -305,6 +319,13 @@ defineExpose({
           >
             <IconTrash />
             清空会话
+          </a>
+          <a
+            @click.stop.prevent="openFeedModal"
+            class="flex py-3 px-3 items-center gap-3 rounded-md hover:bg-gray-500/10 transition-colors duration-200 text-white cursor-pointer text-sm"
+          >
+            <IconForward />
+            我要反馈
           </a>
           <!-- <a
             @click="changeTheme(theme === 'light' ? 'dark' : 'light')"

@@ -81,3 +81,13 @@ export const comment = (params: {
     code: string;
   }>;
 };
+
+/**
+ * 用户反馈
+ */
+export const sendFeed = (params: { content: string }) => {
+  return post('/api/action/feed.json', params) as Promise<{
+    data: number;
+    code: string;
+  }>;
+};
