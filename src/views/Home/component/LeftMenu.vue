@@ -26,8 +26,9 @@ import {
   sendFeed,
 } from '@/service/home';
 import type { IConversation } from '@/types';
+import { ElMessage } from 'element-plus';
 import _ from 'lodash';
-import { onMounted, reactive, ref } from 'vue';
+import { onMounted, getCurrentInstance, reactive, ref } from 'vue';
 interface State {
   /**
    * 被选中的对话id
@@ -47,6 +48,7 @@ const props = defineProps<{
   theme: 'light' | 'dark';
   onChangeSessionId: (id: number | undefined) => void;
 }>();
+const { proxy } = getCurrentInstance();
 const history = ref<Array<IConversation>>([]);
 const state = reactive<State>({
   selectConvId: -1,
@@ -126,14 +128,27 @@ function clearConversations() {
   });
 }
 // 打开反馈弹窗
-function openFeedModal() {}
+function openFeedModal() {
+  proxy
+    .$prompt('请输入反馈内容', '提示', {
+      confirmButtonText: '确定',
+      cancelButtonText: '取消',
+      closeOnClickModal: false,
+      inputPattern: /^.{1,100}$/,
+      inputErrorMessage: '反馈内容长度必须介于 1 和 100 之间',
+    })
+    .then(({ value }: { value: string }) => {
+      submitFeed(value);
+    })
+    .catch(() => {});
+}
 /**
  * 提交反馈
  */
-function submitFeed() {
-  sendFeed({ content: 'xxxx' }).then((res) => {
+function submitFeed(content: string) {
+  sendFeed({ content: content }).then((res) => {
     if (res.code === 'SUCCESS') {
-      console.log('反馈提交成功');
+      ElMessage.success(res.message);
     }
   });
 }
