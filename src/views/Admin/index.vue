@@ -128,7 +128,7 @@ const { queryParams, form, rules } = toRefs(data);
 /** 查询用户列表 */
 function getList() {
   loading.value = true;
-  listUser(queryParams).then((res) => {
+  listUser(queryParams.value).then((res) => {
     userList.value = res.rows;
     total.value = res.total;
     loading.value = false;
