@@ -89,5 +89,6 @@ export const sendFeed = (params: { content: string }) => {
   return post('/api/action/feed.json', params) as Promise<{
     data: number;
     code: string;
+    message: string;
   }>;
 };
