@@ -8,11 +8,9 @@
 import {
   Ellipsis,
   IconChat,
-  IconDark,
   IconDelete,
   IconEdit,
   IconForward,
-  IconLight,
   IconPlus,
   IconRight,
   IconTrash,
@@ -28,7 +26,7 @@ import {
 import type { IConversation } from '@/types';
 import { ElMessage } from 'element-plus';
 import _ from 'lodash';
-import { onMounted, getCurrentInstance, reactive, ref } from 'vue';
+import { getCurrentInstance, onMounted, reactive, ref } from 'vue';
 interface State {
   /**
    * 被选中的对话id
@@ -48,7 +46,7 @@ const props = defineProps<{
   theme: 'light' | 'dark';
   onChangeSessionId: (id: number | undefined) => void;
 }>();
-const { proxy } = getCurrentInstance();
+const { proxy } = getCurrentInstance() as any;
 const history = ref<Array<IConversation>>([]);
 const state = reactive<State>({
   selectConvId: -1,
