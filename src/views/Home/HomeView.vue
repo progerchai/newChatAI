@@ -752,7 +752,6 @@ onMounted(() => {
                     tabindex="0"
                     data-id="root"
                     style="max-height: 200px; height: 24px; overflow-y: hidden"
-                    rows="1"
                     class="m-0 w-full resize-none border-0 bg-transparent p-0 pl-2 pr-7 focus:ring-0 focus-visible:ring-0 dark:bg-transparent md:pl-0"
                   ></textarea>
                   <button
