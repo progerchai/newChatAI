@@ -44,10 +44,16 @@ export const listUser = (params: {
   userName?: string;
   phone?: string;
   status?: 1 | 0;
-  range: string;
+  dateRange?: string[];
+  teacherId?: number;
+  pageNum: number;
+  pageSize: number;
 }) => {
   return get('/api/role/getUserList.json', params) as Promise<{
-    data: IAdminList;
+    data: {
+      total: number;
+      rows: IUser[];
+    };
     code: string;
   }>;
 };
@@ -74,7 +80,7 @@ export const delUser = (params: { uids: number[] }) => {
 };
 
 // 查询用户详细
-export function getUser(userId: number) {}
+export function getUser(userId: number) { }
 
 /**
  * 获取用户角色

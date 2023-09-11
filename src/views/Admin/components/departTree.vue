@@ -24,7 +24,7 @@ function getDeptTree() {
 }
 /** 节点单击事件 */
 function handleNodeClick(data) {
-  props.onChange({ deptId: data.id });
+  props.onChange({ teacherId: data.id });
 }
 /** 通过条件过滤节点  */
 const filterNode = (value, data) => {
