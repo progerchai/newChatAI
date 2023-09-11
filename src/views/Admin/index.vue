@@ -87,7 +87,7 @@ const data = reactive({
     status: undefined,
     deptId: undefined,
     dateRange: undefined,
-    teacherId: undefined
+    teacherId: undefined,
   },
   rules: {
     userName: [
@@ -135,7 +135,7 @@ function getList() {
       userList.value = data.rows;
       total.value = data.total;
     }
-      loading.value = false;
+    loading.value = false;
   });
 }
 
