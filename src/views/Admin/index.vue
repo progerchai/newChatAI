@@ -7,24 +7,24 @@ import {
   listUser,
   resetUserPwd,
   updateUser,
-} from "@/service/admin";
-import { getToken } from "@/utils";
-import dayjs from "dayjs";
-import { getCurrentInstance, reactive, ref, toRefs } from "vue";
-import { useRouter } from "vue-router";
-import { useStore } from "vuex";
-import { DepartTree } from "./components/index";
+} from '@/service/admin';
+import { getToken } from '@/utils';
+import dayjs from 'dayjs';
+import { getCurrentInstance, reactive, ref, toRefs } from 'vue';
+import { useRouter } from 'vue-router';
+import { useStore } from 'vuex';
+import { DepartTree } from './components/index';
 const router = useRouter();
 const { proxy } = getCurrentInstance();
-const store = useStore("global");
-const isSuperAdmin = store.state.role === "super_admin";
-const isAdmin = ["super_admin", "admin"].includes(store.state.role);
+const store = useStore('global');
+const isSuperAdmin = store.state.role === 'super_admin';
+const isAdmin = ['super_admin', 'admin'].includes(store.state.role);
 if (!isAdmin) {
-  router.push("/404.html");
+  router.push('/404.html');
 }
 const sys_normal_disable = [
-  { value: 1, label: "启用" },
-  { value: 0, label: "停用" },
+  { value: 1, label: '启用' },
+  { value: 0, label: '停用' },
 ];
 const sys_user_sex = {};
 const userList = ref([]);
@@ -35,9 +35,9 @@ const ids = ref([]);
 const single = ref(true);
 const multiple = ref(true);
 const total = ref(0);
-const title = ref("");
+const title = ref('');
 const dateRange = ref([]);
-const deptName = ref("");
+const deptName = ref('');
 const deptOptions = ref(undefined);
 const initPassword = ref(undefined);
 const postOptions = ref([]);
@@ -48,21 +48,22 @@ const upload = reactive({
   // 是否显示弹出层（用户导入）
   open: false,
   // 弹出层标题（用户导入）
-  title: "",
+  title: '',
   // 是否禁用上传
   isUploading: false,
   // 是否更新已经存在的用户数据
   updateSupport: 0,
   // 设置上传的请求头部
-  headers: { Authorization: "Bearer " + getToken() },
+  headers: { Authorization: 'Bearer ' + getToken() },
   // 上传的地址
-  url: import.meta.env.VITE_APP_BASE_API + "/system/user/importData",
+  url: import.meta.env.VITE_APP_BASE_API + '/system/user/importData',
 });
 /**
  * 处理数据变化
  */
 const handleChange = (data) => {
   queryParams.value = { ...queryParams.value, ...data };
+  getList();
 };
 // 列显隐信息
 const columns = ref([
@@ -91,35 +92,35 @@ const data = reactive({
   },
   rules: {
     userName: [
-      { required: true, message: "用户名称不能为空", trigger: "blur" },
+      { required: true, message: '用户名称不能为空', trigger: 'blur' },
       {
         min: 2,
         max: 20,
-        message: "用户名称长度必须介于 2 和 20 之间",
-        trigger: "blur",
+        message: '用户名称长度必须介于 2 和 20 之间',
+        trigger: 'blur',
       },
     ],
     password: [
-      { required: true, message: "用户密码不能为空", trigger: "blur" },
+      { required: true, message: '用户密码不能为空', trigger: 'blur' },
       {
         min: 5,
         max: 20,
-        message: "用户密码长度必须介于 5 和 20 之间",
-        trigger: "blur",
+        message: '用户密码长度必须介于 5 和 20 之间',
+        trigger: 'blur',
       },
     ],
     email: [
       {
-        type: "email",
-        message: "请输入正确的邮箱地址",
-        trigger: ["blur", "change"],
+        type: 'email',
+        message: '请输入正确的邮箱地址',
+        trigger: ['blur', 'change'],
       },
     ],
     phone: [
       {
         pattern: /^1[3|4|5|6|7|8|9][0-9]\d{8}$/,
-        message: "请输入正确的手机号码",
-        trigger: "blur",
+        message: '请输入正确的手机号码',
+        trigger: 'blur',
       },
     ],
   },
@@ -130,7 +131,7 @@ const { queryParams, form, rules } = toRefs(data);
 function getList() {
   loading.value = true;
   listUser(queryParams.value).then((res) => {
-    if (res.code === "SUCCESS") {
+    if (res.code === 'SUCCESS') {
       const data = res.data;
       userList.value = data.rows;
       total.value = data.total;
@@ -147,7 +148,7 @@ function handleQuery() {
 /** 重置按钮操作 */
 function resetQuery() {
   dateRange.value = [];
-  proxy.resetForm("queryRef");
+  proxy.resetForm('queryRef');
   queryParams.value.deptId = undefined;
   proxy.$refs.deptTreeRef.setCurrentKey(null);
   handleQuery();
@@ -155,39 +156,41 @@ function resetQuery() {
 /** 删除按钮操作 */
 function handleDelete(row) {
   const uids = row.uid || ids.value;
-  proxy.$modal.confirm('是否确认删除用户id为"' + uids + '"的数据项？').then(() => {
-    delUser(uids).then((res) => {
-      if (res.code === "SUCCESS") {
-        getList();
-        proxy.$modal.msgSuccess("删除成功");
-      }
+  proxy.$modal
+    .confirm('是否确认删除用户id为"' + uids + '"的数据项？')
+    .then(() => {
+      delUser(uids).then((res) => {
+        if (res.code === 'SUCCESS') {
+          getList();
+          proxy.$modal.msgSuccess('删除成功');
+        }
+      });
     });
-  });
 }
 
 /** 用户状态修改  */
 function handleStatusChange(row) {
-  let text = row.status === 0 ? "停用" : "启用";
+  let text = row.status === 0 ? '停用' : '启用';
   proxy.$modal
-    .confirm("确认要" + text + '"' + row.userName + '"用户吗?')
+    .confirm('确认要' + text + '"' + row.userName + '"用户吗?')
     .then(() => {
       changeUserStatus({ uid: row.uid, status: row.status }).then((res) => {
-        if (res.code === "SUCCESS") {
-          proxy.$modal.msgSuccess(text + "成功");
+        if (res.code === 'SUCCESS') {
+          proxy.$modal.msgSuccess(text + '成功');
         }
       });
     })
     .catch(function () {
-      row.status = row.status === "0" ? "1" : "0";
+      row.status = row.status === 0 ? 1 : 0;
     });
 }
 /** 更多操作 */
 function handleCommand(command, row) {
   switch (command) {
-    case "handleResetPwd":
+    case 'handleResetPwd':
       handleResetPwd(row);
       break;
-    case "handleAuthRole":
+    case 'handleAuthRole':
       handleAuthRole(row);
       break;
     default:
@@ -198,17 +201,17 @@ function handleCommand(command, row) {
 /** 重置密码按钮操作 */
 function handleResetPwd(row) {
   proxy
-    .$prompt('请输入"' + row.userName + '"的新密码', "提示", {
-      confirmButtonText: "确定",
-      cancelButtonText: "取消",
+    .$prompt('请输入"' + row.userName + '"的新密码', '提示', {
+      confirmButtonText: '确定',
+      cancelButtonText: '取消',
       closeOnClickModal: false,
       inputPattern: /^.{5,20}$/,
-      inputErrorMessage: "用户密码长度必须介于 5 和 20 之间",
+      inputErrorMessage: '用户密码长度必须介于 5 和 20 之间',
     })
     .then(({ value }) => {
       resetUserPwd({ uid: row.uid, password: value }).then((res) => {
-        if (res.code === "SUCCESS") {
-          proxy.$modal.msgSuccess("修改成功，新密码是：" + value);
+        if (res.code === 'SUCCESS') {
+          proxy.$modal.msgSuccess('修改成功，新密码是：' + value);
         }
       });
     })
@@ -223,7 +226,7 @@ function handleSelectionChange(selection) {
 /** 下载模板操作 */
 function importTemplate() {
   proxy.download(
-    "system/user/importTemplate",
+    'system/user/importTemplate',
     {},
     `user_template_${new Date().getTime()}.xlsx`
   );
@@ -237,19 +240,19 @@ const handleFileUploadProgress = (event, file, fileList) => {
 const handleFileSuccess = (response, file, fileList) => {
   upload.open = false;
   upload.isUploading = false;
-  proxy.$refs["uploadRef"].handleRemove(file);
+  proxy.$refs['uploadRef'].handleRemove(file);
   proxy.$alert(
     "<div style='overflow: auto;overflow-x: hidden;max-height: 70vh;padding: 10px 20px 0;'>" +
       response.msg +
-      "</div>",
-    "导入结果",
+      '</div>',
+    '导入结果',
     { dangerouslyUseHTMLString: true }
   );
   getList();
 };
 /** 提交上传文件 */
 function submitFileForm() {
-  proxy.$refs["uploadRef"].submit();
+  proxy.$refs['uploadRef'].submit();
 }
 /** 重置操作表单 */
 function reset() {
@@ -261,12 +264,12 @@ function reset() {
     phone: undefined,
     email: undefined,
     sex: undefined,
-    status: "0",
+    status: '0',
     remark: undefined,
     postIds: [],
     roleIds: [],
   };
-  proxy.resetForm("userRef");
+  proxy.resetForm('userRef');
 }
 /** 取消按钮 */
 function cancel() {
@@ -275,19 +278,19 @@ function cancel() {
 }
 /** 新增按钮操作 */
 function handleAdd() {
-  proxy.$modal.notify("暂未开放，敬请期待");
+  proxy.$modal.notify('暂未开放，敬请期待');
   proxy.reset();
   getUser().then((response) => {
     postOptions.value = response.posts;
     roleOptions.value = response.roles;
     open.value = true;
-    title.value = "添加用户";
+    title.value = '添加用户';
     form.value.password = initPassword.value;
   });
 }
 /** 修改按钮操作 */
 function handleUpdate(row) {
-  proxy.$modal.notify("暂未开放，敬请期待");
+  proxy.$modal.notify('暂未开放，敬请期待');
   reset();
   const uid = row.uid || ids.value;
   getUser(uid).then((response) => {
@@ -297,23 +300,23 @@ function handleUpdate(row) {
     form.value.postIds = response.postIds;
     form.value.roleIds = response.roleIds;
     open.value = true;
-    title.value = "修改用户";
-    form.password = "";
+    title.value = '修改用户';
+    form.password = '';
   });
 }
 /** 提交按钮 */
 function submitForm() {
-  proxy.$refs["userRef"].validate((valid) => {
+  proxy.$refs['userRef'].validate((valid) => {
     if (valid) {
       if (form.value.uid != undefined) {
         updateUser(form.value).then((response) => {
-          proxy.$modal.msgSuccess("修改成功");
+          proxy.$modal.msgSuccess('修改成功');
           open.value = false;
           getList();
         });
       } else {
         addUser(form.value).then((response) => {
-          proxy.$modal.msgSuccess("新增成功");
+          proxy.$modal.msgSuccess('新增成功');
           open.value = false;
           getList();
         });
@@ -384,7 +387,9 @@ getList();
             ></el-date-picker>
           </el-form-item>
           <el-form-item>
-            <el-button type="primary" icon="Search" @click="handleQuery">搜索</el-button>
+            <el-button type="primary" icon="Search" @click="handleQuery"
+              >搜索</el-button
+            >
             <el-button icon="Refresh" @click="resetQuery">重置</el-button>
           </el-form-item>
         </el-form>
@@ -501,7 +506,9 @@ getList();
             width="160"
           >
             <template #default="scope">
-              <span>{{ dayjs(scope.row.createTime).format("YYYY-MM-DD HH:mm") }}</span>
+              <span>{{
+                dayjs(scope.row.createTime).format('YYYY-MM-DD HH:mm')
+              }}</span>
             </template>
           </el-table-column>
           <el-table-column
@@ -592,13 +599,21 @@ getList();
           </el-col>
           <el-col :span="12">
             <el-form-item label="邮箱" prop="email">
-              <el-input v-model="form.email" placeholder="请输入邮箱" maxlength="50" />
+              <el-input
+                v-model="form.email"
+                placeholder="请输入邮箱"
+                maxlength="50"
+              />
             </el-form-item>
           </el-col>
         </el-row>
         <el-row>
           <el-col :span="12">
-            <el-form-item v-if="form.uid == undefined" label="用户名称" prop="userName">
+            <el-form-item
+              v-if="form.uid == undefined"
+              label="用户名称"
+              prop="userName"
+            >
               <el-input
                 v-model="form.userName"
                 placeholder="请输入用户名称"
@@ -607,7 +622,11 @@ getList();
             </el-form-item>
           </el-col>
           <el-col :span="12">
-            <el-form-item v-if="form.uid == undefined" label="用户密码" prop="password">
+            <el-form-item
+              v-if="form.uid == undefined"
+              label="用户密码"
+              prop="password"
+            >
               <el-input
                 v-model="form.password"
                 placeholder="请输入用户密码"
@@ -693,7 +712,12 @@ getList();
     </el-dialog>
 
     <!-- 用户导入对话框 -->
-    <el-dialog :title="upload.title" v-model="upload.open" width="400px" append-to-body>
+    <el-dialog
+      :title="upload.title"
+      v-model="upload.open"
+      width="400px"
+      append-to-body
+    >
       <el-upload
         ref="uploadRef"
         :limit="1"
@@ -713,7 +737,9 @@ getList();
         <template #tip>
           <div class="el-upload__tip text-center">
             <div class="el-upload__tip">
-              <el-checkbox v-model="upload.updateSupport" />是否更新已经存在的用户数据
+              <el-checkbox
+                v-model="upload.updateSupport"
+              />是否更新已经存在的用户数据
             </div>
             <span>仅允许导入xls、xlsx格式文件。</span>
             <el-link
