@@ -19,6 +19,7 @@ export default defineConfig({
         rewrite: (path) => path.replace(/^\/api/, ''),
       },
     },
+    open: 'http://localhost:5173',
   },
   plugins: [
     vue(),
