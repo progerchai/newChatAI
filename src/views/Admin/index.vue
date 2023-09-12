@@ -10,7 +10,8 @@ import {
 } from '@/service/admin';
 import { getToken } from '@/utils';
 import dayjs from 'dayjs';
-import { getCurrentInstance, reactive, ref, toRefs } from 'vue';
+import _ from 'lodash';
+import { getCurrentInstance, reactive, ref, toRefs, watch } from 'vue';
 import { useRouter } from 'vue-router';
 import { useStore } from 'vuex';
 import { DepartTree } from './components/index';
@@ -37,7 +38,6 @@ const multiple = ref(true);
 const total = ref(0);
 const title = ref('');
 const dateRange = ref([]);
-const deptName = ref('');
 const deptOptions = ref(undefined);
 const initPassword = ref(undefined);
 const postOptions = ref([]);
@@ -126,7 +126,18 @@ const data = reactive({
   },
 });
 const { queryParams, form, rules } = toRefs(data);
-
+watch(
+  () => data.queryParams.pageSize,
+  () => {
+    getList();
+  }
+);
+watch(
+  () => data.queryParams.pageNum,
+  () => {
+    getList();
+  }
+);
 /** 查询用户列表 */
 function getList() {
   loading.value = true;
@@ -324,7 +335,15 @@ function submitForm() {
     }
   });
 }
+const handleSizeChange = (size) => {
+  const params = _.cloneDeep(queryParams.value);
+  queryParams.value = { ...params, pageSize: size };
+};
 
+const handleCurrentChange = (page) => {
+  const params = _.cloneDeep(queryParams.value);
+  queryParams.value = { ...params, pageNum: page };
+};
 getList();
 </script>
 <template>
@@ -560,13 +579,18 @@ getList();
             </template>
           </el-table-column>
         </el-table>
-        <!-- <pagination
+        <el-pagination
+          class="pagination"
           v-show="total > 0"
+          @size-change="handleSizeChange"
+          @current-change="handleCurrentChange"
+          :current-page.sync="queryParams.pageNum"
+          :page-sizes="[10, 20, 50, 100]"
+          :page-size="queryParams.pageSize"
+          layout="sizes, prev, pager, next"
           :total="total"
-          v-model:page="queryParams.pageNum"
-          v-model:limit="queryParams.pageSize"
-          @pagination="getList"
-        /> -->
+        >
+        </el-pagination>
       </el-col>
     </el-row>
 
@@ -764,5 +788,8 @@ getList();
 <style scoped lang="scss">
 .app-container {
   padding: 24px 20px;
+}
+.pagination {
+  margin-top: 12px;
 }
 </style>
