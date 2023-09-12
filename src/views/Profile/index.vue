@@ -1,6 +1,8 @@
 <script setup name="Profile">
 import userInfo from './userInfo.vue';
 import resetPwd from './resetPwd.vue';
+import expandRequestList from './expandRequestList.vue';
+import requestHistory from './requestHistory.vue';
 import dayjs from 'dayjs';
 import { useRouter } from 'vue-router';
 import { useStore } from 'vuex';
@@ -97,12 +99,16 @@ const sexDict = {
                 邀请码
                 <div class="pull-right">{{ state.user.inviteCode }}</div>
               </li>
+              <li class="list-group-item" v-if="isAdmin">
+                剩余邀请额度
+                <div class="pull-right">{{ state.user.inviteQuota }}</div>
+              </li>
             </ul>
           </div>
         </el-card>
       </el-col>
       <el-col :span="18" :xs="24">
-        <el-card>
+        <el-card style="margin-bottom: 24px">
           <template v-slot:header>
             <div class="clearfix">
               <span>基本资料</span>
@@ -117,6 +123,8 @@ const sexDict = {
             </el-tab-pane>
           </el-tabs>
         </el-card>
+        <requestHistory />
+        <expandRequestList />
       </el-col>
     </el-row>
   </div>

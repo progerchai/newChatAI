@@ -65,4 +65,8 @@ export interface IUser {
    * 用户学校
    */
   deptName?: string;
+  /**
+   * 剩余邀请码邀请额度
+   */
+  inviteQuota?: number;
 }
