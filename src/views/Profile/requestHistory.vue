@@ -5,14 +5,10 @@
  *@email: progerchai@gmail.com
  *@date: 2023-09-12 23:44:22
  */
-import { useStore } from 'vuex';
-import { getCurrentInstance, reactive, watch, toRefs } from 'vue';
-import _ from 'lodash';
+import { getRequestList, submitInviteExpandRequest } from '@/service/profile';
 import dayjs from 'dayjs';
-import { submitInviteExpandRequest, getRequestList } from '@/service/profile';
-const store = useStore('global');
-const role = store.state?.role;
-const isAdmin = ['admin', 'super_admin'].includes(role);
+import _ from 'lodash';
+import { getCurrentInstance, reactive, toRefs, watch } from 'vue';
 const { proxy } = getCurrentInstance() as any;
 const data = reactive({
   queryParams: {
@@ -77,10 +73,11 @@ const handleCurrentChange = (page: number) => {
   const params = _.cloneDeep(queryParams.value);
   queryParams.value = { ...params, pageNum: page };
 };
+getList();
 </script>
 
 <template>
-  <el-card v-if="isAdmin" style="margin-bottom: 24px">
+  <el-card style="margin-bottom: 24px">
     <template v-slot:header>
       <div class="clearfix">
         <span>邀请码扩容申请记录</span>

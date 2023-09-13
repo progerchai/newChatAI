@@ -5,15 +5,13 @@
  *@email: progerchai@gmail.com
  *@date: 2023-09-12 23:44:22
  */
-import { useStore } from "vuex";
-import { getCurrentInstance, reactive, watch, toRefs } from "vue";
-import _ from "lodash";
-import dayjs from "dayjs";
-import { submitInviteExpandRequest, getRequestList } from "@/service/profile";
-const store = useStore("global");
-const role = store.state?.role;
-const isAdmin = ["admin", "super_admin"].includes(role);
-const isSuperAdmin = ["super_admin"].includes(role);
+import { getCurrentInstance, reactive, watch, toRefs } from 'vue';
+import _ from 'lodash';
+import dayjs from 'dayjs';
+import {
+  handleInviteExpandRequest,
+  getInviteExpandRequestList,
+} from '@/service/profile';
 
 const { proxy } = getCurrentInstance() as any;
 const data = reactive({
@@ -40,35 +38,42 @@ watch(
 );
 const getList = () => {
   loading.value = true;
-  getRequestList({
+  getInviteExpandRequestList({
     page: queryParams.value.pageNum,
     pageSize: queryParams.value.pageSize,
   }).then((res) => {
-    if (res.code === "SUCCESS") {
+    if (res.code === 'SUCCESS') {
       console.log(res);
     }
     loading.value = false;
   });
 };
-
-const newRequest = () => {
-  proxy
-    .$prompt("请输入申请额度", "提示", {
-      confirmButtonText: "确定",
-      cancelButtonText: "取消",
-      closeOnClickModal: false,
-      inputPattern: /^\d{1,}$/,
-      inputErrorMessage: "额度需要数字",
-    })
-    .then(({ value }: { value: string }) => {
-      submitInviteExpandRequest({ count: Number(value) }).then((res) => {
-        if (res.code === "SUCCESS") {
-          queryParams.value.pageNum = 1;
-          getList();
-        }
-      });
-    })
-    .catch(() => {});
+// 0:驳回，1:待审核，2:通过
+const handleAction = (id: number, status: 0 | 2) => {
+  if (status === 0) {
+    proxy
+      .$prompt('请输入驳回理由（非必填）', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        closeOnClickModal: false,
+      })
+      .then(({ value }: { value: string }) => {
+        handleSubmit(id, status, value);
+      })
+      .catch(() => {});
+  } else {
+    handleSubmit(id, status, '');
+  }
+};
+/**
+ * 提交 执行驳回/通过申请
+ */
+const handleSubmit = (id: number, status: 0 | 2, response: string) => {
+  handleInviteExpandRequest({ id, status, response }).then((res) => {
+    if (res.code === 'SUCCESS') {
+      getList();
+    }
+  });
 };
 const handleSizeChange = (size: number) => {
   const params = _.cloneDeep(queryParams.value);
@@ -79,13 +84,14 @@ const handleCurrentChange = (page: number) => {
   const params = _.cloneDeep(queryParams.value);
   queryParams.value = { ...params, pageNum: page };
 };
+getList();
 </script>
 
 <template>
-  <el-card v-if="isSuperAdmin" style="margin-bottom: 24px">
+  <el-card style="margin-bottom: 24px">
     <template v-slot:header>
       <div class="clearfix">
-        <span>申请列表</span>
+        <span>邀请码扩容申请列表</span>
       </div>
     </template>
     <el-table v-loading="loading" :data="history">
@@ -96,9 +102,16 @@ const handleCurrentChange = (page: number) => {
         prop="id"
         :show-overflow-tooltip="true"
       />
-      <el-table-column label="创建时间" align="center" prop="createTime" width="160">
+      <el-table-column
+        label="创建时间"
+        align="center"
+        prop="createTime"
+        width="160"
+      >
         <template #default="scope">
-          <span>{{ dayjs(scope.row.createTime).format("YYYY-MM-DD HH:mm") }}</span>
+          <span>{{
+            dayjs(scope.row.createTime).format('YYYY-MM-DD HH:mm')
+          }}</span>
         </template>
       </el-table-column>
       <el-table-column
@@ -131,8 +144,18 @@ const handleCurrentChange = (page: number) => {
       />
       <el-table-column label="操作" align="center" width="80">
         <template #default="scope">
-          <a>通过</a>
-          <a>驳回</a>
+          <span v-if="scope.row.status === 1">
+            <a @click="handleAction(scope.row.id, 2)" style="marginright: 8px"
+              >通过</a
+            >
+            <a @click="handleAction(scope.row.id, 0)">驳回</a>
+          </span>
+          <span v-if="scope.row.status === 2" style="color: #67c23a"
+            >已通过</span
+          >
+          <span v-if="scope.row.status === 0" style="color: #909399"
+            >已驳回</span
+          >
         </template>
       </el-table-column>
     </el-table>

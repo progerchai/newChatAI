@@ -123,8 +123,12 @@ const sexDict = {
             </el-tab-pane>
           </el-tabs>
         </el-card>
-        <requestHistory />
-        <expandRequestList />
+        <div v-if="isAdmin && !isSuperAdmin">
+          <requestHistory />
+        </div>
+        <div v-if="isSuperAdmin">
+          <expandRequestList />
+        </div>
       </el-col>
     </el-row>
   </div>
