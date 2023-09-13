@@ -43,7 +43,7 @@ const getList = () => {
     pageSize: queryParams.value.pageSize,
   }).then((res) => {
     if (res.code === 'SUCCESS') {
-      console.log(res);
+      history.value = res.data.list as any;
     }
     loading.value = false;
   });
@@ -110,7 +110,9 @@ getList();
       >
         <template #default="scope">
           <span>{{
-            dayjs(scope.row.createTime).format('YYYY-MM-DD HH:mm')
+            dayjs(scope.row.createTime)
+              .add(-8, 'day')
+              .format('YYYY-MM-DD HH:mm')
           }}</span>
         </template>
       </el-table-column>
@@ -142,13 +144,18 @@ getList();
         prop="teacherId"
         :show-overflow-tooltip="true"
       />
-      <el-table-column label="操作" align="center" width="80">
+      <el-table-column label="操作" align="center" width="120">
         <template #default="scope">
-          <span v-if="scope.row.status === 1">
-            <a @click="handleAction(scope.row.id, 2)" style="marginright: 8px"
+          <span
+            v-if="scope.row.status === 1 || _.isNil(scope.row.status)"
+            class="action"
+          >
+            <a class="action-btn" @click="handleAction(scope.row.id, 2)"
               >通过</a
             >
-            <a @click="handleAction(scope.row.id, 0)">驳回</a>
+            <a class="action-btn" @click="handleAction(scope.row.id, 0)"
+              >驳回</a
+            >
           </span>
           <span v-if="scope.row.status === 2" style="color: #67c23a"
             >已通过</span
@@ -174,4 +181,13 @@ getList();
   </el-card>
 </template>
 
-<style scoped></style>
+<style scoped lang="scss">
+.action {
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+}
+.action-btn {
+  cursor: pointer;
+}
+</style>

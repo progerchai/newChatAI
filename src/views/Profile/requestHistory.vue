@@ -20,6 +20,11 @@ const data = reactive({
   loading: false,
 });
 const { queryParams, total, loading, history } = toRefs(data);
+const statusDict = {
+  0: '被驳回',
+  1: '审核中',
+  2: '已通过',
+};
 watch(
   () => data.queryParams.pageSize,
   () => {
@@ -39,7 +44,7 @@ const getList = () => {
     pageSize: queryParams.value.pageSize,
   }).then((res) => {
     if (res.code === 'SUCCESS') {
-      console.log(res);
+      history.value = res?.data?.list as any;
     }
     loading.value = false;
   });
@@ -93,7 +98,9 @@ getList();
       >
         <template #default="scope">
           <span>{{
-            dayjs(scope.row.createTime).format('YYYY-MM-DD HH:mm')
+            dayjs(scope.row.createTime)
+              .add(-8, 'day')
+              .format('YYYY-MM-DD HH:mm')
           }}</span>
         </template>
       </el-table-column>
@@ -112,7 +119,7 @@ getList();
         width="80"
       >
         <template #default="scope">
-          <span>{{ scope.row.status }}</span>
+          <span>{{ statusDict[scope.row.status as 0 | 1 | 2] }}</span>
         </template>
       </el-table-column>
       <el-table-column
