@@ -1,4 +1,4 @@
-import { post } from '@/utils';
+import { get, post } from '@/utils';
 /**
  * 登录
  */
@@ -47,6 +47,16 @@ export const resetPassword = (params: {
 }) => {
   return post('/api/user/resetPassword.json', params) as Promise<{
     data: number;
+    code: string;
+  }>;
+};
+
+/**
+ * 退出登录
+ */
+export const logout = () => {
+  return get('/api/user/logout.json') as Promise<{
+    data: boolean;
     code: string;
   }>;
 };
