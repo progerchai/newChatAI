@@ -45,7 +45,7 @@ interface State {
 }
 const PREFIX = '';
 const store = useStore('global');
-const { isPc } = store.state;
+const { isPc, userInfo } = store.state;
 
 const options = [
   {
@@ -652,7 +652,7 @@ onMounted(() => {
           <div
             class="absolute bottom-0 left-0 w-full border-t md:border-t-0 dark:border-white/20 md:border-transparent md:dark:border-transparent md:bg-vert-light-gradient bg-white dark:bg-gray-800 md:!bg-transparent dark:md:bg-vert-dark-gradient"
           >
-            <div v-if="!isPc">
+            <div v-if="!isPc && [].includes(userInfo.uid)">
               <span class="drop-down-title">插件：</span>
               <img
                 class="plugin-img"
@@ -713,7 +713,7 @@ onMounted(() => {
                     </div>
                   </button>
                 </div>
-                <div v-if="isPc" class="drop-down">
+                <div v-if="isPc && [].includes(userInfo.uid)" class="drop-down">
                   <span class="drop-down-title">插件：</span>
                   <img
                     class="plugin-img"
