@@ -6,27 +6,20 @@
  *@email: progerchai@gmail.com
  *@date: 2023-08-05 15:10:24
  */
-import '@/assets/index.css';
-import { IconBlock, IconButton, IconFresh, IconPost } from '@/components/icons';
-import type { IConversation } from '@/types';
-import axios from 'axios';
-import { ElMessage, ElOption, ElSelect } from 'element-plus';
-import _ from 'lodash';
-import { useStore } from 'vuex';
-import { generateConv, getSessionDetail } from '@/service/home';
-import {
-  getCurrentInstance,
-  nextTick,
-  onMounted,
-  reactive,
-  ref,
-  watch,
-} from 'vue';
-import ConversationItem from './component/ConversationItem.vue';
-import LeftMenu from './component/LeftMenu.vue';
-import NoticeModal from './component/NoticeModal.vue';
+import "@/assets/index.css";
+import { IconBlock, IconButton, IconFresh, IconPost } from "@/components/icons";
+import type { IConversation } from "@/types";
+import axios from "axios";
+import { ElMessage, ElOption, ElSelect } from "element-plus";
+import _ from "lodash";
+import { useStore } from "vuex";
+import { generateConv, getSessionDetail } from "@/service/home";
+import { getCurrentInstance, nextTick, onMounted, reactive, ref, watch } from "vue";
+import ConversationItem from "./component/ConversationItem.vue";
+import LeftMenu from "./component/LeftMenu.vue";
+import NoticeModal from "./component/NoticeModal.vue";
 interface State {
-  theme: 'light' | 'dark';
+  theme: "light" | "dark";
   popupShow: boolean;
   avatarIdx: number;
   conversations: Array<IConversation>;
@@ -43,41 +36,41 @@ interface State {
   selectedSessionId: number;
   stashString: string;
 }
-const PREFIX = '';
-const store = useStore('global');
+const PREFIX = "";
+const store = useStore("global");
 const { isPc, userInfo } = store.state;
 
 const options = [
   {
-    value: 'bing',
-    label: '搜索引擎',
-    img: 'https://s1.imagehub.cc/images/2023/08/19/bing.png',
+    value: "bing",
+    label: "搜索引擎",
+    img: "https://s1.imagehub.cc/images/2023/08/19/bing.png",
   },
   {
-    value: 'lib',
-    label: '知识库',
-    img: 'https://s1.imagehub.cc/images/2023/08/19/library.png',
+    value: "lib",
+    label: "知识库",
+    img: "https://s1.imagehub.cc/images/2023/08/19/library.png",
   },
   {
-    value: 'wolfram',
-    label: 'wolfram',
-    img: 'https://s1.imagehub.cc/images/2023/08/20/wolfram.png',
+    value: "wolfram",
+    label: "wolfram",
+    img: "https://s1.imagehub.cc/images/2023/08/20/wolfram.png",
   },
-  { value: 'default', label: '无' },
+  { value: "default", label: "无" },
 ];
 const inputChatRef = ref(null);
 const chatContainer = ref(null);
 const leftMenuRef = ref(null);
-const selectValue = ref('default');
+const selectValue = ref("default");
 const instance = getCurrentInstance();
 const state = reactive<State>({
-  theme: 'light',
-  popupShow: localStorage.getItem('popupShowed') !== 'true',
+  theme: "light",
+  popupShow: localStorage.getItem("popupShowed") !== "true",
   avatarIdx: 1,
   conversations: [],
   conversation: [],
-  chatMsg: '',
-  chatTitle: '新建会话',
+  chatMsg: "",
+  chatTitle: "新建会话",
   convLoading: false,
   isShowGoBottom: false,
   oldConv: null,
@@ -86,7 +79,7 @@ const state = reactive<State>({
   tsource: undefined,
   cid: null,
   selectedSessionId: -1,
-  stashString: '',
+  stashString: "",
 });
 function closeSource() {
   let { source, tsource, rsource } = state;
@@ -113,13 +106,13 @@ function stopChat() {
     .put(`${PREFIX}/api/stop/chat/${cid}`, {})
     .then((result) => {
       const rconv = conversation[conversation.length - 1];
-      rconv['loading'] = false;
+      rconv["loading"] = false;
       state.convLoading = false;
 
-      if (conversation.length == 2 && rconv['speeches']?.length == 1) {
+      if (conversation.length == 2 && rconv["speeches"]?.length == 1) {
         var newConv = {
           id: cid,
-          title: '新建会话',
+          title: "新建会话",
         };
 
         generateConvTitle(newConv);
@@ -137,30 +130,30 @@ function stopChat() {
 }
 function changeHeight() {
   let elem = inputChatRef.value as any;
-  elem.style.height = '24px';
+  elem.style.height = "24px";
   var scrollHeight = elem.scrollHeight;
   if (24 >= scrollHeight || state.chatMsg.length == 0) {
     resetHeight();
     return;
   }
 
-  elem.style.removeProperty('overflow-y');
-  elem.style.height = scrollHeight + 'px';
+  elem.style.removeProperty("overflow-y");
+  elem.style.height = scrollHeight + "px";
 }
 function resetHeight() {
   let elem = inputChatRef.value as any;
-  _.set(elem, 'style.height', '24px');
-  _.set(elem, 'style.overflow-y', 'hidden');
+  _.set(elem, "style.height", "24px");
+  _.set(elem, "style.overflow-y", "hidden");
 }
 /**
  * 关闭弹窗
  */
 function closePopup() {
   state.popupShow = false;
-  localStorage.setItem('popupShowed', 'true');
+  localStorage.setItem("popupShowed", "true");
 }
 function vueCopy(node: Element) {
-  var code = node.getElementsByTagName('code')[0].innerHTML;
+  var code = node.getElementsByTagName("code")[0].innerHTML;
   var text = decodeURIComponent(code);
   (instance as any)?.ctx?.copyText(text).then(
     () => {
@@ -176,25 +169,25 @@ function vueCopy(node: Element) {
       }, 1000);
     },
     () => {
-      console.log('复制失败');
+      console.log("复制失败");
     }
   );
 }
-function changeTheme(_theme: 'light' | 'dark') {
+function changeTheme(_theme: "light" | "dark") {
   state.theme = _theme;
-  var html = document.getElementsByTagName('html')[0];
-  html.classList.remove('light', 'dark');
+  var html = document.getElementsByTagName("html")[0];
+  html.classList.remove("light", "dark");
   html.classList.add(_theme);
-  (html.style as any)['color-scheme'] = _theme;
-  localStorage.setItem('theme', _theme);
+  (html.style as any)["color-scheme"] = _theme;
+  localStorage.setItem("theme", _theme);
 }
 function initConvs(convs: IConversation[]) {
   for (let i = 0; i < convs.length; i++) {
     var conv = convs[i];
-    if (conv.speaker == 'human') {
+    if (conv.speaker == "human") {
       continue;
     }
-    conv['idx'] = _.get(conv, 'speeches.length', 0) - 1;
+    conv["idx"] = _.get(conv, "speeches.length", 0) - 1;
   }
   return convs;
 }
@@ -211,26 +204,24 @@ function chatRepeat() {
   convLoading = true;
 
   var rconv = conversation[conversation.length - 1] || {};
-  rconv['idx'] = rconv['suitable'].length;
-  rconv['loading'] = true;
-  rconv['suitable'].push(0);
-  rconv['speeches'].push('');
+  rconv["idx"] = rconv["suitable"].length;
+  rconv["loading"] = true;
+  rconv["suitable"].push(0);
+  rconv["speeches"].push("");
   refrechConversation();
 
-  const _rsource = (state.rsource = new EventSource(
-    `${PREFIX}/api/chat/repeat/${cid}`
-  ));
-  _rsource.addEventListener('open', function () {
-    console.log('connect');
+  const _rsource = (state.rsource = new EventSource(`${PREFIX}/api/chat/repeat/${cid}`));
+  _rsource.addEventListener("open", function () {
+    console.log("connect");
   });
 
   //如果服务器响应报文中没有指明事件，默认触发message事件
-  _rsource.addEventListener('message', function (e) {
+  _rsource.addEventListener("message", function (e) {
     let rconv = conversation[conversation.length - 1];
-    if (e.data == '[DONE]') {
+    if (e.data == "[DONE]") {
       _rsource.close();
 
-      rconv['loading'] = false;
+      rconv["loading"] = false;
       convLoading = false;
       refrechConversation();
       state.rsource = undefined;
@@ -238,21 +229,21 @@ function chatRepeat() {
     }
 
     let content = e.data;
-    if (content.includes('[ENTRY]')) {
-      content = content.replaceAll('[ENTRY]', '\n');
+    if (content.includes("[ENTRY]")) {
+      content = content.replaceAll("[ENTRY]", "\n");
     }
 
     // 滚动到最下面
     handleScrollBottom();
 
     const idx = rconv.idx;
-    rconv['speeches'][idx] += content;
+    rconv["speeches"][idx] += content;
     refrechConversation();
   });
 
   //发生错误，则会触发error事件
-  _rsource.addEventListener('error', function (e: { data: any }) {
-    console.log('error:' + e.data);
+  _rsource.addEventListener("error", function (e: { data: any }) {
+    console.log("error:" + e.data);
     _rsource.close();
     state.rsource = undefined;
   });
@@ -280,31 +271,31 @@ async function send() {
   if (selectedSessionId < 0) {
     // 当前无会话，创建会话
     const generateRes = await generateConv({ title: chatMsg });
-    if (generateRes.code === 'SUCCESS') {
+    if (generateRes.code === "SUCCESS") {
       onChangeSessionId(generateRes.data);
       await leftMenuRef.value.newChat(generateRes.data);
     } else {
-      ElMessage.error('创建新会话失败');
+      ElMessage.error("创建新会话失败");
       return;
     }
   }
 
   const _conversations = conversation;
-  if (_.get(conversation, 'length', 0) === 0) {
+  if (_.get(conversation, "length", 0) === 0) {
     // 无会话的时候，设置当前会话title 为用户prompt
     leftMenuRef.value.setHistoryTitle(selectedSessionId, chatMsg);
   }
   _conversations.push({
-    speaker: 'human',
-    speech: chatMsg.trim().replace(/\n/g, ''),
+    speaker: "human",
+    speech: chatMsg.trim().replace(/\n/g, ""),
   });
-  state.chatMsg = '';
+  state.chatMsg = "";
   let conv = {
     idx: 0,
     loading: true,
-    speaker: 'ai',
+    speaker: "ai",
     suitable: [0],
-    speeches: [''],
+    speeches: [""],
   };
   _conversations.push(conv);
   state.conversation = _conversations;
@@ -319,27 +310,27 @@ async function send() {
   ));
   // 创建eventSource 失败
   if (!_source.withCredentials) {
-    conv['loading'] = false;
+    conv["loading"] = false;
     state.convLoading = false;
   }
   // const currentConvIndex = conversation.length - 1;
-  _source.addEventListener('open', function (e) {
+  _source.addEventListener("open", function (e) {
     let conv = conversation[conversation.length - 1];
-    conv['loading'] = true;
-    console.log('connect', e);
+    conv["loading"] = true;
+    console.log("connect", e);
   });
-  _source.addEventListener('error', function (e) {
-    console.log('err', e);
+  _source.addEventListener("error", function (e) {
+    console.log("err", e);
   });
   //如果服务器响应报文中没有指明事件，默认触发message事件
-  _source.addEventListener('message', function (e) {
+  _source.addEventListener("message", function (e) {
     let conv = conversation[conversation.length - 1];
 
-    conv['loading'] = true;
+    conv["loading"] = true;
 
-    if (e.data === '[DONE]' || e.data === '[ERROR]') {
+    if (e.data === "[DONE]" || e.data === "[ERROR]") {
       _source.close();
-      conv['loading'] = false;
+      conv["loading"] = false;
       state.convLoading = false;
       refrechConversation();
       state.source = undefined;
@@ -347,36 +338,34 @@ async function send() {
     }
 
     let content = e.data;
-    if (content.includes('[ENTRY]')) {
-      content = content.replaceAll('[ENTRY]', '\n');
+    if (content.includes("[ENTRY]")) {
+      content = content.replaceAll("[ENTRY]", "\n");
     }
 
     // 滚动到最下面
     handleScrollBottom();
 
-    conv['speeches'] += content;
+    conv["speeches"] += content;
     state.conversation = conversation;
 
     refrechConversation();
   });
 
   //发生错误，则会触发error事件
-  _source.addEventListener('error', function (e: any) {
-    console.log('error:' + e.data);
+  _source.addEventListener("error", function (e: any) {
+    console.log("error:" + e.data);
     _source.close();
     state.source = undefined;
   });
 }
 function generateConvTitle(conv: IConversation) {
   const { cid } = state;
-  var _tsource = (state.tsource = new EventSource(
-    `${PREFIX}/api/chat/title/${cid}`
-  ));
+  var _tsource = (state.tsource = new EventSource(`${PREFIX}/api/chat/title/${cid}`));
 
   //如果服务器响应报文中没有指明事件，默认触发message事件
-  conv.title = '';
-  _tsource.addEventListener('message', function (e) {
-    if (e.data === '[DONE]' || e.data === '[ERROR]') {
+  conv.title = "";
+  _tsource.addEventListener("message", function (e) {
+    if (e.data === "[DONE]" || e.data === "[ERROR]") {
       _tsource.close();
       selectConversation(conv, false);
       saveConversations();
@@ -388,8 +377,8 @@ function generateConvTitle(conv: IConversation) {
     selectConversation(conv, false);
   });
 
-  _tsource.addEventListener('error', function (e: any) {
-    console.log('error:' + e.data);
+  _tsource.addEventListener("error", function (e: any) {
+    console.log("error:" + e.data);
     _tsource.close();
     state.tsource = undefined;
   });
@@ -400,8 +389,8 @@ function newChat() {
     return;
   }
 
-  state.chatTitle = '新建会话';
-  document.title = '新建会话';
+  state.chatTitle = "新建会话";
+  document.title = "新建会话";
   const _conversations = conversations;
   for (let idx in _conversations) {
     var conv = _conversations[idx];
@@ -424,7 +413,7 @@ function loadId() {
     .catch((err) => {});
 }
 function loadConversations() {
-  let convs = localStorage.getItem('conversations') || '[]';
+  let convs = localStorage.getItem("conversations") || "[]";
   state.conversations = JSON.parse(convs);
 }
 function saveConversations() {
@@ -437,7 +426,7 @@ function saveConversations() {
     delete conv.delete;
   }
   let convs = JSON.stringify(_conversations);
-  localStorage.setItem('conversations', convs);
+  localStorage.setItem("conversations", convs);
 }
 function clearConversations() {
   state.conversations = [];
@@ -451,8 +440,8 @@ function selectConversation(conv: IConversation, loadConv: boolean) {
   conv.selected = true;
   state.oldConv = conv;
 
-  document.title = conv.title || 'chatai';
-  state.chatTitle = conv.title || 'chatai';
+  document.title = conv.title || "chatai";
+  state.chatTitle = conv.title || "chatai";
 
   if (!loadConv) {
     return;
@@ -491,7 +480,7 @@ function cancelDelConv(idx: number, conv: IConversation) {
   state.conversations[idx] = conv;
 }
 function loadAvatar() {
-  let avatar = localStorage.getItem('avatar') || Math.ceil(Math.random() * 9);
+  let avatar = localStorage.getItem("avatar") || Math.ceil(Math.random() * 9);
   state.avatarIdx = Number(avatar);
 }
 function handleScrollBottom() {
@@ -499,7 +488,7 @@ function handleScrollBottom() {
     let scrollElem = chatContainer.value as any;
     scrollElem.scrollTo({
       top: scrollElem.scrollHeight,
-      behavior: 'smooth',
+      behavior: "smooth",
     });
   });
 }
@@ -557,21 +546,21 @@ watch(
     getSessionDetail({
       getSessionDetail: state.selectedSessionId,
     }).then((res) => {
-      if (res.code === 'SUCCESS') {
+      if (res.code === "SUCCESS") {
         state.conversation = res.data.list;
       }
     });
   }
 );
 onMounted(() => {
-  let theme = localStorage.getItem('theme') || 'light';
-  changeTheme(theme as 'dark' | 'light');
+  let theme = localStorage.getItem("theme") || "light";
+  changeTheme(theme as "dark" | "light");
   // loadId();
   loadConversations();
   loadAvatar();
 
   let chatDivEle = chatContainer.value as any;
-  chatDivEle.addEventListener('scroll', isScrollAndNotBottom, true);
+  chatDivEle.addEventListener("scroll", isScrollAndNotBottom, true);
   (window as any).copy = vueCopy;
 });
 </script>
@@ -599,16 +588,9 @@ onMounted(() => {
         >
           <!-- 聊天窗 -->
           <div class="flex-1 overflow-hidden">
-            <div
-              class="react-scroll-to-bottom--css-ncqif-79elbk h-full dark:bg-gray-800"
-            >
-              <div
-                ref="chatContainer"
-                class="react-scroll-to-bottom--css-krija-1n7m0yu"
-              >
-                <div
-                  class="flex flex-col items-center text-sm dark:bg-gray-800"
-                >
+            <div class="react-scroll-to-bottom--css-ncqif-79elbk h-full dark:bg-gray-800">
+              <div ref="chatContainer" class="react-scroll-to-bottom--css-krija-1n7m0yu">
+                <div class="flex flex-col items-center text-sm dark:bg-gray-800">
                   <!-- 对话item -->
                   <template v-for="(conv, idx) in state.conversation">
                     <ConversationItem
@@ -656,10 +638,7 @@ onMounted(() => {
               <span class="drop-down-title">插件：</span>
               <img
                 class="plugin-img"
-                v-if="
-                  _.find(options, (o) => o.value === selectValue).value !==
-                  'default'
-                "
+                v-if="_.find(options, (o) => o.value === selectValue).value !== 'default'"
                 :src="_.find(options, (o) => o.value === selectValue).img"
                 alt="plugin-img"
               />
@@ -690,9 +669,7 @@ onMounted(() => {
                 >
                   <button
                     v-if="
-                      !state.convLoading &&
-                      state.conversation.length > 0 &&
-                      false // 暂时隐藏
+                      !state.convLoading && state.conversation.length > 0 && false // 暂时隐藏
                     "
                     @click.stop.prevent="chatRepeat"
                     id="chatRepeat"
@@ -718,8 +695,7 @@ onMounted(() => {
                   <img
                     class="plugin-img"
                     v-if="
-                      _.find(options, (o) => o.value === selectValue).value !==
-                      'default'
+                      _.find(options, (o) => o.value === selectValue).value !== 'default'
                     "
                     :src="_.find(options, (o) => o.value === selectValue).img"
                     alt="plugin-img"
@@ -764,8 +740,7 @@ onMounted(() => {
                       class="text-2xl"
                       style="line-height: 1.3rem"
                     >
-                      <span class="load_dot1">·</span
-                      ><span class="load_dot2">·</span
+                      <span class="load_dot1">·</span><span class="load_dot2">·</span
                       ><span class="load_dot3">·</span>
                     </div>
                     <IconPost v-else />
@@ -784,7 +759,7 @@ onMounted(() => {
 </template>
 
 <style lang="scss" scoped>
-@import './Homeview.scss';
+@import "./Homeview.scss";
 </style>
 <style lang="scss">
 .drop-down {
