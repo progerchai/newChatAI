@@ -173,6 +173,7 @@ const handleRegisterFormSelect = (key: string) => {
           placeholder="请输入密码"
           type="password"
           autocomplete="off"
+          show-password
           @input="handleLoginFormSelect('password')"
         ></el-input>
       </el-form-item>
@@ -230,6 +231,7 @@ const handleRegisterFormSelect = (key: string) => {
           placeholder="请输入密码"
           type="password"
           autocomplete="off"
+          show-password
         ></el-input>
       </el-form-item>
       <el-form-item prop="rePassword" label="确认密码：">
@@ -239,6 +241,7 @@ const handleRegisterFormSelect = (key: string) => {
           placeholder="请确认密码"
           type="password"
           autocomplete="off"
+          show-password
         ></el-input>
       </el-form-item>
       <el-form-item prop="inviteCode" label="邀请码：">
