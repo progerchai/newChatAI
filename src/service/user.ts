@@ -60,3 +60,13 @@ export const logout = () => {
     code: string;
   }>;
 };
+
+/**
+ * 重置密码 - 未登录
+ */
+export const reset = (params: { email: string }) => {
+  return post('/api/user/reset.json', params) as Promise<{
+    data: number;
+    code: string;
+  }>;
+};

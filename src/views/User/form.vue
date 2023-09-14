@@ -1,9 +1,9 @@
 <script setup lang="ts">
-import { login, sendEmailCode, register } from '@/service/user';
+import { login, register, sendEmailCode, reset } from '@/service/user';
 import type { ILoginData, IRegisterData } from '@/types';
 import { ElMessage } from 'element-plus';
-import { ref, unref } from 'vue';
-
+import { getCurrentInstance, ref, unref } from 'vue';
+const { proxy } = getCurrentInstance() as any;
 const isDev = import.meta.env.MODE === 'development';
 const loading = ref(false);
 const formRef = ref();
@@ -55,6 +55,28 @@ const rules = {
 };
 const handleActions = () => {
   isLogin.value = isLogin.value !== true;
+};
+/**
+ * 忘记密码
+ */
+const handleForget = () => {
+  proxy
+    .$prompt('请输入邮箱账号', '提示', {
+      confirmButtonText: '确定',
+      cancelButtonText: '取消',
+      closeOnClickModal: false,
+      inputPattern:
+        /^([a-zA-Z0-9_-])+@([a-zA-Z0-9_-])+((.[a-zA-Z0-9_-]{2,3}){1,2})$/,
+      inputErrorMessage: '请输入正确的邮箱',
+    })
+    .then(({ value }: { value: string }) => {
+      reset({ email: value }).then((res) => {
+        if (res.code === 'SUCCESS') {
+          proxy.msgSuccess('重置邮件已发送，请查收～');
+        }
+      });
+    })
+    .catch(() => {});
 };
 const countDownFunc = () => {
   countDown.value = 59;
@@ -271,6 +293,7 @@ const handleRegisterFormSelect = (key: string) => {
     >
       注册
     </el-button>
+    <a class="action-forget-btn" @click="handleForget">忘记密码？</a>
     <a class="action-btn" @click="handleActions">{{
       isLogin ? '去注册' : '去登录'
     }}</a>
@@ -300,6 +323,13 @@ const handleRegisterFormSelect = (key: string) => {
   .login-btn {
     width: 120px;
     background: var(--main-color);
+  }
+  .action-forget-btn {
+    position: absolute;
+    left: 24px;
+    bottom: 20px;
+    cursor: pointer;
+    color: var(--main-color);
   }
   .action-btn {
     position: absolute;
