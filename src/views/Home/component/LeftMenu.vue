@@ -139,6 +139,7 @@ function openFeedModal() {
       cancelButtonText: '取消',
       closeOnClickModal: false,
       inputPattern: /^.{1,100}$/,
+      inputType: 'textarea',
       inputErrorMessage: '反馈内容长度必须介于 1 和 100 之间',
     })
     .then(({ value }: { value: string }) => {
