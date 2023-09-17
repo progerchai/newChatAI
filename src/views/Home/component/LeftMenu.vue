@@ -23,7 +23,6 @@ import {
   getHistory,
   sendFeed,
 } from '@/service/home';
-import { logout } from '@/service/user';
 import type { IConversation } from '@/types';
 import { ElMessage } from 'element-plus';
 import _ from 'lodash';
@@ -147,14 +146,6 @@ function openFeedModal() {
     })
     .catch(() => {});
 }
-const logoutFunc = () => {
-  logout().then((res) => {
-    if (res.code === 'SUCCESS') {
-      ElMessage.success('退出成功');
-      router.push('/login');
-    }
-  });
-};
 /**
  * 提交反馈
  */
@@ -355,13 +346,6 @@ defineExpose({
           >
             <IconForward />
             我要反馈
-          </a>
-          <a
-            v-if="userInfo.uid && userInfo.uid !== -1"
-            @click.stop.prevent="logoutFunc"
-            class="flex py-3 px-3 items-center gap-3 rounded-md hover:bg-gray-500/10 transition-colors duration-200 text-white cursor-pointer text-sm"
-          >
-            退出登录
           </a>
           <!-- <a
             @click="changeTheme(theme === 'light' ? 'dark' : 'light')"

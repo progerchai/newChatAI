@@ -5,7 +5,9 @@
  *@email: progerchai@gmail.com
  *@date: 2023-08-05 17:41:39
  */
+import { logout } from '@/service/user';
 import type { IUser } from '@/types';
+import { ElMessage } from 'element-plus';
 import _ from 'lodash';
 import { ref, watch } from 'vue';
 import { RouterLink, useRouter } from 'vue-router';
@@ -17,6 +19,18 @@ const menu = ref([
 ]);
 const userInfo = ref<IUser>({ uid: -1 });
 const router = useRouter();
+/**
+ * 退出登录
+ */
+const logoutFunc = () => {
+  logout().then((res) => {
+    if (res.code === 'SUCCESS') {
+      ElMessage.success('退出成功');
+      router.push('/login');
+      userInfo.value = { uid: -1 };
+    }
+  });
+};
 watch(
   () => store.state.role,
   (newValue) => {
@@ -51,14 +65,19 @@ watch(
       :to="route"
       >{{ title }}</RouterLink
     >
-    <div class="user">
-      <span
-        class="user-name"
-        v-if="!!userInfo?.userName"
-        @click="router.push('/profile')"
-        >{{ userInfo.userName }}</span
-      >
-    </div>
+    <el-dropdown class="user" v-if="!!userInfo?.userName">
+      <span class="user-name">{{ userInfo.userName }}</span>
+      <template #dropdown>
+        <el-dropdown-menu>
+          <el-dropdown-item @click.native="router.push('/profile')"
+            >个人中心</el-dropdown-item
+          >
+          <el-dropdown-item @click.native="logoutFunc"
+            >退出登录</el-dropdown-item
+          >
+        </el-dropdown-menu>
+      </template>
+    </el-dropdown>
   </div>
 </template>
 
@@ -101,6 +120,7 @@ watch(
   justify-content: flex-end;
   &-name {
     cursor: pointer;
+    color: #fff;
     &:hover {
       color: #2861fc;
     }
