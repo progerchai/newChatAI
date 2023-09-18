@@ -14,8 +14,8 @@ export default defineConfig({
     hmr: true,
     proxy: {
       '^/api': {
-        target: 'http://119.23.229.128/api',
-        // target: 'https://sanle.hep.com.cn/api',
+        // target: 'http://119.23.229.128/api',
+        target: 'https://sanle.hep.com.cn/api',
         changeOrigin: true, //开启代理
         rewrite: (path) => path.replace(/^\/api/, ''),
       },

@@ -72,7 +72,7 @@ const handleForget = () => {
     .then(({ value }: { value: string }) => {
       reset({ email: value }).then((res) => {
         if (res.code === 'SUCCESS') {
-          proxy.msgSuccess('重置邮件已发送，请查收～');
+          proxy.$modal.msgSuccess('重置邮件已发送，请查收～');
         }
       });
     })
