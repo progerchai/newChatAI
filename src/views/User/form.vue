@@ -154,7 +154,7 @@ const handleCode = () => {
       // 发送验证码
       sendEmailCode({ email: registerFormData.value.email }).then((res) => {
         if (res.code === 'SUCCESS') {
-          ElMessage.success('验证码已发送');
+          ElMessage.success('验证码已发送至邮箱，请注意查收！');
         }
         countDownFunc();
       });

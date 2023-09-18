@@ -133,14 +133,19 @@ function clearConversations() {
 // 打开反馈弹窗
 function openFeedModal() {
   proxy
-    .$prompt('请输入反馈内容', '提示', {
-      confirmButtonText: '确定',
-      cancelButtonText: '取消',
-      closeOnClickModal: false,
-      inputPattern: /^.{1,100}$/,
-      inputType: 'textarea',
-      inputErrorMessage: '反馈内容长度必须介于 1 和 100 之间',
-    })
+    .$prompt(
+      '请输入反馈内容，<span>更详细反馈请点击<a style="color: blue" href="https://www.wjx.cn/vm/h0QgTiI.aspx#" target="_blank">这里</a><span>',
+      '提示',
+      {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        closeOnClickModal: false,
+        inputPattern: /^.{1,100}$/,
+        inputType: 'textarea',
+        inputErrorMessage: '反馈内容长度必须介于 1 和 100 之间',
+        dangerouslyUseHTMLString: true,
+      }
+    )
     .then(({ value }: { value: string }) => {
       submitFeed(value);
     })
